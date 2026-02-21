@@ -40,10 +40,10 @@ img { max-width: 100%; display: block; }
 }
 
 .BackHero{
-    background: url("../../../public/Images/EGC-card.jpeg") center/cover no-repeat;
+    /* background: url("../../../public/Images/EGC-card.jpeg") center/cover no-repeat; */
   position: relative;
   padding: 72px 0 34px;
-  height: 1000px
+  height: 600px
 }
 
 
