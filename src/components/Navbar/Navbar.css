@@ -1,0 +1,37 @@
+.nav {
+  background: var(--bg-dark);
+  color: var(--text-light);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.nav__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto 1fr 1fr auto;
+  align-items: center;
+  gap: 24px;
+  padding: 18px 0;
+}
+
+.nav__link {
+  font-family: inherit;
+  font-size: 14px;
+  letter-spacing: 0.4px;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+}
+
+.nav__link:hover { opacity: 1; }
+
+.nav__logo {
+  text-align: center;
+  font-size: 22px;
+  letter-spacing: 0.8px;
+}
+
+.nav__lang {
+  justify-self: end;
+  font-size: 13px;
+  opacity: 0.85;
+}
