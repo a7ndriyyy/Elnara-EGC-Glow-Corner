@@ -7,7 +7,7 @@
   --muted-dark: rgba(0,0,0,0.55);
   --card: #ffffff;
   --radius: 18px;
-  --container: 1160px;
+  --container: 1700px;
 }
 
 * { box-sizing: border-box; }
@@ -25,7 +25,7 @@ a { color: inherit; text-decoration: none; }
 img { max-width: 100%; display: block; }
 
 .container {
-  width: min(var(--container), calc(100% - 48px));
+  width: min(var(--container), calc(100% - 160px));
   margin: 0 auto;
 }
 
@@ -37,4 +37,55 @@ img { max-width: 100%; display: block; }
   height: 1px;
   background: rgba(0,0,0,0.08);
   width: 100%;
+}
+
+.BackHero{
+    background: url("../../../public/Images/EGC-card.jpeg") center/cover no-repeat;
+  position: relative;
+  padding: 72px 0 34px;
+  height: 1000px
+}
+
+
+.BackHero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  /* 🔥 layered gradient for luxury effect */
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,0.65), rgba(0,0,0,0.45)),
+    linear-gradient(to top, rgba(0,0,0,0.6), transparent 40%);
+
+  z-index: 1;
+}
+
+.BackHero > * {
+  position: relative;
+  z-index: 2;
+}
+
+.BackHero::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 120px;
+  background: linear-gradient(to bottom, transparent, var(--bg-cream));
+  z-index: 1;
+}
+
+@media (max-width: 900px) {
+  .BackHero {
+    min-height: 75vh;
+    padding: 100px 0 120px;
+  }
+}
+
+@media (max-width: 520px) {
+  .BackHero {
+    min-height: 65vh;
+    padding: 80px 0 100px;
+  }
 }

@@ -1,9 +1,10 @@
-.hero {
+/* .hero {
   background: var(--bg-dark);
   color: var(--text-light);
   padding: 72px 0 34px;
   width: 100%;
-}
+} */
+
 
 .hero__inner {
   text-align: center;
@@ -24,4 +25,31 @@
   font-size: 12px;
   line-height: 1.5;
   color: var(--muted);
+}
+
+/* ---------- Responsive Hero ---------- */
+@media (max-width: 900px) {
+  .hero {
+    padding: 54px 0 22px;
+  }
+
+  .hero__title {
+    font-size: clamp(30px, 5vw, 48px);
+  }
+
+  .hero__subtitle {
+    max-width: 520px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 520px) {
+  .hero {
+    padding: 44px 0 18px;
+  }
+
+  .hero__subtitle {
+    font-size: 11px;
+    max-width: 320px;
+  }
 }

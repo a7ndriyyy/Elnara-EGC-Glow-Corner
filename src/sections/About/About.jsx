@@ -2,15 +2,7 @@ import "./About.css";
 import { aboutData } from "../../data/about";
 
 function SocialIcon({ id }) {
-  // simple text-icons (no libs). Later we can replace with SVGs.
-  const map = {
-    fb: "f",
-    yt: "▶",
-    ig: "◎",
-    x: "x",
-    web: "h",
-  };
-
+  const map = { fb: "f", yt: "▶", ig: "◎", x: "x", web: "h" };
   return <span className="about__icon">{map[id] ?? "•"}</span>;
 }
 
@@ -18,10 +10,7 @@ export default function About() {
   return (
     <section id="about" className="about">
       <div className="about__wrap">
-        <div className="about__image">
-          <img src={aboutData.image} alt="About" />
-        </div>
-
+        {/* LEFT: text */}
         <div className="about__panel">
           <div className="about__panelInner">
             <h2 className="about__title">{aboutData.title}</h2>
@@ -44,6 +33,15 @@ export default function About() {
                 </a>
               ))}
             </div>
+          </div>
+        </div>
+
+        {/* RIGHT: photo */}
+        <div className="about__image">
+          <img src={aboutData.image} alt={aboutData.name} />
+          <div className="about__person">
+            <div className="about__personName">{aboutData.name}</div>
+            <div className="about__personRole">{aboutData.role}</div>
           </div>
         </div>
       </div>

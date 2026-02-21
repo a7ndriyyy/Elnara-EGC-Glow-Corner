@@ -1,0 +1,35 @@
+.highlights {
+  background: var(--bg-cream);
+  padding: 22px 0 60px; /* ✅ closer to About */
+}
+
+.highlights__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.highlights__card {
+  border-radius: var(--radius);
+  background: rgba(255,255,255,0.55);
+  border: 1px solid rgba(0,0,0,0.08);
+  padding: 18px 18px 16px;
+}
+
+.highlights__title {
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.highlights__text {
+  font-size: 12px;
+  line-height: 1.6;
+  color: rgba(0,0,0,0.55);
+}
+
+@media (max-width: 950px) {
+  .highlights__grid {
+    grid-template-columns: 1fr;
+  }
+}
