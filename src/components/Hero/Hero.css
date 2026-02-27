@@ -1,57 +1,460 @@
+/* Hero Section - Ультра стильний */
 .hero {
-  background: var(--bg-dark);
-  color: var(--text-light);
-  padding: 72px 0 34px;
+  position: relative;
+  min-height: 100vh;
+  background: #0a0a0a;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 6rem 2rem;
+}
+
+/* Фонові ефекти */
+.hero__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.hero__gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 20% 50%, rgba(201, 162, 126, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 80%, rgba(201, 162, 126, 0.1) 0%, transparent 50%);
+}
+
+/* Частинки */
+.hero__particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero__particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: rgba(201, 162, 126, 0.3);
+  border-radius: 50%;
+  animation: float 15s infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-100px) translateX(50px);
+    opacity: 0.3;
+  }
+  75% {
+    opacity: 0.5;
+  }
+}
+
+.hero__particle:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+.hero__particle:nth-child(2) { top: 40%; left: 20%; animation-delay: 2s; }
+.hero__particle:nth-child(3) { top: 60%; left: 30%; animation-delay: 4s; }
+.hero__particle:nth-child(4) { top: 80%; left: 40%; animation-delay: 6s; }
+.hero__particle:nth-child(5) { top: 30%; left: 70%; animation-delay: 8s; }
+.hero__particle:nth-child(6) { top: 50%; left: 80%; animation-delay: 10s; }
+.hero__particle:nth-child(7) { top: 70%; left: 90%; animation-delay: 12s; }
+.hero__particle:nth-child(8) { top: 90%; left: 60%; animation-delay: 14s; }
+
+.hero__container {
+  position: relative;
+  z-index: 2;
+  max-width: 1400px;
+  margin: 0 auto;
   width: 100%;
 }
 
+/* Заголовок */
+.hero__header {
+  text-align: center;
+  margin-bottom: 5rem;
+  animation: fadeInUp 1s ease;
+}
 
-.hero__inner {
-  text-align: left;
-  max-width: 980px;
-  margin: 0 auto;
-  margin-top:370px;
-  margin-right: -15px;
+.hero__badge {
+  display: inline-block;
+  padding: 0.5rem 1.5rem;
+  background: rgba(201, 162, 126, 0.1);
+  border: 1px solid rgba(201, 162, 126, 0.3);
+  border-radius: 50px;
+  color: #c9a27e;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  backdrop-filter: blur(10px);
 }
 
 .hero__title {
-  margin: 0;
-  font-size: clamp(34px, 4.2vw, 64px);
-  font-weight: 500;
-  line-height: 1.08;
+  font-size: 4.5rem;
+  font-weight: 300;
+  color: #ffffff;
+  margin-bottom: 1rem;
+  font-family: 'Playfair Display', serif;
+  line-height: 1.2;
+}
+
+.hero__title span {
+  display: block;
+  color: #c9a27e;
+  font-weight: 600;
+  font-size: 3rem;
 }
 
 .hero__subtitle {
-  margin: 18px auto 0;
-  max-width: 560px;
-   font-size:28px;
-  line-height: 1.5;
-  color: var(--muted);
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 600px;
+  margin: 0 auto;
+  font-weight: 300;
+  letter-spacing: 0.5px;
 }
 
-/* ---------- Responsive Hero ---------- */
-@media (max-width: 900px) {
-  .hero {
-    padding: 54px 0 22px;
-  }
+/* Сітка карток */
+.hero__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  perspective: 2000px;
+}
 
+/* Картка */
+.hero__card {
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(50px);
+  animation: fadeInUp 0.8s ease forwards;
+  perspective: 2000px;
+}
+
+.hero__card-inner {
+  position: relative;
+  height: 500px;
+  border-radius: 30px;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.hero__card:hover .hero__card-inner {
+  transform: rotateY(5deg) rotateX(5deg) translateY(-10px);
+  box-shadow: 30px 30px 60px rgba(0, 0, 0, 0.5);
+}
+
+.hero__card-image {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.hero__card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero__card:hover .hero__card-image img {
+  transform: scale(1.1);
+}
+
+.hero__card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(201, 162, 126, 0.5), #0a0a0a);
+  mix-blend-mode: multiply;
+  transition: opacity 0.3s ease;
+}
+
+.hero__card:hover .hero__card-overlay {
+  opacity: 0.8;
+}
+
+/* Контент картки */
+.hero__card-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2.5rem;
+  z-index: 3;
+  transform: translateY(0);
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+}
+
+.hero__card:hover .hero__card-content {
+  transform: translateY(-10px);
+}
+
+.hero__card-number {
+  display: block;
+  font-size: 1rem;
+  color: #c9a27e;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  letter-spacing: 2px;
+  opacity: 0.9;
+}
+
+.hero__card-title {
+  font-size: 2.2rem;
+  font-weight: 400;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  font-family: 'Playfair Display', serif;
+  line-height: 1.2;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.hero__card-subtitle {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 1.5rem;
+  opacity: 0.9;
+  transform: translateY(10px);
+  transition: all 0.3s ease 0.1s;
+}
+
+.hero__card:hover .hero__card-subtitle {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.hero__card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #c9a27e;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease 0.2s;
+}
+
+.hero__card-link svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.3s ease;
+}
+
+.hero__card:hover .hero__card-link {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero__card-link:hover svg {
+  transform: translateX(5px);
+}
+
+/* Декоративний елемент картки */
+.hero__card-decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.hero__card-decoration span {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.5s ease;
+}
+
+.hero__card-decoration span:nth-child(1) {
+  top: 20px;
+  left: 20px;
+  width: 50px;
+  height: 50px;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.hero__card-decoration span:nth-child(2) {
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.hero__card-decoration span:nth-child(3) {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  opacity: 0;
+  transition: all 0.5s ease;
+}
+
+.hero__card:hover .hero__card-decoration span:nth-child(3) {
+  width: 90%;
+  height: 90%;
+  opacity: 1;
+}
+
+/* Скрол індикатор */
+.hero__scroll {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  z-index: 10;
+}
+
+.hero__scroll-line {
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(to bottom, #c9a27e, transparent);
+  animation: scrollLine 2s ease-in-out infinite;
+}
+
+@keyframes scrollLine {
+  0%, 100% {
+    transform: scaleY(0.3);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+/* Анімації */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Адаптація для планшетів */
+@media (max-width: 1200px) {
+  .hero__grid {
+    gap: 1.5rem;
+  }
+  
+  .hero__card-inner {
+    height: 450px;
+  }
+  
+  .hero__card-title {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .hero__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
   .hero__title {
-    font-size: clamp(30px, 5vw, 48px);
+    font-size: 3.5rem;
   }
-
-  .hero__subtitle {
-    max-width: 520px;
-    font-size: 12px;
+  
+  .hero__title span {
+    font-size: 2.5rem;
   }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 768px) {
   .hero {
-    padding: 44px 0 18px;
+    padding: 4rem 1rem;
   }
-
+  
+  .hero__header {
+    margin-bottom: 3rem;
+  }
+  
+  .hero__title {
+    font-size: 2.8rem;
+  }
+  
+  .hero__title span {
+    font-size: 2rem;
+  }
+  
   .hero__subtitle {
-    font-size: 11px;
-    max-width: 320px;
+    font-size: 1rem;
+  }
+  
+  .hero__grid {
+    gap: 1rem;
+  }
+  
+  .hero__card-inner {
+    height: 350px;
+  }
+  
+  .hero__card-title {
+    font-size: 1.5rem;
+  }
+  
+  .hero__card-content {
+    padding: 1.5rem;
+  }
+  
+  .hero__scroll {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero__grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .hero__title {
+    font-size: 2.2rem;
+  }
+  
+  .hero__badge {
+    font-size: 0.8rem;
+  }
+  
+  .hero__card-inner {
+    height: 300px;
   }
 }

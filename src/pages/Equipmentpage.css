@@ -1,0 +1,488 @@
+/* Equipment Page Styles */
+.equipment-page {
+  background: #0a0a0a;
+  color: #ffffff;
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Section Header */
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 300;
+  margin-bottom: 1rem;
+  font-family: 'Playfair Display', serif;
+  color: #ffffff;
+}
+
+.section-subtitle {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+}
+
+.btn--primary {
+  background: #c9a27e;
+  color: #0a0a0a;
+}
+
+.btn--primary:hover {
+  background: #d8b594;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(201, 162, 126, 0.3);
+}
+
+.btn--outline {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+}
+
+.btn--outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #ffffff;
+}
+
+.btn--large {
+  padding: 1.2rem 3rem;
+  font-size: 1.1rem;
+}
+
+/* Hero Section */
+.equipment-hero {
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 2rem;
+}
+
+.equipment-hero__bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.equipment-hero__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.equipment-hero__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.9) 100%);
+}
+
+.equipment-hero__content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 800px;
+}
+
+.equipment-hero__title {
+  font-size: 3.5rem;
+  font-weight: 300;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  font-family: 'Playfair Display', serif;
+}
+
+.equipment-hero__title span {
+  display: block;
+  color: #c9a27e;
+  font-weight: 600;
+  font-size: 2.5rem;
+  margin-top: 0.5rem;
+}
+
+.equipment-hero__subtitle {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.8);
+  max-width: 600px;
+  margin: 0 auto 3rem;
+  line-height: 1.8;
+}
+
+.equipment-hero__buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+/* Featured Equipment */
+.equipment-featured {
+  padding: 6rem 2rem;
+  background: #0f0f0f;
+}
+
+.machine-card {
+  background: #151515;
+  border-radius: 30px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.machine-card__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.machine-card__image-wrapper {
+  position: relative;
+  height: 100%;
+  min-height: 500px;
+}
+
+.machine-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.machine-card__badge {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  padding: 0.5rem 1.5rem;
+  background: #c9a27e;
+  color: #0a0a0a;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.machine-card__content {
+  padding: 3rem;
+}
+
+.machine-card__title {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  font-family: 'Playfair Display', serif;
+  color: #c9a27e;
+}
+
+.machine-card__stats {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.machine-stat {
+  text-align: center;
+  flex: 1;
+}
+
+.machine-stat__value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #c9a27e;
+  margin-bottom: 0.3rem;
+}
+
+.machine-stat__label {
+  display: block;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.machine-card__description {
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.8;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+}
+
+.machine-card__features h4 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: #ffffff;
+}
+
+.machine-card__features ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+}
+
+.machine-card__features li {
+  color: rgba(255, 255, 255, 0.7);
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.machine-card__features li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #c9a27e;
+}
+
+.machine-card__actions {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Procedures */
+.equipment-procedures {
+  padding: 6rem 2rem;
+  background: #0a0a0a;
+}
+
+.procedures-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.procedure-item {
+  background: #151515;
+  padding: 2.5rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.procedure-item:hover {
+  transform: translateY(-5px);
+  border-color: #c9a27e;
+}
+
+.procedure-number {
+  font-size: 3rem;
+  font-weight: 700;
+  color: rgba(201, 162, 126, 0.2);
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+
+.procedure-item h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: #c9a27e;
+}
+
+.procedure-item p {
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Benefits */
+.equipment-benefits {
+  padding: 6rem 2rem;
+  background: #0f0f0f;
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+.benefit-item {
+  text-align: center;
+  padding: 2rem;
+  background: #151515;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.benefit-item:hover {
+  transform: translateY(-5px);
+  border-color: #c9a27e;
+}
+
+.benefit-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.benefit-item h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: #c9a27e;
+}
+
+.benefit-item p {
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* CTA */
+.equipment-cta {
+  padding: 6rem 2rem;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-content {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.cta-content h2 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  font-family: 'Playfair Display', serif;
+}
+
+.cta-content p {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 2rem;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+/* Modal */
+.equipment-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(10px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.equipment-modal__content {
+  background: #151515;
+  padding: 3rem;
+  border-radius: 20px;
+  max-width: 500px;
+  width: 100%;
+  position: relative;
+}
+
+.equipment-modal__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.equipment-modal__close:hover {
+  background: #c9a27e;
+  color: #0a0a0a;
+}
+
+.equipment-modal__model {
+  color: #c9a27e;
+  margin-bottom: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+  .machine-card__grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .machine-card__image-wrapper {
+    min-height: 300px;
+  }
+  
+  .procedures-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .benefits-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .machine-card__stats {
+    flex-wrap: wrap;
+  }
+  
+  .machine-card__actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .benefits-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .equipment-hero__title {
+    font-size: 2.5rem;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+}

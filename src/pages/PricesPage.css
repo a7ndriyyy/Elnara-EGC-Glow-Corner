@@ -1,0 +1,218 @@
+/* Prices Page - простий та стильний */
+.prices-page {
+  background: #ffffff;
+  color: #1a1a1a;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Hero секція */
+.prices-hero {
+  padding: 6rem 2rem 3rem;
+  text-align: center;
+  background: #fafafa;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.prices-hero__title {
+  font-size: 3rem;
+  font-weight: 400;
+  margin-bottom: 1rem;
+  font-family: 'Playfair Display', serif;
+  color: #1a1a1a;
+  letter-spacing: -0.5px;
+}
+
+.prices-hero__subtitle {
+  font-size: 1.2rem;
+  color: #666;
+  font-weight: 300;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Категорії */
+.prices-categories {
+  padding: 2rem 2rem 1rem;
+  background: #ffffff;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.categories-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.category-btn {
+  padding: 0.6rem 1.5rem;
+  background: transparent;
+  border: 1px solid #e0e0e0;
+  border-radius: 50px;
+  color: #666;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 400;
+}
+
+.category-btn:hover {
+  border-color: #c9a27e;
+  color: #c9a27e;
+}
+
+.category-btn.active {
+  background: #c9a27e;
+  border-color: #c9a27e;
+  color: #ffffff;
+}
+
+/* Список цін */
+.prices-list {
+  padding: 3rem 2rem 5rem;
+  background: #ffffff;
+}
+
+.prices-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.price-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 0;
+  border-bottom: 1px solid #f0f0f0;
+  transition: all 0.2s ease;
+}
+
+.price-item:hover {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  background: #fafafa;
+  border-radius: 8px;
+}
+
+.price-item__info {
+  flex: 1;
+}
+
+.price-item__name {
+  font-size: 1.1rem;
+  font-weight: 400;
+  margin: 0 0 0.3rem 0;
+  color: #1a1a1a;
+}
+
+.price-item__duration {
+  font-size: 0.9rem;
+  color: #999;
+  font-weight: 300;
+}
+
+.price-item__value {
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: #1a1a1a;
+  white-space: nowrap;
+  margin-left: 2rem;
+}
+
+/* No services */
+.no-services {
+  text-align: center;
+  padding: 4rem;
+  color: #999;
+  font-size: 1rem;
+}
+
+/* Інформація */
+.prices-info {
+  padding: 3rem 2rem 4rem;
+  background: #fafafa;
+  border-top: 1px solid #eaeaea;
+  text-align: center;
+}
+
+.info-note {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.info-note p {
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.info-phone {
+  display: inline-block;
+  font-size: 1.5rem;
+  color: #1a1a1a;
+  text-decoration: none;
+  font-weight: 400;
+  margin-top: 0.5rem;
+  border-bottom: 1px solid #c9a27e;
+  padding-bottom: 0.2rem;
+  transition: all 0.2s ease;
+}
+
+.info-phone:hover {
+  color: #c9a27e;
+  border-bottom-color: #c9a27e;
+}
+
+/* Адаптація */
+@media (max-width: 768px) {
+  .prices-hero__title {
+    font-size: 2.2rem;
+  }
+  
+  .prices-hero__subtitle {
+    font-size: 1rem;
+  }
+  
+  .price-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .price-item__value {
+    margin-left: 0;
+    font-size: 1.2rem;
+  }
+  
+  .price-item:hover {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  
+  .info-phone {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .categories-wrapper {
+    gap: 0.3rem;
+  }
+  
+  .category-btn {
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+  }
+  
+  .price-item__name {
+    font-size: 1rem;
+  }
+}
