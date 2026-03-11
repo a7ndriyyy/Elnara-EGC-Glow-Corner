@@ -1,33 +1,45 @@
+import { FaStar, FaRegStar, FaQuoteRight } from "react-icons/fa";
+
 export const reviewsData = {
-  backgroundImage:
-    "https://images.unsplash.com/photo-1612810436541-336d9000f2fb?q=80&w=1800",
+  title: "Reviews",
+  subtitle: "Що кажуть клієнти",
+  backgroundImage: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
   reviews: [
     {
       id: 1,
       name: "Miranda Nowak",
       rating: 4,
-      text:
-        "Very pleasant atmosphere, especially considering the difficult times we are all facing with the current pandemic. Extremely clean area! Greeted very warmly upon my entrance and seated almost immediately!",
-      avatar:
-        "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=600",
+      text: "Very pleasant atmosphere, especially considering the difficult times we are all facing with the current pandemic. Extremely clean area! Greeted very warmly upon my entrance and seated almost immediately!",
+      avatar: "https://images.unsplash.com/photo-1494790108755-27193f48e30e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      date: "March 2024",
+      service: "Facial Treatment"
     },
     {
       id: 2,
-      name: "Amy Smith",
+      name: "Sophia Chen",
       rating: 5,
-      text:
-        "I loved the service and the vibe. Super professional team, everything felt clean and calm. Will definitely come back again!",
-      avatar:
-        "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=600",
+      text: "Absolutely amazing experience! Elnara is a true artist. She understood exactly what I wanted and delivered beyond expectations. The salon is spotless and the atmosphere is so relaxing.",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      date: "February 2024",
+      service: "Evening Makeup"
     },
     {
       id: 3,
-      name: "Sara Khan",
+      name: "Emma Thompson",
       rating: 5,
-      text:
-        "Amazing experience — the staff are friendly and the results were exactly what I wanted. Highly recommend!",
-      avatar:
-        "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=600",
+      text: "The best beauty salon I've ever been to! Professional service, premium products, and incredible attention to detail. My skin has never looked better. Highly recommended!",
+      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      date: "January 2024",
+      service: "Chemical Peel"
     },
-  ],
+    {
+      id: 4,
+      name: "Olivia Martinez",
+      rating: 5,
+      text: "Elnara is a magician! She transformed my look for a special event and I received so many compliments. The consultation was thorough and she really listened to what I wanted.",
+      avatar: "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      date: "December 2023",
+      service: "Bridal Makeup"
+    }
+  ]
 };

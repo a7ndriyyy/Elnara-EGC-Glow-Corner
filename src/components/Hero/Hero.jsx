@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./Hero.css";
 
 // Імпорт зображень (якщо вони є в public)
@@ -43,8 +43,11 @@ const heroItems = [
   },
 ];
 
+
+
 export default function Hero() {
   const cardsRef = useRef([]);
+  const [particles, setParticles] = useState([]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -65,16 +68,47 @@ export default function Hero() {
     return () => observer.disconnect();
   }, []);
 
+useEffect(() => {
+  // Використовуємо setTimeout для безпечного виклику
+  const timer = setTimeout(() => {
+    const generated = Array.from({ length: 50 }).map((_, i) => ({
+      id: i,
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      duration: `${8 + Math.random() * 20}s`,
+      delay: `${Math.random() * 5}s`,
+      size: `${2 + Math.random() * 6}px`,
+      opacity: 0.1 + Math.random() * 0.3,
+    }));
+    setParticles(generated);
+  }, 0);
+
+  return () => clearTimeout(timer);
+}, []);
+
+
   return (
     <section className="hero">
       {/* Фоновий градієнт */}
       <div className="hero__background">
+         <div className="hero__animated-gradient hero__orb"></div>
         <div className="hero__gradient"></div>
-        <div className="hero__particles">
-          {[...Array(20)].map((_, i) => (
-            <span key={i} className="hero__particle"></span>
-          ))}
-        </div>
+    <div className="hero__particles">
+  {particles.map((p) => (
+    <span
+      key={p.id}
+      className="hero__particle"
+      style={{
+        left: p.left,
+        top: p.top,
+        animationDuration: p.duration,
+        animationDelay: p.delay,
+        width: p.size,
+        height: p.size,
+      }}
+    />
+  ))}
+</div>
       </div>
 
       <div className="hero__container">

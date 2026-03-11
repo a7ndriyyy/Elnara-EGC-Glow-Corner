@@ -4,16 +4,20 @@ import ProfileHighlights from "../sections/ProfileHighlights/ProfileHighlights";
 import Treatments from "../sections/Treatments/Treatments";
 import Reviews from "../sections/Reviews/Reviews";
 import Contact from "../sections/Contact/Contact";
+import "./HomePage.css";
 
 export default function HomePage() {
   return (
-    <>
+  <div className="home">
       <Hero />
-      <About />
-      <ProfileHighlights />
-      <Treatments />
-      <Reviews />
-      <Contact />
-    </>
+
+      <main className="home__content">
+        <Treatments />
+        <About />
+        <ProfileHighlights />
+        <Reviews />
+        <Contact />
+      </main>
+    </div>
   );
 }
