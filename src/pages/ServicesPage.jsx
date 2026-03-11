@@ -1,5 +1,9 @@
-import { useState} from "react";
+import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
+import { FiArrowRight, FiClock } from "react-icons/fi";
+import { FaPaperPlane, FaCheckCircle, FaTimesCircle, FaPhone, FaEnvelope, FaUser } from "react-icons/fa";
+import { IoClose } from "react-icons/io5";
+import emailjs from '@emailjs/browser';
 import "./ServicesPage.css";
 
 // Імпорт зображень (замініть на свої)
@@ -12,8 +16,27 @@ import servicesHero from "../../public/Images/ImagesServices/services-hero.webp"
 export default function ServicesPage() {
   const [selectedService, setSelectedService] = useState(null);
   const [activeFilter, setActiveFilter] = useState("all");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Стан для форми
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "Хочу записатись на послугу"
+  });
+  
+  const [formStatus, setFormStatus] = useState({
+    submitted: false,
+    success: false,
+    message: "",
+    loading: false
+  });
 
-  // Дані про послуги - ВСЕ ВИПРАВЛЕНО
+  const [errors, setErrors] = useState({});
+  const formRef = useRef(null);
+
+  // Дані про послуги
   const services = [
     {
       id: 1,
@@ -104,7 +127,7 @@ export default function ServicesPage() {
       duration: "45 хвилин",
       description: "Професійна корекція, фарбування та ламінування брів.",
       longDescription: "Створюємо ідеальну форму брів, яка підходить саме вам. Фарбування хною або фарбою, ламінування, ботокс для брів.",
-      image: makeupDay, // Замініть на фото брів
+      image: makeupDay,
       features: [
         "Корекція пінцетом/воском",
         "Фарбування хною/фарбою",
@@ -123,6 +146,119 @@ export default function ServicesPage() {
     : services.filter(s => s.category === activeFilter);
 
   const popularServices = services.filter(s => s.popular);
+
+  // Валідація форми
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.name.trim()) {
+      newErrors.name = "Ім'я обов'язкове";
+    } else if (formData.name.length < 2) {
+      newErrors.name = "Ім'я занадто коротке";
+    }
+    
+    if (!formData.email.trim()) {
+      newErrors.email = "Email обов'язковий";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Невірний формат email";
+    }
+    
+    if (formData.phone && !/^[\d\s\-+()]{10,}$/.test(formData.phone)) {
+      newErrors.phone = "Невірний формат телефону";
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Обробка відправки форми
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      formRef.current.classList.add("services__form--error");
+      setTimeout(() => {
+        formRef.current.classList.remove("services__form--error");
+      }, 500);
+      return;
+    }
+    
+    setFormStatus({ ...formStatus, loading: true, message: "" });
+    
+    try {
+      const result = await emailjs.sendForm(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        formRef.current,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
+      
+      if (result.status === 200) {
+        setFormStatus({
+          submitted: true,
+          success: true,
+          message: "Повідомлення відправлено! Ми зв'яжемось з вами найближчим часом.",
+          loading: false
+        });
+        
+        setFormData({ name: "", email: "", phone: "", message: "Хочу записатись на послугу" });
+        
+        formRef.current.classList.add("services__form--success");
+        setTimeout(() => {
+          formRef.current.classList.remove("services__form--success");
+        }, 1000);
+        
+        setTimeout(() => {
+          setIsModalOpen(false);
+          setSelectedService(null);
+          setFormStatus({ submitted: false, success: false, message: "", loading: false });
+        }, 2000);
+      }
+    } catch (error) {
+      console.error("EmailJS error:", error);
+      setFormStatus({
+        submitted: true,
+        success: false,
+        message: "Сталася помилка. Спробуйте ще раз або зателефонуйте нам.",
+        loading: false
+      });
+    }
+  };
+
+  // Обробка зміни полів
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  // Відкриття модального вікна
+  const openModal = (service = null) => {
+    setSelectedService(service);
+    if (service) {
+      setFormData(prev => ({ 
+        ...prev, 
+        message: `Хочу записатись на послугу: ${service.name}` 
+      }));
+    } else {
+      setFormData(prev => ({ 
+        ...prev, 
+        message: "Хочу записатись на консультацію" 
+      }));
+    }
+    setIsModalOpen(true);
+  };
+
+  // Закриття модального вікна
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedService(null);
+    setFormData({ name: "", email: "", phone: "", message: "Хочу записатись на послугу" });
+    setErrors({});
+    setFormStatus({ submitted: false, success: false, message: "", loading: false });
+  };
 
   return (
     <div className="services-page">
@@ -146,9 +282,12 @@ export default function ServicesPage() {
             <a href="#services" className="btn btn--primary">
               Всі послуги
             </a>
-            <Link to="/contact" className="btn btn--outline">
+            <button 
+              className="btn btn--outline"
+              onClick={() => openModal()}
+            >
               Записатись
-            </Link>
+            </button>
           </div>
         </div>
       </section>
@@ -197,7 +336,10 @@ export default function ServicesPage() {
               <div 
                 key={service.id} 
                 className="popular-card"
-                onClick={() => setSelectedService(service)}
+                onClick={() => {
+                  setSelectedService(service);
+                  openModal(service);
+                }}
               >
                 <div className="popular-card__image">
                   <img src={service.image} alt={service.name} />
@@ -211,7 +353,10 @@ export default function ServicesPage() {
                       <span className="popular-card__duration">{service.duration}</span>
                       <span className="popular-card__price">{service.price} €</span>
                     </div>
-                    <button className="popular-card__btn">
+                    <button className="popular-card__btn" onClick={(e) => {
+                      e.stopPropagation();
+                      openModal(service);
+                    }}>
                       Детальніше →
                     </button>
                   </div>
@@ -270,7 +415,7 @@ export default function ServicesPage() {
               <div 
                 key={service.id} 
                 className="service-card"
-                onClick={() => setSelectedService(service)}
+                onClick={() => openModal(service)}
               >
                 <div className="service-card__image">
                   <img src={service.image} alt={service.name} />
@@ -340,9 +485,12 @@ export default function ServicesPage() {
             <h2>Готові до перетворення?</h2>
             <p>Запишіться на макіяж прямо зараз та отримайте знижку 10% на перше відвідування</p>
             <div className="cta__buttons">
-              <Link to="/contact" className="btn btn--primary btn--large">
+              <button 
+                className="btn btn--primary btn--large"
+                onClick={() => openModal()}
+              >
                 Записатись онлайн
-              </Link>
+              </button>
               <a href="tel:+33456756578" className="btn btn--outline btn--large">
                 +33 4 56 75 65 78
               </a>
@@ -351,51 +499,94 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* Модальне вікно */}
-      {selectedService && (
-        <div className="modal" onClick={() => setSelectedService(null)}>
-          <div className="modal__content" onClick={(e) => e.stopPropagation()}>
-            <button className="modal__close" onClick={() => setSelectedService(null)}>×</button>
+      {/* МОДАЛЬНЕ ВІКНО З ФОРМОЮ */}
+      {isModalOpen && (
+        <div className="services__modal-overlay" onClick={closeModal}>
+          <div className="services__modal" onClick={(e) => e.stopPropagation()}>
+            <button className="services__modal-close" onClick={closeModal}>
+              <IoClose />
+            </button>
             
-            <div className="modal__grid">
-              <div className="modal__image">
-                <img src={selectedService.image} alt={selectedService.name} />
-              </div>
-              
-              <div className="modal__info">
-                <h2>{selectedService.name}</h2>
-                <p className="modal__name-en">{selectedService.nameEn}</p>
-                
-                <div className="modal__price-info">
-                  <span className="modal__price">{selectedService.price} €</span>
-                  <span className="modal__duration">{selectedService.duration}</span>
-                </div>
-                
-                <p className="modal__description">{selectedService.longDescription}</p>
-                
-                <div className="modal__features">
-                  <h3>Що входить:</h3>
-                  <ul>
-                    {selectedService.features.map((feature, i) => (
-                      <li key={i}>{feature}</li>
-                    ))}
-                  </ul>
-                </div>
-                
-                <div className="modal__brands">
-                  <h3>Використовуємо бренди:</h3>
-                  <div className="brand-tags">
-                    {selectedService.brands.map((brand, i) => (
-                      <span key={i} className="brand-tag">{brand}</span>
-                    ))}
-                  </div>
-                </div>
-                
-                <Link to="/contact" className="btn btn--primary modal__btn">
-                  Записатись на цю послугу
-                </Link>
-              </div>
+            <div className="services__modal-header">
+              <h3 className="services__modal-title">
+                {selectedService ? `Запис на: ${selectedService.name}` : 'Записатись на консультацію'}
+              </h3>
+              <p className="services__modal-subtitle">
+                Заповніть форму і ми зв'яжемось з вами найближчим часом
+              </p>
             </div>
+
+            <form ref={formRef} onSubmit={handleSubmit} className="services__modal-form">
+              <div className={`services__modal-field ${errors.name ? 'error' : ''}`}>
+                <FaUser className="services__modal-field-icon" />
+                <input
+                  type="text"
+                  name="name"
+                  placeholder=" "
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="services__modal-input"
+                />
+                <label className="services__modal-label">Ваше ім'я *</label>
+                {errors.name && <span className="services__modal-error">{errors.name}</span>}
+              </div>
+
+              <div className={`services__modal-field ${errors.email ? 'error' : ''}`}>
+                <FaEnvelope className="services__modal-field-icon" />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder=" "
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="services__modal-input"
+                />
+                <label className="services__modal-label">Email *</label>
+                {errors.email && <span className="services__modal-error">{errors.email}</span>}
+              </div>
+
+              <div className={`services__modal-field ${errors.phone ? 'error' : ''}`}>
+                <FaPhone className="services__modal-field-icon" />
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder=" "
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className="services__modal-input"
+                />
+                <label className="services__modal-label">Телефон (необов'язково)</label>
+                {errors.phone && <span className="services__modal-error">{errors.phone}</span>}
+              </div>
+
+              <input type="hidden" name="message" value={formData.message} />
+
+              <button 
+                type="submit" 
+                className="services__modal-submit"
+                disabled={formStatus.loading}
+              >
+                {formStatus.loading ? (
+                  <>
+                    <span className="services__modal-spinner"></span>
+                    Відправка...
+                  </>
+                ) : (
+                  <>
+                    <FaPaperPlane className="services__modal-submit-icon" />
+                    {selectedService ? 'Записатись' : 'Отримати консультацію'}
+                    <span className="services__modal-submit-glow"></span>
+                  </>
+                )}
+              </button>
+
+              {formStatus.message && (
+                <div className={`services__modal-status ${formStatus.success ? 'success' : 'error'}`}>
+                  {formStatus.success ? <FaCheckCircle /> : <FaTimesCircle />}
+                  <span>{formStatus.message}</span>
+                </div>
+              )}
+            </form>
           </div>
         </div>
       )}

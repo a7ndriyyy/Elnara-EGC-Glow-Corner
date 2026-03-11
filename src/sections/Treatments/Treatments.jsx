@@ -3,34 +3,37 @@ import { FiClock, FiArrowRight } from "react-icons/fi";
 import { MdFace, MdSpa } from "react-icons/md";
 import { GiSparkles } from "react-icons/gi";
 import { BsStars } from "react-icons/bs";
+import { FaPaperPlane, FaCheckCircle, FaTimesCircle, FaPhone, FaEnvelope, FaUser } from "react-icons/fa";
+import { IoClose } from "react-icons/io5";
+import emailjs from '@emailjs/browser';
 import "./Treatments.css";
 import { treatmentsData } from "../../data/treatments";
 
 export default function Treatments() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
-  const [particles, setParticles] = useState([]); // Стан для частинок
+  const [particles, setParticles] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false); // стан для модального вікна
   const sectionRef = useRef(null);
   const cardsRef = useRef([]);
+  
+  // Стан для форми
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "Хочу записатись на консультацію"
+  });
+  
+  const [formStatus, setFormStatus] = useState({
+    submitted: false,
+    success: false,
+    message: "",
+    loading: false
+  });
 
-  // Генеруємо частинки в useEffect, а не під час рендеру
- useEffect(() => {
-  // Використовуємо setTimeout для безпечного виклику
-  const timer = setTimeout(() => {
-    const generated = Array.from({ length: 50 }).map((_, i) => ({
-      id: i,
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      duration: `${8 + Math.random() * 20}s`,
-      delay: `${Math.random() * 5}s`,
-      size: `${2 + Math.random() * 6}px`,
-      opacity: 0.1 + Math.random() * 0.3,
-    }));
-    setParticles(generated);
-  }, 0);
-
-  return () => clearTimeout(timer);
-}, []); // Порожній масив - виконається тільки один раз після монтування
+  const [errors, setErrors] = useState({});
+  const formRef = useRef(null);
 
   // Використовуємо useMemo для відфільтрованих даних
   const filteredTreatments = useMemo(() => {
@@ -46,6 +49,24 @@ export default function Treatments() {
     { id: "Face", label: "Обличчя", icon: <MdFace /> },
     { id: "Body", label: "Тіло", icon: <MdSpa /> }
   ];
+
+  // Генерація частинок
+   useEffect(() => {
+    const timer = setTimeout(() => {
+      const generated = Array.from({ length: 50 }).map((_, i) => ({
+        id: i,
+        left: `${Math.random() * 100}%`,
+        top: `${Math.random() * 100}%`,
+        duration: `${8 + Math.random() * 20}s`,
+        delay: `${Math.random() * 5}s`,
+        size: `${2 + Math.random() * 6}px`,
+        opacity: 0.1 + Math.random() * 0.3,
+      }));
+      setParticles(generated);
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   // Ефект для відстеження миші
   const handleMouseMove = useCallback((e) => {
@@ -98,6 +119,103 @@ export default function Treatments() {
     );
     return Math.max(0.3, 1 - distance / 100);
   }, [mousePosition]);
+
+  // Валідація форми
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.name.trim()) {
+      newErrors.name = "Ім'я обов'язкове";
+    } else if (formData.name.length < 2) {
+      newErrors.name = "Ім'я занадто коротке";
+    }
+    
+    if (!formData.email.trim()) {
+      newErrors.email = "Email обов'язковий";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Невірний формат email";
+    }
+    
+    if (formData.phone && !/^[\d\s\-+()]{10,}$/.test(formData.phone)) {
+      newErrors.phone = "Невірний формат телефону";
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Обробка відправки форми
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      formRef.current.classList.add("treatments__form--error");
+      setTimeout(() => {
+        formRef.current.classList.remove("treatments__form--error");
+      }, 500);
+      return;
+    }
+    
+    setFormStatus({ ...formStatus, loading: true, message: "" });
+    
+    try {
+      // Відправка через EmailJS
+      const result = await emailjs.sendForm(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        formRef.current,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
+      
+      if (result.status === 200) {
+        setFormStatus({
+          submitted: true,
+          success: true,
+          message: "Повідомлення відправлено! Ми зв'яжемось з вами найближчим часом.",
+          loading: false
+        });
+        
+        setFormData({ name: "", email: "", phone: "", message: "Хочу записатись на консультацію" });
+        
+        formRef.current.classList.add("treatments__form--success");
+        setTimeout(() => {
+          formRef.current.classList.remove("treatments__form--success");
+        }, 1000);
+        
+        // Закриваємо модальне вікно через 2 секунди після успіху
+        setTimeout(() => {
+          setIsModalOpen(false);
+          setFormStatus({ submitted: false, success: false, message: "", loading: false });
+        }, 2000);
+      }
+    } catch (error) {
+      console.error("EmailJS error:", error);
+      setFormStatus({
+        submitted: true,
+        success: false,
+        message: "Сталася помилка. Спробуйте ще раз або зателефонуйте нам.",
+        loading: false
+      });
+    }
+  };
+
+  // Обробка зміни полів
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  // Закриття модального вікна
+  const closeModal = () => {
+    setIsModalOpen(false);
+    // Скидаємо форму при закритті
+    setFormData({ name: "", email: "", phone: "", message: "Хочу записатись на консультацію" });
+    setErrors({});
+    setFormStatus({ submitted: false, success: false, message: "", loading: false });
+  };
 
   return (
     <section id="treatments" className="treatments" ref={sectionRef}>
@@ -156,7 +274,7 @@ export default function Treatments() {
           </p>
         </div>
 
-        {/* Фільтри категорій з React іконками */}
+        {/* Фільтри категорій */}
         <div className="treatments__filters">
           {categories.map((cat) => (
             <button
@@ -245,7 +363,10 @@ export default function Treatments() {
             <p className="treatments__cta-text">
               Отримайте безкоштовну консультацію нашого експерта
             </p>
-            <button className="treatments__cta-btn">
+            <button 
+              className="treatments__cta-btn"
+              onClick={() => setIsModalOpen(true)}
+            >
               Записатись на консультацію
               <FiArrowRight className="treatments__cta-btn-icon" />
               <span className="treatments__cta-btn-glow"></span>
@@ -258,6 +379,94 @@ export default function Treatments() {
           </div>
         </div>
       </div>
+
+      {/* МОДАЛЬНЕ ВІКНО З ФОРМОЮ */}
+      {isModalOpen && (
+        <div className="treatments__modal-overlay" onClick={closeModal}>
+          <div className="treatments__modal" onClick={(e) => e.stopPropagation()}>
+            <button className="treatments__modal-close" onClick={closeModal}>
+              <IoClose />
+            </button>
+            
+            <div className="treatments__modal-header">
+              <h3 className="treatments__modal-title">Записатись на консультацію</h3>
+              <p className="treatments__modal-subtitle">
+                Заповніть форму і ми зв'яжемось з вами найближчим часом
+              </p>
+            </div>
+
+            <form ref={formRef} onSubmit={handleSubmit} className="treatments__modal-form">
+              <div className={`treatments__modal-field ${errors.name ? 'error' : ''}`}>
+                <FaUser className="treatments__modal-field-icon" />
+                <input
+                  type="text"
+                  name="name"
+                  placeholder=" "
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="treatments__modal-input"
+                />
+                <label className="treatments__modal-label">Ваше ім'я *</label>
+                {errors.name && <span className="treatments__modal-error">{errors.name}</span>}
+              </div>
+
+              <div className={`treatments__modal-field ${errors.email ? 'error' : ''}`}>
+                <FaEnvelope className="treatments__modal-field-icon" />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder=" "
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="treatments__modal-input"
+                />
+                <label className="treatments__modal-label">Email *</label>
+                {errors.email && <span className="treatments__modal-error">{errors.email}</span>}
+              </div>
+
+              <div className={`treatments__modal-field ${errors.phone ? 'error' : ''}`}>
+                <FaPhone className="treatments__modal-field-icon" />
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder=" "
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className="treatments__modal-input"
+                />
+                <label className="treatments__modal-label">Телефон (необов'язково)</label>
+                {errors.phone && <span className="treatments__modal-error">{errors.phone}</span>}
+              </div>
+
+              <button 
+                type="submit" 
+                className="treatments__modal-submit"
+                disabled={formStatus.loading}
+              >
+                {formStatus.loading ? (
+                  <>
+                    <span className="treatments__modal-spinner"></span>
+                    Відправка...
+                  </>
+                ) : (
+                  <>
+                    <FaPaperPlane className="treatments__modal-submit-icon" />
+                    Записатись
+                    <span className="treatments__modal-submit-glow"></span>
+                  </>
+                )}
+              </button>
+
+              {formStatus.message && (
+                <div className={`treatments__modal-status ${formStatus.success ? 'success' : 'error'}`}>
+                  {formStatus.success ? <FaCheckCircle /> : <FaTimesCircle />}
+                  <span>{formStatus.message}</span>
+                </div>
+              )}
+            </form>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

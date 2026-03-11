@@ -1,5 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { FiArrowRight, FiClock, FiUsers, FiAward } from "react-icons/fi";
+import { FaPaperPlane, FaCheckCircle, FaTimesCircle, FaPhone, FaEnvelope, FaUser } from "react-icons/fa";
+import { IoClose } from "react-icons/io5";
+import emailjs from '@emailjs/browser';
 import "./StudyPage.css";
 
 // Імпорт зображень (замініть на свої)
@@ -13,7 +17,27 @@ import videoPreview2 from "../../public/Images/ImagesStudy/video-preview.webp";
 
 export default function StudyPage() {
   const [activeVideo, setActiveVideo] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState(null);
   const [, setIsVisible] = useState({});
+  
+  // Стан для форми
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "Хочу записатись на курс"
+  });
+  
+  const [formStatus, setFormStatus] = useState({
+    submitted: false,
+    success: false,
+    message: "",
+    loading: false
+  });
+
+  const [errors, setErrors] = useState({});
+  const formRef = useRef(null);
 
   // Ефект для анімації при скролі
   useEffect(() => {
@@ -76,6 +100,119 @@ export default function StudyPage() {
     { id: 3, title: "Секрети контурування", duration: "18:45", preview: videoPreview1, videoUrl: "https://www.youtube.com/embed/..." },
   ];
 
+  // Валідація форми
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.name.trim()) {
+      newErrors.name = "Ім'я обов'язкове";
+    } else if (formData.name.length < 2) {
+      newErrors.name = "Ім'я занадто коротке";
+    }
+    
+    if (!formData.email.trim()) {
+      newErrors.email = "Email обов'язковий";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Невірний формат email";
+    }
+    
+    if (formData.phone && !/^[\d\s\-+()]{10,}$/.test(formData.phone)) {
+      newErrors.phone = "Невірний формат телефону";
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Обробка відправки форми
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      formRef.current.classList.add("study__form--error");
+      setTimeout(() => {
+        formRef.current.classList.remove("study__form--error");
+      }, 500);
+      return;
+    }
+    
+    setFormStatus({ ...formStatus, loading: true, message: "" });
+    
+    try {
+      const result = await emailjs.sendForm(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        formRef.current,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
+      
+      if (result.status === 200) {
+        setFormStatus({
+          submitted: true,
+          success: true,
+          message: "Повідомлення відправлено! Ми зв'яжемось з вами найближчим часом.",
+          loading: false
+        });
+        
+        setFormData({ name: "", email: "", phone: "", message: "Хочу записатись на курс" });
+        
+        formRef.current.classList.add("study__form--success");
+        setTimeout(() => {
+          formRef.current.classList.remove("study__form--success");
+        }, 1000);
+        
+        setTimeout(() => {
+          setIsModalOpen(false);
+          setSelectedCourse(null);
+          setFormStatus({ submitted: false, success: false, message: "", loading: false });
+        }, 2000);
+      }
+    } catch (error) {
+      console.error("EmailJS error:", error);
+      setFormStatus({
+        submitted: true,
+        success: false,
+        message: "Сталася помилка. Спробуйте ще раз або зателефонуйте нам.",
+        loading: false
+      });
+    }
+  };
+
+  // Обробка зміни полів
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  // Відкриття модального вікна
+  const openModal = (course = null) => {
+    setSelectedCourse(course);
+    if (course) {
+      setFormData(prev => ({ 
+        ...prev, 
+        message: `Хочу записатись на курс: ${course.title}` 
+      }));
+    } else {
+      setFormData(prev => ({ 
+        ...prev, 
+        message: "Хочу записатись на курс" 
+      }));
+    }
+    setIsModalOpen(true);
+  };
+
+  // Закриття модального вікна
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedCourse(null);
+    setFormData({ name: "", email: "", phone: "", message: "Хочу записатись на курс" });
+    setErrors({});
+    setFormStatus({ submitted: false, success: false, message: "", loading: false });
+  };
+
   return (
     <div className="study-page">
       {/* Hero Section з відео/фото на фоні */}
@@ -95,12 +232,13 @@ export default function StudyPage() {
             Авторські курси з макіяжу від міжнародного експерта з 15-річним досвідом
           </p>
           <div className="study-hero__buttons" data-animate="fade-up" data-delay="300">
-            <Link to="#courses" className="study-btn study-btn--primary">
+            <button 
+              className="study-btn study-btn--primary"
+              onClick={() => openModal()}
+            >
               Обрати курс
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </Link>
+              <FiArrowRight />
+            </button>
             <button className="study-btn study-btn--outline" onClick={() => setActiveVideo("intro")}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
@@ -215,9 +353,7 @@ export default function StudyPage() {
                   
                   <div className="course-card__meta">
                     <span className="course-card__duration">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
+                      <FiClock />
                       {course.duration}
                     </span>
                   </div>
@@ -230,11 +366,12 @@ export default function StudyPage() {
 
                   <div className="course-card__footer">
                     <span className="course-card__price">{course.price}</span>
-                    <button className="course-card__btn">
+                    <button 
+                      className="course-card__btn"
+                      onClick={() => openModal(course)}
+                    >
                       Записатись
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                      </svg>
+                      <FiArrowRight />
                     </button>
                   </div>
                 </div>
@@ -316,10 +453,16 @@ export default function StudyPage() {
             <h2>Почни свою подорож у світ краси</h2>
             <p>Запишись на безкоштовну консультацію та обери свій ідеальний курс</p>
             <div className="cta-buttons">
-              <button className="study-btn study-btn--primary study-btn--large">
+              <button 
+                className="study-btn study-btn--primary study-btn--large"
+                onClick={() => openModal()}
+              >
                 Отримати консультацію
               </button>
-              <button className="study-btn study-btn--outline study-btn--large">
+              <button 
+                className="study-btn study-btn--outline study-btn--large"
+                onClick={() => window.location.href = 'tel:+1234567890'}
+              >
                 Зателефонувати
               </button>
             </div>
@@ -327,67 +470,158 @@ export default function StudyPage() {
         </div>
       </section>
 
-     {/* Модальне вікно для відео */}
-{/* Модальне вікно - максимально простий варіант */}
-{activeVideo && (
-  <div style={{
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100vh',
-    backgroundColor: 'rgba(0, 0, 0, 0.95)',
-    zIndex: 999999,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }} onClick={() => setActiveVideo(null)}>
-    <div style={{
-      position: 'relative',
-      width: '90%',
-      maxWidth: '1000px',
-      backgroundColor: '#000',
-      borderRadius: '10px',
-      overflow: 'hidden'
-    }} onClick={(e) => e.stopPropagation()}>
-      <button style={{
-        position: 'absolute',
-        top: '10px',
-        right: '10px',
-        width: '40px',
-        height: '40px',
-        borderRadius: '50%',
-        background: '#c9a27e',
-        border: 'none',
-        color: '#000',
-        fontSize: '20px',
-        cursor: 'pointer',
-        zIndex: 10
-      }} onClick={() => setActiveVideo(null)}>✕</button>
-      
-      <div style={{
-        position: 'relative',
-        width: '100%',
-        paddingBottom: '56.25%'
-      }}>
-        <iframe
-          src={activeVideo.videoUrl || "https://www.youtube.com/embed/dQw4w9WgXcQ"}
-          title={activeVideo.title}
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            border: 'none'
-          }}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
-      </div>
-    </div>
-  </div>
-)}
+      {/* Модальне вікно для відео */}
+      {activeVideo && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100vh',
+          backgroundColor: 'rgba(0, 0, 0, 0.95)',
+          zIndex: 999999,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }} onClick={() => setActiveVideo(null)}>
+          <div style={{
+            position: 'relative',
+            width: '90%',
+            maxWidth: '1000px',
+            backgroundColor: '#000',
+            borderRadius: '10px',
+            overflow: 'hidden'
+          }} onClick={(e) => e.stopPropagation()}>
+            <button style={{
+              position: 'absolute',
+              top: '10px',
+              right: '10px',
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              background: '#c9a27e',
+              border: 'none',
+              color: '#000',
+              fontSize: '20px',
+              cursor: 'pointer',
+              zIndex: 10
+            }} onClick={() => setActiveVideo(null)}>✕</button>
+            
+            <div style={{
+              position: 'relative',
+              width: '100%',
+              paddingBottom: '56.25%'
+            }}>
+              <iframe
+                src={activeVideo.videoUrl || "https://www.youtube.com/embed/dQw4w9WgXcQ"}
+                title={activeVideo.title}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  border: 'none'
+                }}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* МОДАЛЬНЕ ВІКНО З ФОРМОЮ */}
+      {isModalOpen && (
+        <div className="study__modal-overlay" onClick={closeModal}>
+          <div className="study__modal" onClick={(e) => e.stopPropagation()}>
+            <button className="study__modal-close" onClick={closeModal}>
+              <IoClose />
+            </button>
+            
+            <div className="study__modal-header">
+              <h3 className="study__modal-title">
+                {selectedCourse ? `Запис на курс: ${selectedCourse.title}` : 'Записатись на консультацію'}
+              </h3>
+              <p className="study__modal-subtitle">
+                Заповніть форму і ми зв'яжемось з вами найближчим часом
+              </p>
+            </div>
+
+            <form ref={formRef} onSubmit={handleSubmit} className="study__modal-form">
+              <div className={`study__modal-field ${errors.name ? 'error' : ''}`}>
+                <FaUser className="study__modal-field-icon" />
+                <input
+                  type="text"
+                  name="name"
+                  placeholder=" "
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="study__modal-input"
+                />
+                <label className="study__modal-label">Ваше ім'я *</label>
+                {errors.name && <span className="study__modal-error">{errors.name}</span>}
+              </div>
+
+              <div className={`study__modal-field ${errors.email ? 'error' : ''}`}>
+                <FaEnvelope className="study__modal-field-icon" />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder=" "
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="study__modal-input"
+                />
+                <label className="study__modal-label">Email *</label>
+                {errors.email && <span className="study__modal-error">{errors.email}</span>}
+              </div>
+
+              <div className={`study__modal-field ${errors.phone ? 'error' : ''}`}>
+                <FaPhone className="study__modal-field-icon" />
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder=" "
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className="study__modal-input"
+                />
+                <label className="study__modal-label">Телефон (необов'язково)</label>
+                {errors.phone && <span className="study__modal-error">{errors.phone}</span>}
+              </div>
+
+              <input type="hidden" name="message" value={formData.message} />
+
+              <button 
+                type="submit" 
+                className="study__modal-submit"
+                disabled={formStatus.loading}
+              >
+                {formStatus.loading ? (
+                  <>
+                    <span className="study__modal-spinner"></span>
+                    Відправка...
+                  </>
+                ) : (
+                  <>
+                    <FaPaperPlane className="study__modal-submit-icon" />
+                    {selectedCourse ? 'Записатись на курс' : 'Отримати консультацію'}
+                    <span className="study__modal-submit-glow"></span>
+                  </>
+                )}
+              </button>
+
+              {formStatus.message && (
+                <div className={`study__modal-status ${formStatus.success ? 'success' : 'error'}`}>
+                  {formStatus.success ? <FaCheckCircle /> : <FaTimesCircle />}
+                  <span>{formStatus.message}</span>
+                </div>
+              )}
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

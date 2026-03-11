@@ -792,3 +792,312 @@
     font-size: 0.9rem;
   }
 }
+
+/* ===== МОДАЛЬНЕ ВІКНО ===== */
+.treatments__modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: treatmentsModalFadeIn 0.3s ease;
+}
+
+@keyframes treatmentsModalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.treatments__modal {
+  background: #fff;
+  border-radius: 30px;
+  padding: 2.5rem;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+  animation: treatmentsModalSlideUp 0.4s ease;
+}
+
+@keyframes treatmentsModalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.treatments__modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #666;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.treatments__modal-close:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #c9a27e;
+  transform: rotate(90deg);
+}
+
+.treatments__modal-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.treatments__modal-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 0.5rem 0;
+  font-family: 'Playfair Display', serif;
+}
+
+.treatments__modal-subtitle {
+  font-size: 0.95rem;
+  color: #666;
+  margin: 0;
+}
+
+/* ===== ФОРМА В МОДАЛЬНОМУ ВІКНІ ===== */
+.treatments__modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.treatments__modal-field {
+  position: relative;
+}
+
+.treatments__modal-field.error .treatments__modal-input {
+  border-color: #ff4d4f;
+}
+
+.treatments__modal-field-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #c9a27e;
+  font-size: 1rem;
+  z-index: 2;
+}
+
+.treatments__modal-input {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  background: #f8f4f0;
+  border: 1px solid rgba(201, 162, 126, 0.3);
+  border-radius: 15px;
+  font-size: 1rem;
+  color: #1a1a1a;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.treatments__modal-input:focus {
+  outline: none;
+  border-color: #c9a27e;
+  box-shadow: 0 0 0 3px rgba(201, 162, 126, 0.1);
+  background: white;
+}
+
+.treatments__modal-label {
+  position: absolute;
+  left: 3rem;
+  top: 1rem;
+  padding: 0 0.25rem;
+  background: #f8f4f0;
+  color: #999;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  pointer-events: none;
+  border-radius: 5px;
+}
+
+.treatments__modal-input:focus ~ .treatments__modal-label,
+.treatments__modal-input:not(:placeholder-shown) ~ .treatments__modal-label {
+  top: -0.5rem;
+  left: 2.5rem;
+  font-size: 0.8rem;
+  color: #c9a27e;
+  background: white;
+  padding: 0 0.3rem;
+}
+
+.treatments__modal-error {
+  position: absolute;
+  bottom: -1.2rem;
+  left: 1rem;
+  font-size: 0.75rem;
+  color: #ff4d4f;
+}
+
+/* Кнопка відправки */
+.treatments__modal-submit {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 1.2rem 2rem;
+  background: #c9a27e;
+  border: none;
+  border-radius: 50px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+  border: 1px solid #c9a27e;
+}
+
+.treatments__modal-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(201, 162, 126, 0.4);
+  background: #b8926a;
+}
+
+.treatments__modal-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.treatments__modal-submit-icon {
+  font-size: 1.1rem;
+  transition: transform 0.3s ease;
+}
+
+.treatments__modal-submit:hover .treatments__modal-submit-icon {
+  transform: translateX(5px) rotate(10deg);
+}
+
+.treatments__modal-submit-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150%;
+  height: 150%;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.5s ease;
+  pointer-events: none;
+}
+
+.treatments__modal-submit:hover .treatments__modal-submit-glow {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Спінер */
+.treatments__modal-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: treatmentsModalSpin 0.8s linear infinite;
+}
+
+@keyframes treatmentsModalSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* Статус повідомлення */
+.treatments__modal-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  animation: treatmentsModalSlideUp 0.3s ease;
+}
+
+.treatments__modal-status.success {
+  background: rgba(82, 196, 26, 0.1);
+  color: #52c41a;
+  border: 1px solid rgba(82, 196, 26, 0.2);
+}
+
+.treatments__modal-status.error {
+  background: rgba(255, 77, 79, 0.1);
+  color: #ff4d4f;
+  border: 1px solid rgba(255, 77, 79, 0.2);
+}
+
+/* Помилки форми */
+.treatments__form--error {
+  animation: treatmentsModalShake 0.5s ease;
+}
+
+.treatments__form--success {
+  animation: treatmentsModalPulse 0.5s ease;
+}
+
+@keyframes treatmentsModalShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-10px); }
+  40%, 80% { transform: translateX(10px); }
+}
+
+@keyframes treatmentsModalPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+/* Адаптивність */
+@media (max-width: 768px) {
+  .treatments__modal {
+    padding: 1.5rem;
+    width: 95%;
+  }
+
+  .treatments__modal-title {
+    font-size: 1.5rem;
+  }
+
+  .treatments__modal-submit {
+    padding: 1rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .treatments__modal {
+    padding: 1.2rem;
+  }
+
+  .treatments__modal-title {
+    font-size: 1.3rem;
+  }
+}

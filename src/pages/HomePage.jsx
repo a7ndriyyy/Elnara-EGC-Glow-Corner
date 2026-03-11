@@ -3,7 +3,6 @@ import About from "../sections/About/About";
 import ProfileHighlights from "../sections/ProfileHighlights/ProfileHighlights";
 import Treatments from "../sections/Treatments/Treatments";
 import Reviews from "../sections/Reviews/Reviews";
-import Contact from "../sections/Contact/Contact";
 import "./HomePage.css";
 
 export default function HomePage() {
@@ -16,7 +15,6 @@ export default function HomePage() {
         <About />
         <ProfileHighlights />
         <Reviews />
-        <Contact />
       </main>
     </div>
   );
