@@ -11,8 +11,8 @@ import pricesImg from "/Images/EGC-card.jpeg";
 const heroItems = [
   { 
     id: 1, 
-    title: "Про нас", 
-    subtitle: "Історія та філософія",
+    title: "Навчання", 
+    subtitle: "Курси та Уроки",
     path: "/about", 
     image: aboutImg,
     color: "#c9a27e"

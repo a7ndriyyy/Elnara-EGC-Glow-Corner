@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 const navLinks = [
-  { id: "treatments", label: "Our treatments", path: "/services" },
-  { id: "about", label: "About us", path: "/about" },
-  { id: "reviews", label: "Reviews", path: "/#reviews" },
-  { id: "contact", label: "Contact", path: "/#contact" },
+  { id: "salon", label: "Salon Services", path: "/services" },
+  { id: "study", label: "Study with us", path: "/about" },
+  { id: "massages", label: "Massages and Procedures", path: "/equipment" },
+  { id: "prices", label: "Prices", path: "/prices" },
 ];
 
 export default function Navbar() {
@@ -82,16 +82,16 @@ export default function Navbar() {
         {/* Desktop Right Navigation */}
         <nav className="navbar__nav navbar__nav--right">
           <Link 
-            to="/#reviews" 
+            to="/equipment" 
             className={`navbar__link ${isActive("/#reviews") ? "navbar__link--active" : ""}`}
           >
-            Reviews
+            Massages and Procedures 
           </Link>
           <Link 
-            to="/#contact" 
+            to="/prices" 
             className={`navbar__link ${isActive("/#contact") ? "navbar__link--active" : ""}`}
           >
-            Contact
+            Prices
           </Link>
           <button className="navbar__lang-btn">
             EN

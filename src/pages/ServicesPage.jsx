@@ -1,8 +1,10 @@
-import { useState, useRef } from "react";
+import { useState, useRef , useEffect} from "react";
 import { Link } from "react-router-dom";
 import { FiArrowRight, FiClock } from "react-icons/fi";
 import { FaPaperPlane, FaCheckCircle, FaTimesCircle, FaPhone, FaEnvelope, FaUser } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import emailjs from '@emailjs/browser';
 import "./ServicesPage.css";
 
@@ -17,6 +19,13 @@ export default function ServicesPage() {
   const [selectedService, setSelectedService] = useState(null);
   const [activeFilter, setActiveFilter] = useState("all");
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+   useEffect(() => {
+    AOS.init({
+      duration: 600,
+      once: true
+    });
+  }, []);
   
   // Стан для форми
   const [formData, setFormData] = useState({

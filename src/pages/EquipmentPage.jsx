@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useState, useRef} from "react";
 import { Link } from "react-router-dom";
+import emailjs from "@emailjs/browser";
+import { IoClose } from "react-icons/io5";
+import { FaUser, FaEnvelope, FaPhone, FaPaperPlane, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import "./EquipmentPage.css";
 
 // Імпорт зображень
@@ -8,6 +11,28 @@ import machine1 from "../../public/Images/ImageEquipment/machine1.webp";
 
 export default function EquipmentPage() {
   const [selectedMachine, setSelectedMachine] = useState(null);
+  const [selectedService, setSelectedService] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+  // Стан для форми
+    const [formData, setFormData] = useState({
+      name: "",
+      email: "",
+      phone: "",
+      message: "Хочу записатись на послугу"
+    });
+    
+    const [formStatus, setFormStatus] = useState({
+      submitted: false,
+      success: false,
+      message: "",
+      loading: false
+    });
+  
+    const [errors, setErrors] = useState({});
+    const formRef = useRef(null);
+  
 
   // Дані про обладнання
   const equipment = [
@@ -37,6 +62,112 @@ export default function EquipmentPage() {
 
   const mainMachine = equipment[0];
 
+
+  // Обробка відправки форми
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      formRef.current.classList.add("services__form--error");
+      setTimeout(() => {
+        formRef.current.classList.remove("services__form--error");
+      }, 500);
+      return;
+    }
+    
+    setFormStatus({ ...formStatus, loading: true, message: "" });
+    
+    try {
+      const result = await emailjs.sendForm(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        formRef.current,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
+      
+      if (result.status === 200) {
+        setFormStatus({
+          submitted: true,
+          success: true,
+          message: "Повідомлення відправлено! Ми зв'яжемось з вами найближчим часом.",
+          loading: false
+        });
+        
+        setFormData({ name: "", email: "", phone: "", message: "Хочу записатись на послугу" });
+        
+        formRef.current.classList.add("services__form--success");
+        setTimeout(() => {
+          formRef.current.classList.remove("services__form--success");
+        }, 1000);
+        
+        setTimeout(() => {
+          setIsModalOpen(false);
+          setSelectedService(null);
+          setFormStatus({ submitted: false, success: false, message: "", loading: false });
+        }, 2000);
+      }
+    } catch (error) {
+      console.error("EmailJS error:", error);
+      setFormStatus({
+        submitted: true,
+        success: false,
+        message: "Сталася помилка. Спробуйте ще раз або зателефонуйте нам.",
+        loading: false
+      });
+    }
+    
+  const validateForm = () => {
+  const newErrors = {};
+
+  if (!formData.name.trim()) {
+    newErrors.name = "Введіть ім'я";
+  }
+
+  if (!formData.email.trim()) {
+    newErrors.email = "Введіть email";
+  }
+
+  setErrors(newErrors);
+  return Object.keys(newErrors).length === 0;
+};
+  };
+  
+
+  // Обробка зміни полів
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  // Відкриття модального вікна
+  const openModal = (service = null) => {
+    setSelectedService(service);
+    if (service) {
+      setFormData(prev => ({ 
+        ...prev, 
+        message: `Хочу записатись на послугу: ${service.name}` 
+      }));
+    } else {
+      setFormData(prev => ({ 
+        ...prev, 
+        message: "Хочу записатись на консультацію" 
+      }));
+    }
+    setIsModalOpen(true);
+  };
+
+  // Закриття модального вікна
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedService(null);
+    setFormData({ name: "", email: "", phone: "", message: "Хочу записатись на послугу" });
+    setErrors({});
+    setFormStatus({ submitted: false, success: false, message: "", loading: false });
+  };
+
   return (
     <div className="equipment-page">
       {/* Hero секція */}
@@ -59,9 +190,12 @@ export default function EquipmentPage() {
             <a href="#equipment" className="btn btn--primary">
               Детальніше
             </a>
-            <Link to="/contact" className="btn btn--outline">
+                <button 
+              className="btn btn--outline"
+              onClick={() => openModal()}
+            >
               Консультація
-            </Link>
+            </button>
           </div>
         </div>
       </section>
@@ -130,9 +264,12 @@ export default function EquipmentPage() {
                   >
                     Детальніше про апарат
                   </button>
-                  <Link to="/contact" className="btn btn--outline">
-                    Записатись
-                  </Link>
+                  <button 
+              className="btn btn--outline"
+              onClick={() => openModal()}
+            >
+              Записатись
+            </button>
                 </div>
               </div>
             </div>
@@ -206,9 +343,12 @@ export default function EquipmentPage() {
             <h2>Спробуйте LPG масаж</h2>
             <p>Запишіться на процедуру та відчуйте результат вже після першого сеансу</p>
             <div className="cta-buttons">
-              <Link to="/contact" className="btn btn--primary btn--large">
-                Записатись
-              </Link>
+                  <button 
+              className="btn btn--outline"
+              onClick={() => openModal()}
+            >
+              Записатись
+            </button>
               <a href="tel:+33456756578" className="btn btn--outline btn--large">
                 +33 4 56 75 65 78
               </a>
@@ -232,12 +372,107 @@ export default function EquipmentPage() {
               <li>Насадки: 6 програм</li>
               <li>Інтенсивність: 10 рівнів</li>
             </ul>
-            <Link to="/contact" className="btn btn--primary">
+            <button 
+              className="btn btn--outline"
+              onClick={() => openModal()}
+            >
               Записатись
-            </Link>
+            </button>
           </div>
         </div>
       )}
+
+       {/* МОДАЛЬНЕ ВІКНО З ФОРМОЮ */}
+            {isModalOpen && (
+              <div className="services__modal-overlay" onClick={closeModal}>
+                <div className="services__modal" onClick={(e) => e.stopPropagation()}>
+                  <button className="services__modal-close" onClick={closeModal}>
+                    <IoClose />
+                  </button>
+                  
+                  <div className="services__modal-header">
+                    <h3 className="services__modal-title">
+                      {selectedService ? `Запис на: ${selectedService.name}` : 'Записатись на консультацію'}
+                    </h3>
+                    <p className="services__modal-subtitle">
+                      Заповніть форму і ми зв'яжемось з вами найближчим часом
+                    </p>
+                  </div>
+      
+                  <form ref={formRef} onSubmit={handleSubmit} className="services__modal-form">
+                    <div className={`services__modal-field ${errors.name ? 'error' : ''}`}>
+                      <FaUser className="services__modal-field-icon" />
+                      <input
+                        type="text"
+                        name="name"
+                        placeholder=" "
+                        value={formData.name}
+                        onChange={handleChange}
+                        className="services__modal-input"
+                      />
+                      <label className="services__modal-label">Ваше ім'я *</label>
+                      {errors.name && <span className="services__modal-error">{errors.name}</span>}
+                    </div>
+      
+                    <div className={`services__modal-field ${errors.email ? 'error' : ''}`}>
+                      <FaEnvelope className="services__modal-field-icon" />
+                      <input
+                        type="email"
+                        name="email"
+                        placeholder=" "
+                        value={formData.email}
+                        onChange={handleChange}
+                        className="services__modal-input"
+                      />
+                      <label className="services__modal-label">Email *</label>
+                      {errors.email && <span className="services__modal-error">{errors.email}</span>}
+                    </div>
+      
+                    <div className={`services__modal-field ${errors.phone ? 'error' : ''}`}>
+                      <FaPhone className="services__modal-field-icon" />
+                      <input
+                        type="tel"
+                        name="phone"
+                        placeholder=" "
+                        value={formData.phone}
+                        onChange={handleChange}
+                        className="services__modal-input"
+                      />
+                      <label className="services__modal-label">Телефон (необов'язково)</label>
+                      {errors.phone && <span className="services__modal-error">{errors.phone}</span>}
+                    </div>
+      
+                    <input type="hidden" name="message" value={formData.message} />
+      
+                    <button 
+                      type="submit" 
+                      className="services__modal-submit"
+                      disabled={formStatus.loading}
+                    >
+                      {formStatus.loading ? (
+                        <>
+                          <span className="services__modal-spinner"></span>
+                          Відправка...
+                        </>
+                      ) : (
+                        <>
+                          <FaPaperPlane className="services__modal-submit-icon" />
+                          {selectedService ? 'Записатись' : 'Отримати консультацію'}
+                          <span className="services__modal-submit-glow"></span>
+                        </>
+                      )}
+                    </button>
+      
+                    {formStatus.message && (
+                      <div className={`services__modal-status ${formStatus.success ? 'success' : 'error'}`}>
+                        {formStatus.success ? <FaCheckCircle /> : <FaTimesCircle />}
+                        <span>{formStatus.message}</span>
+                      </div>
+                    )}
+                  </form>
+                </div>
+              </div>
+            )}
     </div>
   );
 }
