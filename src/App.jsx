@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import "../src/index.css";
@@ -33,7 +33,7 @@ function ScrollToHash() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <ScrollToHash />
       <Routes>
         <Route path="/" element={<Layout />}>
@@ -44,6 +44,6 @@ export default function App() {
           <Route path="prices" element={<PricesPage />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
