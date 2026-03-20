@@ -1,3 +1,4 @@
+import React from 'react';
 import { useEffect, useRef, useState, useCallback } from "react";
 import { aboutData } from "../../data/about";
 import { FaFacebookF, FaYoutube, FaInstagram, FaTwitter, FaGlobe } from "react-icons/fa";

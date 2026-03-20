@@ -1,3 +1,4 @@
+import React from 'react';
 import { useEffect, useRef, useState } from "react";
 import { highlights } from "../../data/highlights";
 import { MdVerified} from "react-icons/md";

@@ -1,3 +1,4 @@
+import React from 'react';
 import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import { FiClock, FiArrowRight } from "react-icons/fi";
 import { MdFace, MdSpa } from "react-icons/md";

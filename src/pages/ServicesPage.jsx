@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState, useRef , useEffect} from "react";
 import { Link } from "react-router-dom";
 import { FiArrowRight, FiClock } from "react-icons/fi";

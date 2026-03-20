@@ -1,3 +1,4 @@
+import React from 'react';
 import Hero from "../components/Hero/Hero";
 import About from "../sections/About/About";
 import ProfileHighlights from "../sections/ProfileHighlights/ProfileHighlights";

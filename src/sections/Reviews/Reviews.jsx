@@ -1,3 +1,4 @@
+import React from 'react';
 import { useEffect, useState, useRef, useCallback } from "react";
 import { FaStar, FaRegStar, FaQuoteRight, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { reviewsData } from "../../data/reviews";
