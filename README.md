@@ -1,16 +1,58 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Elnara Beauty - Professional Makeup & Beauty Studio
 
-Currently, two official plugins are available:
+### 1. **Hero Section** (`Hero.jsx`)
+- Animated welcome section with navigation cards
+- Links to main sections: Services, Courses, Treatments, Prices
+- Particle background effects
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 2. **Services Page** (`ServicesPage.jsx`)
+- Complete list of makeup services
+- Categories: Bridal, Evening, Day, Brows
+- Service details with duration, price, and features
+- Modal booking form for each service
 
-## React Compiler
+### 3. **Study Page** (`StudyPage.jsx`)
+- Professional makeup courses
+- Course details with pricing and duration
+- Video tutorials gallery
+- Information about instructor Elnara
+- Course booking form
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 4. **Treatments Section** (`Treatments.jsx`)
+- Beauty treatments for Face and Body
+- Filterable by category
+- Treatment details with time and price
+- Consultation booking form
 
-## Expanding the ESLint configuration
+### 5. **Profile Highlights** (`ProfileHighlights.jsx`)
+- Studio advantages and achievements
+- Statistics and certifications
+- Interactive cards with hover effects
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Technologies Used
+
+### Core Technologies
+- **React 18** - UI library with hooks
+- **React Router DOM** - Navigation and routing
+- **Vite** - Build tool and development server
+
+### Styling & Animations
+- **CSS Modules** - Scoped styling
+- **AOS** - Scroll animations
+- **React Icons** - Icon library
+
+### Functionality
+- **EmailJS** - Email sending without backend
+- **Intersection Observer** - Scroll-triggered animations
+
+## 📦 Installation & Setup
+
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
+
+### Step 1: Clone the repository
+```bash
+git clone https://github.com/yourusername/elnara-beauty.git
+cd elnara-beauty
