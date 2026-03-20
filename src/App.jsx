@@ -1,3 +1,4 @@
+import React from 'react';
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
@@ -34,7 +35,7 @@ function ScrollToHash() {
 export default function App() {
   return (
     <React.StrictMode>
-    <HashRouter>
+    <HashRouter >
       <ScrollToHash />
       <Routes>
         <Route path="/" element={<Layout />}>
