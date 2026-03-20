@@ -33,6 +33,7 @@ function ScrollToHash() {
 
 export default function App() {
   return (
+    <React.StrictMode>
     <HashRouter>
       <ScrollToHash />
       <Routes>
@@ -45,5 +46,6 @@ export default function App() {
         </Route>
       </Routes>
     </HashRouter>
+    </React.StrictMode>
   );
 }
