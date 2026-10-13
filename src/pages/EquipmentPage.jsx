@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 import { IoClose } from "react-icons/io5";
 import { FaUser, FaEnvelope, FaPhone, FaPaperPlane, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
-import "./EquipmentPage.css";
+import "./Equipmentpage.css";
 
 // Імпорт зображень
 import equipmentHero from "../../public/Images/ImageEquipment/equipment-hero.webp";
