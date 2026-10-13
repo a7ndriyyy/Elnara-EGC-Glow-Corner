@@ -1239,6 +1239,7 @@
   .section-title {
     font-size: 1.8rem;
   }
+}
 
   .study-hero__title {
     font-size: 2rem;
@@ -1310,3 +1311,4 @@
   .course-card__footer {
     flex-direction: column;
     gap: 1rem
+  }
