@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { FiArrowRight, FiClock, FiUsers, FiAward } from "react-icons/fi";
+import { FiArrowRight, FiClock} from "react-icons/fi";
 import { FaPaperPlane, FaCheckCircle, FaTimesCircle, FaPhone, FaEnvelope, FaUser } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import emailjs from '@emailjs/browser';
@@ -11,7 +11,7 @@ import "./StudyPage.css";
 import courseImage1 from "../../public/Images/ImagesStudy/Makeup-Course.webp";
 import courseImage2 from "../../public/Images/ImagesStudy/Makeup-Course.webp";
 import courseImage3 from "../../public/Images/ImagesStudy/Makeup-Course.webp";
-import elnaraPortrait from "../../public/Images/ImagesStudy/Elnara-portrait.webp";
+import elnaraPortrait from "../../public/Images/ImagesStudy/elnara-portrait.webp";
 import studyHero from "../../public/Images/ImagesStudy/Study-hero.webp";
 import videoPreview1 from "../../public/Images/ImagesStudy/video-preview.webp";
 import videoPreview2 from "../../public/Images/ImagesStudy/video-preview.webp";
