@@ -1,45 +1,69 @@
+
+/* ================================
+   ELNARA — Responsive Booking Page
+   ================================ */
+
 .booking-page {
+  box-sizing: border-box;
   min-height: 70vh;
-  padding: 64px 20px;
+  padding: clamp(32px, 6vw, 80px) 20px;
   background: #f7f5f2;
   color: #202020;
 }
 
+.booking-page *,
+.booking-page *::before,
+.booking-page *::after {
+  box-sizing: border-box;
+}
+
 .booking-card {
   width: 100%;
-  max-width: 640px;
+  max-width: 680px;
   margin: 0 auto;
-  padding: 36px;
-  border-radius: 16px;
+  padding: clamp(24px, 5vw, 42px);
+  border: 1px solid rgb(154 120 88 / 12%);
+  border-radius: 20px;
   background: #fff;
-  box-shadow: 0 12px 40px rgb(0 0 0 / 7%);
+  box-shadow: 0 16px 48px rgb(32 32 32 / 7%);
 }
 
 .booking-eyebrow {
-  margin: 0 0 10px;
+  margin: 0 0 12px;
   color: #9a7858;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.16em;
+  line-height: 1.5;
+  text-transform: uppercase;
 }
 
 .booking-card h1 {
-  margin: 0 0 12px;
-  font-size: clamp(28px, 5vw, 40px);
+  margin: 0 0 14px;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
 }
 
 .booking-intro {
-  color: #666;
-  line-height: 1.6;
+  margin: 0;
+  color: #68645f;
+  font-size: 15px;
+  line-height: 1.75;
 }
 
 .booking-notice {
-  margin: 24px 0;
-  padding: 14px;
+  margin: 26px 0;
+  padding: 16px 18px;
+  border: 1px solid rgb(154 120 88 / 12%);
   border-left: 3px solid #9a7858;
+  border-radius: 0 10px 10px 0;
   background: #f8f2eb;
+  color: #55483d;
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.65;
 }
 
 .booking-notice p {
@@ -48,52 +72,114 @@
 
 .booking-card form {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 10px;
 }
 
 .booking-card label,
 .booking-times legend {
   margin-top: 12px;
+  color: #292723;
+  font-size: 14px;
   font-weight: 600;
+  line-height: 1.5;
 }
 
-.booking-card input {
-  box-sizing: border-box;
+.booking-card input,
+.booking-card select {
+  display: block;
   width: 100%;
-  min-height: 46px;
-  padding: 10px 12px;
-  border: 1px solid #d8d5d1;
-  border-radius: 8px;
+  min-width: 0;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid #dedad5;
+  border-radius: 10px;
+  outline: none;
   background: #fff;
   color: #202020;
   font: inherit;
+  font-size: 16px;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease;
+}
+
+.booking-card input::placeholder {
+  color: #a09a93;
+}
+
+.booking-card input:hover,
+.booking-card select:hover {
+  border-color: #bba58f;
+}
+
+.booking-card input:focus,
+.booking-card select:focus {
+  border-color: #9a7858;
+  box-shadow: 0 0 0 3px rgb(154 120 88 / 14%);
+}
+
+.booking-card input:focus-visible,
+.booking-card select:focus-visible,
+.booking-time:focus-visible,
+.booking-submit:focus-visible {
+  outline: 2px solid #9a7858;
+  outline-offset: 3px;
 }
 
 .booking-times {
   min-width: 0;
-  margin: 10px 0;
+  margin: 16px 0 8px;
   padding: 0;
   border: 0;
+}
+
+.booking-times legend {
+  padding: 0;
 }
 
 .booking-time-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
-  margin-top: 12px;
+  gap: 10px;
+  margin-top: 14px;
 }
 
 .booking-time {
-  min-height: 42px;
-  border: 1px solid #d8d5d1;
-  border-radius: 8px;
+  min-width: 0;
+  min-height: 44px;
+  padding: 8px 6px;
+  border: 1px solid #dedad5;
+  border-radius: 10px;
   background: #fff;
+  color: #292723;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.booking-time:hover:not(:disabled) {
+  border-color: #9a7858;
+  background: #fbf8f5;
+}
+
+.booking-time:active:not(:disabled) {
+  transform: scale(0.98);
 }
 
 .booking-time:disabled {
+  border-color: #ece9e5;
+  background: #f7f6f4;
+  color: #b5b0aa;
   cursor: not-allowed;
-  opacity: 0.45;
+  opacity: 0.7;
 }
 
 .booking-time.selected {
@@ -103,48 +189,290 @@
 }
 
 .booking-hint {
-  color: #666;
-  font-size: 14px;
+  margin: 10px 0 0;
+  color: #77716a;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.booking-service-summary,
+.booking-summary {
+  min-width: 0;
+  margin: 14px 0;
+  padding: 16px;
+  border: 1px solid rgb(154 120 88 / 12%);
+  border-radius: 12px;
+  background: #f8f2eb;
+  color: #55483d;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.booking-service-summary p,
+.booking-summary p {
+  margin: 4px 0;
+}
+
+.booking-summary h2 {
+  margin: 0 0 12px;
+  color: #292723;
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.4;
 }
 
 .booking-submit {
-  min-height: 48px;
+  display: block;
+  width: 100%;
+  min-height: 52px;
   margin-top: 20px;
-  padding: 12px 18px;
-  border: 0;
-  border-radius: 8px;
+  padding: 14px 20px;
+  border: 1px solid #202020;
+  border-radius: 10px;
   background: #202020;
   color: #fff;
   font: inherit;
+  font-size: 15px;
   font-weight: 600;
+  line-height: 1.4;
+  text-align: center;
   cursor: pointer;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
 }
 
 .booking-submit:hover {
-  background: #3c3c3c;
+  border-color: #9a7858;
+  background: #9a7858;
+}
+
+.booking-submit:active {
+  transform: translateY(1px);
+}
+
+.booking-submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .booking-error {
+  margin: 8px 0;
   color: #b42318;
-}
-
-.booking-result {
-  padding: 16px;
-  border-radius: 8px;
-  background: #f2f4f0;
+  font-size: 14px;
   line-height: 1.5;
 }
 
-@media (max-width: 560px) {
+.booking-result {
+  margin-top: 20px;
+  padding: 18px;
+  border: 1px solid #dce5d8;
+  border-radius: 12px;
+  background: #f2f4f0;
+  color: #344b32;
+  font-size: 14px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+/* Tablet */
+@media (max-width: 768px) {
   .booking-page {
-    padding: 28px 12px;
+    padding: 40px 18px;
   }
 
   .booking-card {
-    padding: 22px 16px;
+    max-width: 620px;
+    padding: 30px;
+    border-radius: 16px;
   }
 
   .booking-time-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 9px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .booking-page {
+    padding: 24px 12px;
+  }
+
+  .booking-card {
+    padding: 24px 17px;
+    border-radius: 14px;
+  }
+
+  .booking-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.13em;
+  }
+
+  .booking-card h1 {
+    font-size: clamp(27px, 8vw, 34px);
+  }
+
+  .booking-intro {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .booking-notice {
+    margin: 20px 0;
+    padding: 13px 14px;
+    font-size: 13px;
+  }
+
+  .booking-card label,
+  .booking-times legend {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+
+  .booking-card input,
+  .booking-card select {
+    min-height: 48px;
+    padding: 12px;
+  }
+
+  .booking-time-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .booking-time {
+    min-height: 43px;
+    padding: 8px 3px;
+    font-size: 13px;
+  }
+
+  .booking-service-summary,
+  .booking-summary {
+    padding: 13px;
+    font-size: 14px;
+  }
+
+  .booking-submit {
+    min-height: 50px;
+    padding: 13px 14px;
+  }
+}
+
+/* Small mobile screens */
+@media (max-width: 360px) {
+  .booking-page {
+    padding: 18px 8px;
+  }
+
+  .booking-card {
+    padding: 21px 13px;
+  }
+
+  .booking-time-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .booking-card input,
+  .booking-card select,
+  .booking-time,
+  .booking-submit {
+    transition: none;
+  }
+}
+
+
+/* Fix service dropdown overflow on mobile */
+.booking-card form {
+  width: 100%;
+  min-width: 0;
+}
+
+.booking-card label {
+  display: block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.booking-card select {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.booking-service-summary,
+.booking-summary {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+@media (max-width: 480px) {
+  .booking-card {
+    width: 100%;
+    min-width: 0;
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+
+  .booking-card select {
+    font-size: 16px;
+  }
+}
+
+
+
+/* Fix service dropdown overflow on mobile */
+.booking-card form {
+  width: 100%;
+  min-width: 0;
+}
+
+.booking-card label {
+  display: block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.booking-card select {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.booking-service-summary,
+.booking-summary {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+@media (max-width: 480px) {
+  .booking-card {
+    width: 100%;
+    min-width: 0;
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+
+  .booking-card select {
+    font-size: 16px;
   }
 }

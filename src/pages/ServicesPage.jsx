@@ -1,12 +1,17 @@
-import React from 'react';
-import { useState, useRef , useEffect} from "react";
-import { Link } from "react-router-dom";
-import { FiArrowRight, FiClock } from "react-icons/fi";
-import { FaPaperPlane, FaCheckCircle, FaTimesCircle, FaPhone, FaEnvelope, FaUser } from "react-icons/fa";
+import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  FaPaperPlane,
+  FaCheckCircle,
+  FaTimesCircle,
+  FaPhone,
+  FaEnvelope,
+  FaUser,
+} from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import emailjs from '@emailjs/browser';
+import emailjs from "@emailjs/browser";
 import "./ServicesPage.css";
 
 // Імпорт зображень (замініть на свої)
@@ -20,6 +25,28 @@ export default function ServicesPage() {
   const [selectedService, setSelectedService] = useState(null);
   const [activeFilter, setActiveFilter] = useState("all");
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const navigate = useNavigate();
+
+  const goToBooking = (service) => {
+  const bookingServiceIds = {
+    1: "bridal-makeup",
+    2: "evening-makeup",
+    3: "day-makeup",
+    4: "smokey-eyes",
+    5: "brow-shaping-coloring",
+  };
+
+  const bookingServiceId = service
+    ? bookingServiceIds[service.id]
+    : null;
+
+  navigate(
+    bookingServiceId
+      ? `/booking?service=${bookingServiceId}`
+      : "/booking"
+  );
+};
 
    useEffect(() => {
     AOS.init({
@@ -245,21 +272,14 @@ export default function ServicesPage() {
   };
 
   // Відкриття модального вікна
-  const openModal = (service = null) => {
-    setSelectedService(service);
-    if (service) {
-      setFormData(prev => ({ 
-        ...prev, 
-        message: `Хочу записатись на послугу: ${service.name}` 
-      }));
-    } else {
-      setFormData(prev => ({ 
-        ...prev, 
-        message: "Хочу записатись на консультацію" 
-      }));
-    }
-    setIsModalOpen(true);
-  };
+  const openModal = () => {
+  setSelectedService(null);
+  setFormData((prev) => ({
+    ...prev,
+    message: "Хочу записатись на консультацію",
+  }));
+  setIsModalOpen(true);
+};
 
   // Закриття модального вікна
   const closeModal = () => {
@@ -294,7 +314,7 @@ export default function ServicesPage() {
             </a>
             <button 
               className="btn btn--outline"
-              onClick={() => openModal()}
+              onClick={() => goToBooking()}
             >
               Записатись
             </button>
@@ -346,10 +366,7 @@ export default function ServicesPage() {
               <div 
                 key={service.id} 
                 className="popular-card"
-                onClick={() => {
-                  setSelectedService(service);
-                  openModal(service);
-                }}
+                onClick={() => goToBooking(service)}
               >
                 <div className="popular-card__image">
                   <img src={service.image} alt={service.name} />
@@ -363,11 +380,14 @@ export default function ServicesPage() {
                       <span className="popular-card__duration">{service.duration}</span>
                       <span className="popular-card__price">{service.price} €</span>
                     </div>
-                    <button className="popular-card__btn" onClick={(e) => {
-                      e.stopPropagation();
-                      openModal(service);
-                    }}>
-                      Детальніше →
+                 <button
+                    className="popular-card__btn"
+                     onClick={(e) => {
+                     e.stopPropagation();
+                     goToBooking(service);
+                       }}
+                      >
+                     Записатися →
                     </button>
                   </div>
                 </div>
@@ -422,22 +442,40 @@ export default function ServicesPage() {
           {/* Сітка послуг */}
           <div className="services__grid">
             {filteredServices.map((service) => (
-              <div 
-                key={service.id} 
-                className="service-card"
-                onClick={() => openModal(service)}
+              <div
+                                key={service.id}
+                                className="service-card"
+                                onClick={() => goToBooking(service)}
+                              >
+                            <div className="service-card__image">
+                              <img src={service.image} alt={service.name} />
+                            </div>
+                      <div className="service-card__content">
+              <h3>{service.name}</h3>
+
+              <p className="service-card__name-en">{service.nameEn}</p>
+
+              <div className="service-card__details">
+                <span className="service-card__duration">
+                  {service.duration}
+                </span>
+
+                <span className="service-card__price">
+                  {service.price} €
+                </span>
+              </div>
+
+              <button
+                type="button"
+                className="popular-card__btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  goToBooking(service);
+                }}
               >
-                <div className="service-card__image">
-                  <img src={service.image} alt={service.name} />
-                </div>
-                <div className="service-card__content">
-                  <h3>{service.name}</h3>
-                  <p className="service-card__name-en">{service.nameEn}</p>
-                  <div className="service-card__details">
-                    <span className="service-card__duration">{service.duration}</span>
-                    <span className="service-card__price">{service.price} €</span>
-                  </div>
-                </div>
+                Записатися →
+              </button>
+            </div>
               </div>
             ))}
           </div>
@@ -497,10 +535,17 @@ export default function ServicesPage() {
             <div className="cta__buttons">
               <button 
                 className="btn btn--primary btn--large"
-                onClick={() => openModal()}
+                onClick={() => goToBooking()}
               >
                 Записатись онлайн
               </button>
+              <button
+  type="button"
+  className="btn btn--outline btn--large"
+  onClick={openModal}
+>
+  Отримати консультацію
+</button>
               <a href="tel:+33456756578" className="btn btn--outline btn--large">
                 +33 4 56 75 65 78
               </a>
