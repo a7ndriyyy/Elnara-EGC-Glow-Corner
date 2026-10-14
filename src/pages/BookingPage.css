@@ -1,0 +1,150 @@
+.booking-page {
+  min-height: 70vh;
+  padding: 64px 20px;
+  background: #f7f5f2;
+  color: #202020;
+}
+
+.booking-card {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 36px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 12px 40px rgb(0 0 0 / 7%);
+}
+
+.booking-eyebrow {
+  margin: 0 0 10px;
+  color: #9a7858;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.booking-card h1 {
+  margin: 0 0 12px;
+  font-size: clamp(28px, 5vw, 40px);
+}
+
+.booking-intro {
+  color: #666;
+  line-height: 1.6;
+}
+
+.booking-notice {
+  margin: 24px 0;
+  padding: 14px;
+  border-left: 3px solid #9a7858;
+  background: #f8f2eb;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.booking-notice p {
+  margin: 6px 0 0;
+}
+
+.booking-card form {
+  display: grid;
+  gap: 10px;
+}
+
+.booking-card label,
+.booking-times legend {
+  margin-top: 12px;
+  font-weight: 600;
+}
+
+.booking-card input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px solid #d8d5d1;
+  border-radius: 8px;
+  background: #fff;
+  color: #202020;
+  font: inherit;
+}
+
+.booking-times {
+  min-width: 0;
+  margin: 10px 0;
+  padding: 0;
+  border: 0;
+}
+
+.booking-time-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.booking-time {
+  min-height: 42px;
+  border: 1px solid #d8d5d1;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.booking-time:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.booking-time.selected {
+  border-color: #9a7858;
+  background: #9a7858;
+  color: #fff;
+}
+
+.booking-hint {
+  color: #666;
+  font-size: 14px;
+}
+
+.booking-submit {
+  min-height: 48px;
+  margin-top: 20px;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 8px;
+  background: #202020;
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.booking-submit:hover {
+  background: #3c3c3c;
+}
+
+.booking-error {
+  color: #b42318;
+}
+
+.booking-result {
+  padding: 16px;
+  border-radius: 8px;
+  background: #f2f4f0;
+  line-height: 1.5;
+}
+
+@media (max-width: 560px) {
+  .booking-page {
+    padding: 28px 12px;
+  }
+
+  .booking-card {
+    padding: 22px 16px;
+  }
+
+  .booking-time-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

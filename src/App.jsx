@@ -9,6 +9,7 @@ import AboutPage from "./pages/StudyPage";
 import ServicesPage from "./pages/ServicesPage";
 import EquipmentPage from "./pages/EquipmentPage";
 import PricesPage from "./pages/PricesPage";
+import BookingPage from "./pages/BookingPage";
 // Додайте імпорт для скролу до секцій
 
 
@@ -44,6 +45,7 @@ export default function App() {
           <Route path="services" element={<ServicesPage />} />
           <Route path="equipment" element={<EquipmentPage />} />
           <Route path="prices" element={<PricesPage />} />
+          <Route path="booking" element={<BookingPage />} />
         </Route>
       </Routes>
     </HashRouter>
