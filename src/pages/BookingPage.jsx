@@ -530,7 +530,7 @@ export default function BookingPage() {
                 No available times for this date. Please choose another date.
               </p>
             ) : (
-              <div className="booking-time-grid">
+              <div className="booking-time-slot-grid">
                 {availableSlots.map((slot) => {
                   const time = new Intl.DateTimeFormat("en-GB", {
                     timeZone: "Europe/Paris",
