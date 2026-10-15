@@ -387,51 +387,6 @@
 }
 
 
-/* Fix service dropdown overflow on mobile */
-.booking-card form {
-  width: 100%;
-  min-width: 0;
-}
-
-.booking-card label {
-  display: block;
-  max-width: 100%;
-  overflow-wrap: anywhere;
-}
-
-.booking-card select {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.booking-service-summary,
-.booking-summary {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  overflow-wrap: anywhere;
-  word-break: normal;
-}
-
-@media (max-width: 480px) {
-  .booking-card {
-    width: 100%;
-    min-width: 0;
-    padding-right: 14px;
-    padding-left: 14px;
-  }
-
-  .booking-card select {
-    font-size: 16px;
-  }
-}
-
-
 
 /* Fix service dropdown overflow on mobile */
 .booking-card form {
