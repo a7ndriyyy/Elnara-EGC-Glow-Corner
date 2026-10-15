@@ -1,18 +1,17 @@
+
 import React from 'react';
-import { Outlet } from "react-router-dom";
-import Navbar from "../Navbar/Navbar";
-import Footer from "../Footer/Footer";
-// Імпортуйте Hero сюди, якщо він має бути тільки на головній. Якщо Hero з 4 картками має бути на всіх сторінках вгорі - додайте його сюди.
-// Але за вашим початковим кодом, Hero був тільки на головній. Тому я залишу його в HomePage.
+import { Outlet } from 'react-router-dom';
+import Navbar from '../Navbar/Navbar';
+import Footer from '../Footer/Footer';
 
 export default function Layout() {
   return (
-    <>
+    <div className="site-layout">
       <Navbar />
-      <main>
-        <Outlet /> {/* Тут будуть рендеритись сторінки (HomePage, AboutPage, etc.) */}
+      <main className="site-layout__main">
+        <Outlet />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

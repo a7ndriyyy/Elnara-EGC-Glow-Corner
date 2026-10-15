@@ -1,139 +1,223 @@
 
-.admin-page {
-  width: min(1100px, calc(100% - 32px));
-  margin: 40px auto;
-  color: #222;
+.admin-page,
+.admin-login {
+  width: 100%;
+  color: var(--text-dark);
 }
 
-.admin-page__header,
-.admin-appointment__top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
+.admin-page {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 56px 5%;
+  min-height: 70vh;
 }
 
 .admin-page__header {
-  margin-bottom: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
   flex-wrap: wrap;
+  margin-bottom: 38px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(31, 30, 28, 0.16);
 }
 
 .admin-page__header h1 {
-  margin-bottom: 8px;
+  margin: 0 0 10px;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 400;
+  letter-spacing: -0.04em;
+}
+
+.admin-page__header p {
+  margin: 0;
+  color: var(--muted-dark);
+}
+
+.admin-page button,
+.admin-login button {
+  min-height: 44px;
+  padding: 11px 20px;
+  border: 1px solid var(--bg-dark);
+  border-radius: 2px;
+  background: var(--bg-dark);
+  color: var(--text-light);
+  font: inherit;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.admin-page button:hover:not(:disabled),
+.admin-login button:hover:not(:disabled) {
+  background: transparent;
+  color: var(--bg-dark);
+}
+
+.admin-page button:disabled,
+.admin-login button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .admin-page__filters {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 24px;
   flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 28px;
 }
 
-.admin-page button,
-.admin-login button {
-  padding: 10px 16px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background: #fff;
-  color: #222;
-  cursor: pointer;
+.admin-page__filters label {
+  font-size: 0.95rem;
 }
 
-.admin-page button:disabled,
-.admin-login button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.admin-page select,
+.admin-page__filters select,
 .admin-login input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid rgba(31, 30, 28, 0.25);
+  border-radius: 2px;
+  background: var(--card);
+  color: var(--text-dark);
   font: inherit;
+}
+
+.admin-page__filters span {
+  margin-left: auto;
+  color: var(--muted-dark);
+  font-size: 0.9rem;
 }
 
 .admin-page__list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  gap: 22px;
 }
 
 .admin-appointment {
-  padding: 22px;
-  border: 1px solid #e0e0e0;
-  border-radius: 12px;
-  background: #fff;
+  min-width: 0;
+  padding: 26px;
+  border: 1px solid rgba(31, 30, 28, 0.12);
+  border-radius: var(--radius);
+  background: var(--card);
+  box-shadow: 0 8px 28px rgba(31, 30, 28, 0.04);
   overflow-wrap: anywhere;
+}
+
+.admin-appointment__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 22px;
 }
 
 .admin-appointment h2 {
   margin: 0;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
+  font-weight: 400;
 }
 
 .admin-appointment p {
-  margin: 12px 0;
+  margin: 13px 0;
+  line-height: 1.5;
 }
 
-.admin-appointment__top {
-  align-items: flex-start;
-  margin-bottom: 18px;
+.admin-appointment p strong {
+  font-weight: 600;
 }
 
 .status {
   display: inline-block;
-  padding: 5px 9px;
-  border-radius: 20px;
-  background: #eee;
-  font-size: 0.85rem;
+  padding: 6px 10px;
+  border-radius: 30px;
+  background: #eee9df;
+  color: var(--text-dark);
+  font-size: 0.8rem;
+  text-transform: capitalize;
 }
 
 .status--pending {
-  background: #fff0cc;
+  background: #f6e8c9;
 }
 
 .status--confirmed {
-  background: #dff4e4;
+  background: #dce9d9;
 }
 
 .status--cancelled {
-  background: #f9dddd;
+  background: #f0dada;
 }
 
 .admin-appointment__actions {
   display: flex;
-  gap: 10px;
-  margin-top: 20px;
   flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(31, 30, 28, 0.1);
+}
+
+.admin-appointment__actions button:last-child {
+  background: transparent;
+  color: var(--bg-dark);
+}
+
+.admin-appointment__actions button:last-child:hover:not(:disabled) {
+  background: var(--bg-dark);
+  color: var(--text-light);
 }
 
 .admin-page__error,
 .admin-login [role="alert"] {
-  color: #b42318;
+  color: #a32626;
 }
 
 .admin-login {
   min-height: 70vh;
   display: grid;
   place-items: center;
-  padding: 24px;
+  padding: 48px 20px;
 }
 
 .admin-login__form {
-  width: min(100%, 420px);
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 28px;
-  border: 1px solid #e0e0e0;
-  border-radius: 12px;
-  background: #fff;
+  gap: 14px;
+  width: min(100%, 440px);
+  padding: clamp(24px, 5vw, 42px);
+  border: 1px solid rgba(31, 30, 28, 0.14);
+  border-radius: var(--radius);
+  background: var(--card);
+  box-shadow: 0 16px 50px rgba(31, 30, 28, 0.06);
 }
 
 .admin-login__form h1 {
-  margin: 0;
+  margin: 0 0 4px;
+  font-size: 2rem;
+  font-weight: 400;
+}
+
+.admin-login__form > p {
+  margin: 0 0 16px;
+  color: var(--muted-dark);
+  line-height: 1.5;
+}
+
+.admin-login__form label {
+  font-size: 0.95rem;
+}
+
+.admin-login__form input {
+  width: 100%;
+}
+
+.admin-login__form input:focus,
+.admin-page__filters select:focus {
+  outline: 2px solid rgba(31, 30, 28, 0.35);
+  outline-offset: 2px;
 }
 
 .admin-login__form button {
@@ -142,14 +226,25 @@
 
 @media (max-width: 600px) {
   .admin-page {
-    margin: 24px auto;
+    padding: 34px 20px;
   }
 
   .admin-page__header {
     align-items: flex-start;
   }
 
-  .admin-appointment__top {
-    flex-direction: column;
+  .admin-page__header > div:last-child {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .admin-page__filters span {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .admin-appointment {
+    padding: 20px;
   }
 }

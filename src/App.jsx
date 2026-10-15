@@ -48,8 +48,10 @@ export default function App() {
           <Route path="equipment" element={<EquipmentPage />} />
           <Route path="prices" element={<PricesPage />} />
           <Route path="booking" element={<BookingPage />} />
-          <Route path="admin-login" element={<AdminLogin />} />
-          <Route path="admin" element={<AdminPage />} />
+
+
+            <Route path="admin-login" element={<AdminLogin />} />
+            <Route path="admin" element={<AdminPage />} />
         </Route>
       </Routes>
     </HashRouter>
