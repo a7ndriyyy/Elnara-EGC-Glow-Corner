@@ -1,0 +1,155 @@
+
+.admin-page {
+  width: min(1100px, calc(100% - 32px));
+  margin: 40px auto;
+  color: #222;
+}
+
+.admin-page__header,
+.admin-appointment__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.admin-page__header {
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.admin-page__header h1 {
+  margin-bottom: 8px;
+}
+
+.admin-page__filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.admin-page button,
+.admin-login button {
+  padding: 10px 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fff;
+  color: #222;
+  cursor: pointer;
+}
+
+.admin-page button:disabled,
+.admin-login button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.admin-page select,
+.admin-login input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font: inherit;
+}
+
+.admin-page__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 20px;
+}
+
+.admin-appointment {
+  padding: 22px;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  background: #fff;
+  overflow-wrap: anywhere;
+}
+
+.admin-appointment h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.admin-appointment p {
+  margin: 12px 0;
+}
+
+.admin-appointment__top {
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+
+.status {
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: 20px;
+  background: #eee;
+  font-size: 0.85rem;
+}
+
+.status--pending {
+  background: #fff0cc;
+}
+
+.status--confirmed {
+  background: #dff4e4;
+}
+
+.status--cancelled {
+  background: #f9dddd;
+}
+
+.admin-appointment__actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.admin-page__error,
+.admin-login [role="alert"] {
+  color: #b42318;
+}
+
+.admin-login {
+  min-height: 70vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.admin-login__form {
+  width: min(100%, 420px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 28px;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.admin-login__form h1 {
+  margin: 0;
+}
+
+.admin-login__form button {
+  margin-top: 8px;
+}
+
+@media (max-width: 600px) {
+  .admin-page {
+    margin: 24px auto;
+  }
+
+  .admin-page__header {
+    align-items: flex-start;
+  }
+
+  .admin-appointment__top {
+    flex-direction: column;
+  }
+}

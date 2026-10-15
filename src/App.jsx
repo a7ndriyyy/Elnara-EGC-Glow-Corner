@@ -10,6 +10,8 @@ import ServicesPage from "./pages/ServicesPage";
 import EquipmentPage from "./pages/EquipmentPage";
 import PricesPage from "./pages/PricesPage";
 import BookingPage from "./pages/BookingPage";
+import AdminLogin from "./pages/AdminLogin";
+import AdminPage from "./pages/AdminPage";
 // Додайте імпорт для скролу до секцій
 
 
@@ -46,6 +48,8 @@ export default function App() {
           <Route path="equipment" element={<EquipmentPage />} />
           <Route path="prices" element={<PricesPage />} />
           <Route path="booking" element={<BookingPage />} />
+          <Route path="admin-login" element={<AdminLogin />} />
+          <Route path="admin" element={<AdminPage />} />
         </Route>
       </Routes>
     </HashRouter>
