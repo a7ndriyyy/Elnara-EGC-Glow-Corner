@@ -1,37 +1,9 @@
-import React, { useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import "./BookingPage.css";
 
-const allServices = [
-  { id: "bridal-makeup", category: "Макіяж", name: "Весільний макіяж", price: "250 €", duration: "2 год" },
-  { id: "evening-makeup", category: "Макіяж", name: "Вечірній макіяж", price: "180 €", duration: "1.5 год" },
-  { id: "day-makeup", category: "Макіяж", name: "Денний макіяж", price: "120 €", duration: "1 год" },
-  { id: "smokey-eyes", category: "Макіяж", name: "Smokey Eyes", price: "160 €", duration: "1.5 год" },
-  { id: "mens-makeup", category: "Макіяж", name: "Чоловічий макіяж", price: "100 €", duration: "1 год" },
-  { id: "trial-makeup", category: "Макіяж", name: "Пробний макіяж", price: "80 €", duration: "1 год" },
-  { id: "ultrasonic-cleaning", category: "Обличчя", name: "Ультразвукове чищення", price: "90 €", duration: "1 год" },
-  { id: "combined-cleaning", category: "Обличчя", name: "Комбіноване чищення", price: "120 €", duration: "1.5 год" },
-  { id: "face-rf", category: "Обличчя", name: "RF-ліфтинг обличчя", price: "150 €", duration: "1 год" },
-  { id: "microcurrent", category: "Обличчя", name: "Мікротокова терапія", price: "110 €", duration: "1 год" },
-  { id: "face-massage", category: "Обличчя", name: "Масаж обличчя", price: "70 €", duration: "45 хв" },
-  { id: "biorevitalization", category: "Обличчя", name: "Біоревіталізація", price: "350 €", duration: "1 год" },
-  { id: "face-neck-massage", category: "Обличчя", name: "Масаж обличчя та шиї", price: "60 €", duration: "40 хв" },
-  { id: "lpg-full-body", category: "Тіло та масаж", name: "LPG масаж всього тіла", price: "200 €", duration: "1 год" },
-  { id: "lpg-abdomen-thighs", category: "Тіло та масаж", name: "LPG масаж живота та стегон", price: "150 €", duration: "45 хв" },
-  { id: "cryolipolysis", category: "Тіло та масаж", name: "Кріоліполіз (1 зона)", price: "300 €", duration: "1 год" },
-  { id: "anti-cellulite-wrap", category: "Тіло та масаж", name: "Антицелюлітне обгортання", price: "80 €", duration: "1 год" },
-  { id: "body-rf", category: "Тіло та масаж", name: "RF-ліфтинг тіла", price: "180 €", duration: "1 год" },
-  { id: "back-massage", category: "Тіло та масаж", name: "Класичний масаж спини", price: "70 €", duration: "45 хв" },
-  { id: "full-body-massage", category: "Тіло та масаж", name: "Загальний масаж тіла", price: "120 €", duration: "1.5 год" },
-  { id: "anti-cellulite-massage", category: "Тіло та масаж", name: "Антицелюлітний масаж", price: "90 €", duration: "1 год" },
-  { id: "lymphatic-massage", category: "Тіло та масаж", name: "Лімфодренажний масаж", price: "100 €", duration: "1 год" },
-  { id: "brow-shaping", category: "Брови та вії", name: "Корекція брів", price: "25 €", duration: "20 хв" },
-  { id: "brow-coloring", category: "Брови та вії", name: "Фарбування брів", price: "20 €", duration: "15 хв" },
-  { id: "brow-shaping-coloring", category: "Брови та вії", name: "Корекція + фарбування", price: "40 €", duration: "35 хв" },
-  { id: "brow-lamination", category: "Брови та вії", name: "Ламінування брів", price: "60 €", duration: "1 год" },
-  { id: "lash-coloring", category: "Брови та вії", name: "Фарбування вій", price: "15 €", duration: "15 хв" },
-  { id: "lash-lamination", category: "Брови та вії", name: "Ламінування вій", price: "Ціну уточнити", duration: "1 год" },
-];
+import React, { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { Turnstile } from "@marsidev/react-turnstile";
+import { supabase } from "../lib/supabase";
+import "./BookingPage.css";
 
 const categoryLabels = {
   Макіяж: "Макіяж",
@@ -41,6 +13,8 @@ const categoryLabels = {
 };
 
 const weekdayLabels = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Нд"];
+
+const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 
 function formatDate(date) {
   const year = date.getFullYear();
@@ -91,11 +65,10 @@ export default function BookingPage() {
   const [searchParams] = useSearchParams();
   const initialService = searchParams.get("service") || "";
 
-  const [serviceId, setServiceId] = useState(
-    allServices.some((service) => service.id === initialService)
-      ? initialService
-      : ""
-  );
+  const [allServices, setAllServices] = useState([]);
+  const [servicesLoading, setServicesLoading] = useState(true);
+  const [servicesError, setServicesError] = useState("");
+  const [serviceId, setServiceId] = useState(initialService);
 
   const today = useMemo(() => {
     const now = new Date();
@@ -109,14 +82,127 @@ export default function BookingPage() {
   const [visibleMonth, setVisibleMonth] = useState(
     new Date(today.getFullYear(), today.getMonth(), 1)
   );
+
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+
   const [status, setStatus] = useState("idle");
+  const [submitMessage, setSubmitMessage] = useState("");
+
+  const [availableSlots, setAvailableSlots] = useState([]);
+  const [slotsLoading, setSlotsLoading] = useState(false);
+  const [slotsError, setSlotsError] = useState("");
+  const [selectedSlot, setSelectedSlot] = useState("");
+
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [turnstileKey, setTurnstileKey] = useState(0);
 
   const selectedService = allServices.find(
     (service) => service.id === serviceId
   );
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadServices() {
+      setServicesLoading(true);
+      setServicesError("");
+
+      const { data, error } = await supabase
+        .from("services")
+        .select("id, category, name, price_eur, duration_minutes")
+        .eq("is_active", true)
+        .order("name");
+
+      if (cancelled) return;
+
+      if (error) {
+        console.error("Failed to load services:", error);
+        setServicesError("Unable to load services. Please try again later.");
+        setServicesLoading(false);
+        return;
+      }
+
+      setAllServices(
+        (data || []).map((service) => ({
+          id: service.id,
+          category: service.category,
+          name: service.name,
+          price:
+            service.price_eur == null
+              ? "Price to be confirmed"
+              : `${Number(service.price_eur).toLocaleString("en-GB")} €`,
+          duration:
+            service.duration_minutes % 60 === 0
+              ? `${service.duration_minutes / 60} hr`
+              : service.duration_minutes > 60
+                ? `${Math.floor(service.duration_minutes / 60)} hr ${service.duration_minutes % 60} min`
+                : `${service.duration_minutes} min`,
+        }))
+      );
+
+      setServicesLoading(false);
+    }
+
+    loadServices();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (servicesLoading || !serviceId) return;
+
+    const serviceExists = allServices.some(
+      (service) => service.id === serviceId
+    );
+
+    if (!serviceExists) {
+      setServiceId("");
+    }
+  }, [allServices, servicesLoading, serviceId]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    setAvailableSlots([]);
+    setSelectedSlot("");
+    setSlotsError("");
+
+    if (!serviceId || !date || servicesLoading || servicesError) {
+      setSlotsLoading(false);
+      return;
+    }
+
+    async function loadAvailableSlots() {
+      setSlotsLoading(true);
+
+      const { data, error } = await supabase.rpc("get_available_slots", {
+        p_service_id: serviceId,
+        p_date: date,
+      });
+
+      if (cancelled) return;
+
+      if (error) {
+        console.error("Failed to load available slots:", error);
+        setSlotsError("Unable to load available times. Please try again.");
+        setAvailableSlots([]);
+      } else {
+        setAvailableSlots(data || []);
+      }
+
+      setSlotsLoading(false);
+    }
+
+    loadAvailableSlots();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [serviceId, date, servicesLoading, servicesError]);
 
   const calendarDays = useMemo(
     () => getCalendarDays(visibleMonth),
@@ -128,6 +214,7 @@ export default function BookingPage() {
     today.getMonth(),
     1
   );
+
   const lastAllowedMonth = new Date(
     maxDate.getFullYear(),
     maxDate.getMonth(),
@@ -139,6 +226,7 @@ export default function BookingPage() {
 
   function clearStatus() {
     setStatus("idle");
+    setSubmitMessage("");
   }
 
   function selectDate(day) {
@@ -147,15 +235,18 @@ export default function BookingPage() {
     }
 
     setDate(day);
+    setSelectedSlot("");
     clearStatus();
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
+    clearStatus();
 
     if (
       !selectedService ||
       !date ||
+      !selectedSlot ||
       !name.trim() ||
       !phone.trim() ||
       !email.trim()
@@ -164,7 +255,65 @@ export default function BookingPage() {
       return;
     }
 
-    setStatus("unavailable");
+    if (!turnstileSiteKey) {
+      setSubmitMessage(
+        "Security verification is not configured. Please try again later."
+      );
+      setStatus("failed");
+      return;
+    }
+
+    if (!turnstileToken) {
+      setStatus("captcha");
+      return;
+    }
+
+    setStatus("submitting");
+
+    try {
+      const { data, error } = await supabase.functions.invoke(
+        "create-appointment",
+        {
+          body: {
+            service_id: serviceId,
+            starts_at: selectedSlot,
+            customer_name: name.trim(),
+            customer_phone: phone.trim(),
+            customer_email: email.trim(),
+            turnstile_token: turnstileToken,
+          },
+        }
+      );
+
+      if (error || !data?.success) {
+        console.error("Appointment request failed:", error || data);
+
+        setSubmitMessage(
+          data?.error ||
+            "We could not submit your request. Please try again."
+        );
+        setStatus("failed");
+        return;
+      }
+
+      setStatus("success");
+      setSubmitMessage(
+        "Your appointment request has been received. Please wait for confirmation."
+      );
+
+      setTurnstileToken("");
+      setTurnstileKey((key) => key + 1);
+    } catch (error) {
+      console.error("Unexpected booking error:", error);
+
+      setSubmitMessage(
+        "A connection error occurred. Please try again."
+      );
+      setStatus("failed");
+    } finally {
+      setTurnstileToken("");
+      setTurnstileKey((key) => key + 1);
+    }
   }
 
   return (
@@ -172,36 +321,52 @@ export default function BookingPage() {
       <section className="booking-card">
         <p className="booking-eyebrow">ELNARA BEAUTY</p>
         <h1>Book an appointment</h1>
+
         <p className="booking-intro">
           Choose a service and your preferred date, then leave your contact
           details. We will confirm availability before your appointment.
         </p>
 
         <div className="booking-notice" role="note">
-          <strong>Online booking is being prepared</strong>
+          <strong>Appointment requests</strong>
           <p>
-            Live availability is not connected yet. Selecting a date does not
-            reserve an appointment. Your request cannot be submitted online
-            until availability is connected.
+            Available times are checked against the booking calendar.
+            Your appointment is not confirmed until you receive confirmation.
           </p>
         </div>
 
         <form onSubmit={handleSubmit}>
+          {servicesLoading && (
+            <p role="status">Loading services...</p>
+          )}
+
+          {servicesError && (
+            <p className="booking-error" role="alert">
+              {servicesError}
+            </p>
+          )}
+
           <label htmlFor="booking-service">Service</label>
           <select
             id="booking-service"
             value={serviceId}
             onChange={(event) => {
               setServiceId(event.target.value);
+              setSelectedSlot("");
+              setAvailableSlots([]);
               clearStatus();
             }}
             required
+            disabled={servicesLoading || Boolean(servicesError)}
           >
             <option value="">Choose a service</option>
+
             {Object.entries(categoryLabels).map(([category, label]) => {
               const categoryServices = allServices.filter(
                 (service) => service.category === category
               );
+
+              if (categoryServices.length === 0) return null;
 
               return (
                 <optgroup key={category} label={label}>
@@ -217,9 +382,15 @@ export default function BookingPage() {
 
           {selectedService && (
             <div className="booking-service-summary">
-              <p><strong>Service:</strong> {selectedService.name}</p>
-              <p><strong>Price:</strong> {selectedService.price}</p>
-              <p><strong>Duration:</strong> {selectedService.duration}</p>
+              <p>
+                <strong>Service:</strong> {selectedService.name}
+              </p>
+              <p>
+                <strong>Price:</strong> {selectedService.price}
+              </p>
+              <p>
+                <strong>Duration:</strong> {selectedService.duration}
+              </p>
             </div>
           )}
 
@@ -266,7 +437,11 @@ export default function BookingPage() {
               </button>
             </div>
 
-            <div className="booking-calendar-grid" role="group" aria-label="Choose a date">
+            <div
+              className="booking-calendar-grid"
+              role="group"
+              aria-label="Choose a date"
+            >
               {weekdayLabels.map((weekday) => (
                 <span key={weekday} className="booking-weekday">
                   {weekday}
@@ -291,7 +466,9 @@ export default function BookingPage() {
                       !isAllowed && "unavailable",
                       isSelected && "selected",
                       isToday && "today",
-                    ].filter(Boolean).join(" ")}
+                    ]
+                      .filter(Boolean)
+                      .join(" ")}
                     disabled={!day.inCurrentMonth || !isAllowed}
                     aria-pressed={isSelected}
                     aria-label={day.date.toLocaleDateString("en-GB", {
@@ -308,31 +485,82 @@ export default function BookingPage() {
             </div>
 
             <div className="booking-calendar-legend">
-              <span><i className="legend-dot selected-dot" /> Selected</span>
-              <span><i className="legend-dot unavailable-dot" /> Unavailable</span>
+              <span>
+                <i className="legend-dot selected-dot" /> Selected
+              </span>
+              <span>
+                <i className="legend-dot unavailable-dot" /> Unavailable
+              </span>
             </div>
 
             {date && (
               <p className="booking-selected-date">
-                Selected date: <strong>{parseDate(date).toLocaleDateString("en-GB", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                })}</strong>
+                Selected date:{" "}
+                <strong>
+                  {parseDate(date).toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </strong>
               </p>
             )}
 
             <p className="booking-hint">
-              Calendar dates are selectable for planning only. Actual
-              availability will appear after the live calendar is connected.
+              Choose a date to check actual available times. Selecting a date
+              does not reserve an appointment.
             </p>
           </fieldset>
 
           <fieldset className="booking-times">
             <legend>Available times</legend>
-            <p className="booking-hint">
-              Time slots are hidden until real availability can be checked.
-            </p>
+
+            {!serviceId || !date ? (
+              <p className="booking-hint">
+                Choose a service and date to see available times.
+              </p>
+            ) : slotsLoading ? (
+              <p role="status">Loading available times...</p>
+            ) : slotsError ? (
+              <p className="booking-error" role="alert">
+                {slotsError}
+              </p>
+            ) : availableSlots.length === 0 ? (
+              <p className="booking-hint">
+                No available times for this date. Please choose another date.
+              </p>
+            ) : (
+              <div className="booking-time-grid">
+                {availableSlots.map((slot) => {
+                  const time = new Intl.DateTimeFormat("en-GB", {
+                    timeZone: "Europe/Paris",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false,
+                  }).format(new Date(slot.starts_at));
+
+                  return (
+                    <button
+                      key={slot.starts_at}
+                      type="button"
+                      className={[
+                        "booking-time-slot",
+                        selectedSlot === slot.starts_at && "selected",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
+                      aria-pressed={selectedSlot === slot.starts_at}
+                      onClick={() => {
+                        setSelectedSlot(slot.starts_at);
+                        clearStatus();
+                      }}
+                    >
+                      {time}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </fieldset>
 
           <label htmlFor="booking-name">Full name</label>
@@ -374,22 +602,73 @@ export default function BookingPage() {
             required
           />
 
+          <div className="booking-turnstile">
+            {turnstileSiteKey ? (
+              <Turnstile
+                key={turnstileKey}
+                siteKey={turnstileSiteKey}
+                onSuccess={(token) => {
+                  setTurnstileToken(token);
+                  if (status === "captcha") setStatus("idle");
+                }}
+                onExpire={() => setTurnstileToken("")}
+                onError={() => {
+                  setTurnstileToken("");
+                  setSubmitMessage(
+                    "Security verification failed. Please reload the verification and try again."
+                  );
+                }}
+              />
+            ) : (
+              <p className="booking-error" role="alert">
+                Security verification is not configured.
+              </p>
+            )}
+          </div>
+
           {status === "error" && (
             <p className="booking-error" role="alert">
-              Please complete all required fields.
+              Please complete all required fields and select an available time.
             </p>
           )}
 
-          {status === "unavailable" && (
+          {status === "captcha" && (
             <p className="booking-error" role="alert">
-              Online requests are not available yet because live availability
-              has not been connected. Please contact ELNARA directly to arrange
-              an appointment.
+              Please complete the security verification before submitting.
             </p>
           )}
 
-          <button className="booking-submit" type="submit">
-            Check availability
+          {status === "failed" && (
+            <p className="booking-error" role="alert">
+              {submitMessage}
+            </p>
+          )}
+
+          {status === "success" && (
+            <p role="status">
+              {submitMessage}
+            </p>
+          )}
+
+          <button
+            className="booking-submit"
+            type="submit"
+            disabled={
+              servicesLoading ||
+              Boolean(servicesError) ||
+              allServices.length === 0 ||
+              slotsLoading ||
+              Boolean(slotsError) ||
+              status === "submitting" ||
+              status === "success" ||
+              !turnstileSiteKey
+            }
+          >
+            {status === "submitting"
+              ? "Submitting request..."
+              : status === "success"
+                ? "Request submitted"
+                : "Request appointment"}
           </button>
         </form>
       </section>
