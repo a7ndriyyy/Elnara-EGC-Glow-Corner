@@ -212,6 +212,15 @@ begin
     raise exception 'Appointment creation did not return an appointment id.';
   end if;
 
+  -- A verified deposit is the condition that confirms the appointment.
+  update public.appointments
+    set status = 'confirmed'
+    where id = (v_appointment->>'appointment_id')::uuid
+      and status in ('pending', 'confirmed');
+  if not found then
+    raise exception 'Paid appointment could not be confirmed.';
+  end if;
+
   update public.booking_payment_holds
     set status = 'paid',
         stripe_payment_intent_id = p_payment_intent_id,
