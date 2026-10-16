@@ -5,12 +5,14 @@ import emailjs from "@emailjs/browser";
 import { IoClose } from "react-icons/io5";
 import { FaUser, FaEnvelope, FaPhone, FaPaperPlane, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import "./Equipmentpage.css";
+import { useLanguage } from "../i18n/LanguageContext";
 
 // Імпорт зображень
 import equipmentHero from "../../public/Images/ImageEquipment/equipment-hero.webp";
 import machine1 from "../../public/Images/ImageEquipment/machine1.webp";
 
 export default function EquipmentPage() {
+  const { t } = useLanguage();
   const [selectedMachine, setSelectedMachine] = useState(null);
   const [selectedService, setSelectedService] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -174,28 +176,27 @@ export default function EquipmentPage() {
       {/* Hero секція */}
       <section className="equipment-hero">
         <div className="equipment-hero__bg">
-          <img src={equipmentHero} alt="Професійне обладнання" />
+          <img src={equipmentHero} alt={t("equipmentPage.hero")} />
           <div className="equipment-hero__overlay"></div>
         </div>
         
         <div className="equipment-hero__content">
           <h1 className="equipment-hero__title">
-            Професійне обладнання
-            <span>для вашої краси</span>
+            {t("equipmentPage.hero")}
+            <span>{t("equipmentPage.hero2")}</span>
           </h1>
           <p className="equipment-hero__subtitle">
-            Сучасний апарат преміум-класу для безпечних та ефективних процедур. 
-            Європейська сертифікація та гарантія якості.
+            {t("equipmentPage.heroText")}
           </p>
           <div className="equipment-hero__buttons">
             <a href="#equipment" className="btn btn--primary">
-              Детальніше
+              {t("equipmentPage.details")}
             </a>
                 <button 
               className="btn btn--outline"
               onClick={() => openModal()}
             >
-              Консультація
+              {t("equipmentPage.consultation")}
             </button>
           </div>
         </div>
@@ -205,9 +206,9 @@ export default function EquipmentPage() {
       <section id="equipment" className="equipment-featured">
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">Наше обладнання</h2>
+            <h2 className="section-title">{t("equipmentPage.title")}</h2>
             <p className="section-subtitle">
-              Використовуємо тільки сертифіковане обладнання преміум-класу
+              {t("equipmentPage.subtitle")}
             </p>
           </div>
 
@@ -233,15 +234,15 @@ export default function EquipmentPage() {
                 <div className="machine-card__stats">
                   <div className="machine-stat">
                     <span className="machine-stat__value">{mainMachine.country}</span>
-                    <span className="machine-stat__label">Країна виробник</span>
+                    <span className="machine-stat__label">{t("equipmentPage.country")}</span>
                   </div>
                   <div className="machine-stat">
                     <span className="machine-stat__value">✓</span>
-                    <span className="machine-stat__label">Сертифіковано</span>
+                    <span className="machine-stat__label">{t("equipmentPage.certified")}</span>
                   </div>
                   <div className="machine-stat">
                     <span className="machine-stat__value">500+</span>
-                    <span className="machine-stat__label">Процедур</span>
+                    <span className="machine-stat__label">{t("equipmentPage.procedures")}</span>
                   </div>
                 </div>
                 
@@ -250,7 +251,7 @@ export default function EquipmentPage() {
                 </p>
                 
                 <div className="machine-card__features">
-                  <h4>Можливості апарату:</h4>
+                  <h4>{t("equipmentPage.capabilities")}</h4>
                   <ul>
                     {mainMachine.features.map((feature, i) => (
                       <li key={i}>{feature}</li>
@@ -263,13 +264,13 @@ export default function EquipmentPage() {
                     className="btn btn--primary"
                     onClick={() => setSelectedMachine(mainMachine)}
                   >
-                    Детальніше про апарат
+                    {t("equipmentPage.device")}
                   </button>
                   <button 
               className="btn btn--outline"
               onClick={() => openModal()}
             >
-              Записатись
+              {t("equipmentPage.book")}
             </button>
                 </div>
               </div>
@@ -282,9 +283,9 @@ export default function EquipmentPage() {
       <section className="equipment-procedures">
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">Процедури на апараті</h2>
+            <h2 className="section-title">{t("equipmentPage.procedureTitle")}</h2>
             <p className="section-subtitle">
-              Що ми робимо за допомогою Dermology Pro
+              {t("equipmentPage.procedureText")}
             </p>
           </div>
 
@@ -309,29 +310,29 @@ export default function EquipmentPage() {
       <section className="equipment-benefits">
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">Чому обирають нас</h2>
+            <h2 className="section-title">{t("equipmentPage.why")}</h2>
           </div>
 
           <div className="benefits-grid">
             <div className="benefit-item">
               <div className="benefit-icon">🇮🇹</div>
-              <h3>Італійська якість</h3>
-              <p>Апарат виробництва Італії з європейською сертифікацією</p>
+              <h3>{t("equipmentPage.italian")}</h3>
+              <p>{t("equipmentPage.italianText")}</p>
             </div>
             <div className="benefit-item">
               <div className="benefit-icon">🔬</div>
-              <h3>Науковий підхід</h3>
-              <p>Клінічно доведена ефективність процедур</p>
+              <h3>{t("equipmentPage.science")}</h3>
+              <p>{t("equipmentPage.scienceText")}</p>
             </div>
             <div className="benefit-item">
               <div className="benefit-icon">⚕️</div>
-              <h3>Безпека</h3>
-              <p>Регулярне обслуговування та контроль якості</p>
+              <h3>{t("equipmentPage.safety")}</h3>
+              <p>{t("equipmentPage.safetyText")}</p>
             </div>
             <div className="benefit-item">
               <div className="benefit-icon">✨</div>
-              <h3>Комфорт</h3>
-              <p>Безболісні процедури з приємними відчуттями</p>
+              <h3>{t("equipmentPage.comfort")}</h3>
+              <p>{t("equipmentPage.comfortText")}</p>
             </div>
           </div>
         </div>
@@ -341,8 +342,8 @@ export default function EquipmentPage() {
       <section className="equipment-cta">
         <div className="container">
           <div className="cta-content">
-            <h2>Спробуйте LPG масаж</h2>
-            <p>Запишіться на процедуру та відчуйте результат вже після першого сеансу</p>
+            <h2>{t("equipmentPage.cta")}</h2>
+            <p>{t("equipmentPage.ctaText")}</p>
             <div className="cta-buttons">
                   <button 
               className="btn btn--outline"
@@ -366,12 +367,12 @@ export default function EquipmentPage() {
             <h2>{selectedMachine.name}</h2>
             <p className="equipment-modal__model">{selectedMachine.model}</p>
             <p>{selectedMachine.longDescription}</p>
-            <h3>Характеристики:</h3>
+            <h3>{t("equipmentPage.device")}</h3>
             <ul>
-              <li>Виробник: {selectedMachine.country}</li>
-              <li>Технологія: LPG Endermologie</li>
-              <li>Насадки: 6 програм</li>
-              <li>Інтенсивність: 10 рівнів</li>
+              <li>{t("equipmentPage.manufacturer")}: {selectedMachine.country}</li>
+              <li>{t("equipmentPage.technology")}: LPG Endermologie</li>
+              <li>{t("equipmentPage.programs")}: 6</li>
+              <li>{t("equipmentPage.intensity")}: 10</li>
             </ul>
             <button 
               className="btn btn--outline"
@@ -393,10 +394,10 @@ export default function EquipmentPage() {
                   
                   <div className="services__modal-header">
                     <h3 className="services__modal-title">
-                      {selectedService ? `Запис на: ${selectedService.name}` : 'Записатись на консультацію'}
+                      {selectedService ? `${t("equipmentPage.book")}: ${selectedService.name}` : t("equipmentPage.consultation")}
                     </h3>
                     <p className="services__modal-subtitle">
-                      Заповніть форму і ми зв'яжемось з вами найближчим часом
+                      {t("equipmentPage.modalSubtitle")}
                     </p>
                   </div>
       
@@ -411,7 +412,7 @@ export default function EquipmentPage() {
                         onChange={handleChange}
                         className="services__modal-input"
                       />
-                      <label className="services__modal-label">Ваше ім'я *</label>
+                      <label className="services__modal-label">{t("equipmentPage.name")}</label>
                       {errors.name && <span className="services__modal-error">{errors.name}</span>}
                     </div>
       
@@ -439,7 +440,7 @@ export default function EquipmentPage() {
                         onChange={handleChange}
                         className="services__modal-input"
                       />
-                      <label className="services__modal-label">Телефон (необов'язково)</label>
+                      <label className="services__modal-label">{t("equipmentPage.phone")}</label>
                       {errors.phone && <span className="services__modal-error">{errors.phone}</span>}
                     </div>
       
@@ -453,7 +454,7 @@ export default function EquipmentPage() {
                       {formStatus.loading ? (
                         <>
                           <span className="services__modal-spinner"></span>
-                          Відправка...
+                          {t("equipmentPage.sending")}
                         </>
                       ) : (
                         <>

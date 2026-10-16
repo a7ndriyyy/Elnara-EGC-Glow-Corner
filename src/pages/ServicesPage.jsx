@@ -13,6 +13,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import emailjs from "@emailjs/browser";
 import "./ServicesPage.css";
+import { useLanguage } from "../i18n/LanguageContext";
 
 // Імпорт зображень (замініть на свої)
 import makeupBridal from "../../public/Images/ImagesServices/makeup-brida.webp";
@@ -22,6 +23,7 @@ import makeupSmokey from "../../public/Images/ImagesServices/makeup-smokey.webp"
 import servicesHero from "../../public/Images/ImagesServices/services-hero.webp";
 
 export default function ServicesPage() {
+  const { t } = useLanguage();
   const [selectedService, setSelectedService] = useState(null);
   const [activeFilter, setActiveFilter] = useState("all");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -301,22 +303,21 @@ export default function ServicesPage() {
         
         <div className="services-hero__content">
           <h1 className="services-hero__title">
-            Салон краси
+            {t("servicesPage.hero")}
             <span>Elnara</span>
           </h1>
           <p className="services-hero__subtitle">
-            Професійний макіяж для вашого ідеального образу. 
-            Працюємо з преміальною косметикою та індивідуальним підходом.
+            {t("servicesPage.heroText")}
           </p>
           <div className="services-hero__buttons">
             <a href="#services" className="btn btn--primary">
-              Всі послуги
+              {t("servicesPage.all")}
             </a>
             <button 
               className="btn btn--outline"
               onClick={() => goToBooking()}
             >
-              Записатись
+              {t("servicesPage.book")}
             </button>
           </div>
         </div>
@@ -328,26 +329,26 @@ export default function ServicesPage() {
           <div className="features__grid">
             <div className="feature-card" data-aos="fade-up">
               <div className="feature-card__icon">💄</div>
-              <h3>Преміальна косметика</h3>
-              <p>Працюємо тільки з люксовими брендами: Dior, Chanel, Tom Ford, Charlotte Tilbury</p>
+              <h3>{t("servicesPage.cosmetics")}</h3>
+              <p>{t("servicesPage.cosmeticsText")}</p>
             </div>
             
             <div className="feature-card" data-aos="fade-up" data-delay="100">
               <div className="feature-card__icon">✨</div>
-              <h3>Стерильність</h3>
-              <p>Одноразові інструменти, дезінфекція всіх поверхонь після кожного клієнта</p>
+              <h3>{t("servicesPage.hygiene")}</h3>
+              <p>{t("servicesPage.hygieneText")}</p>
             </div>
             
             <div className="feature-card" data-aos="fade-up" data-delay="200">
               <div className="feature-card__icon">🎓</div>
-              <h3>Досвід 15+ років</h3>
-              <p>Міжнародні сертифікати, робота з Vogue, Elle, Harper's Bazaar</p>
+              <h3>{t("servicesPage.experience")}</h3>
+              <p>{t("servicesPage.experienceText")}</p>
             </div>
             
             <div className="feature-card" data-aos="fade-up" data-delay="300">
               <div className="feature-card__icon">💎</div>
-              <h3>Індивідуальний підхід</h3>
-              <p>Кожен макіяж створюється з урахуванням ваших особливостей та побажань</p>
+              <h3>{t("servicesPage.personal")}</h3>
+              <p>{t("servicesPage.personalText")}</p>
             </div>
           </div>
         </div>
@@ -357,8 +358,8 @@ export default function ServicesPage() {
       <section className="popular">
         <div className="container">
           <div className="section-header">
-            <span className="section-badge">Популярне</span>
-            <h2 className="section-title">Найзатребуваніші <span>послуги</span></h2>
+            <span className="section-badge">{t("servicesPage.popular")}</span>
+            <h2 className="section-title">{t("servicesPage.popularTitle")}</h2>
           </div>
 
           <div className="popular__grid">
@@ -370,7 +371,7 @@ export default function ServicesPage() {
               >
                 <div className="popular-card__image">
                   <img src={service.image} alt={service.name} />
-                  <span className="popular-card__badge">Популярне</span>
+                  <span className="popular-card__badge">{t("servicesPage.popular")}</span>
                 </div>
                 <div className="popular-card__content">
                   <h3>{service.name}</h3>
@@ -397,12 +398,12 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* Всі послуги */}
+      {/* {t("servicesPage.all")} */}
       <section id="services" className="services">
         <div className="container">
           <div className="section-header">
-            <span className="section-badge">Наші послуги</span>
-            <h2 className="section-title">Оберіть свій <span>ідеальний образ</span></h2>
+            <span className="section-badge">{t("servicesPage.our")}</span>
+            <h2 className="section-title">{t("servicesPage.choose")}</h2>
           </div>
 
           {/* Фільтри */}
@@ -411,31 +412,31 @@ export default function ServicesPage() {
               className={`filter-btn ${activeFilter === 'all' ? 'active' : ''}`}
               onClick={() => setActiveFilter('all')}
             >
-              Всі послуги
+              {t("servicesPage.all")}
             </button>
             <button 
               className={`filter-btn ${activeFilter === 'bridal' ? 'active' : ''}`}
               onClick={() => setActiveFilter('bridal')}
             >
-              Весільний
+              {t("servicesPage.bridal")}
             </button>
             <button 
               className={`filter-btn ${activeFilter === 'evening' ? 'active' : ''}`}
               onClick={() => setActiveFilter('evening')}
             >
-              Вечірній
+              {t("servicesPage.evening")}
             </button>
             <button 
               className={`filter-btn ${activeFilter === 'day' ? 'active' : ''}`}
               onClick={() => setActiveFilter('day')}
             >
-              Денний
+              {t("servicesPage.day")}
             </button>
             <button 
               className={`filter-btn ${activeFilter === 'brows' ? 'active' : ''}`}
               onClick={() => setActiveFilter('brows')}
             >
-              Брови
+              {t("servicesPage.brows")}
             </button>
           </div>
 
@@ -486,7 +487,7 @@ export default function ServicesPage() {
       <section className="process">
         <div className="container">
           <div className="section-header">
-            <span className="section-badge">Як ми працюємо</span>
+            <span className="section-badge">{t("servicesPage.process")}</span>
             <h2 className="section-title">Ваш шлях до <span>ідеального образу</span></h2>
           </div>
 
@@ -494,32 +495,32 @@ export default function ServicesPage() {
             <div className="process-step">
               <div className="process-step__number">01</div>
               <div className="process-step__content">
-                <h3>Консультація</h3>
-                <p>Обговорюємо ваші побажання, особливості шкіри, вибираємо стиль макіяжу</p>
+                <h3>{t("servicesPage.consultation")}</h3>
+                <p>{t("servicesPage.consultationText")}</p>
               </div>
             </div>
 
             <div className="process-step">
               <div className="process-step__number">02</div>
               <div className="process-step__content">
-                <h3>Підготовка шкіри</h3>
-                <p>Очищення, зволоження, праймер - все для ідеальної основи</p>
+                <h3>{t("servicesPage.skin")}</h3>
+                <p>{t("servicesPage.skinText")}</p>
               </div>
             </div>
 
             <div className="process-step">
               <div className="process-step__number">03</div>
               <div className="process-step__content">
-                <h3>Створення макіяжу</h3>
-                <p>Професійне нанесення з урахуванням ваших особливостей</p>
+                <h3>{t("servicesPage.makeup")}</h3>
+                <p>{t("servicesPage.makeupText")}</p>
               </div>
             </div>
 
             <div className="process-step">
               <div className="process-step__number">04</div>
               <div className="process-step__content">
-                <h3>Фіксація та поради</h3>
-                <p>Закріплюємо макіяж, даємо рекомендації по догляду</p>
+                <h3>{t("servicesPage.finish")}</h3>
+                <p>{t("servicesPage.finishText")}</p>
               </div>
             </div>
           </div>
@@ -530,14 +531,14 @@ export default function ServicesPage() {
       <section className="cta">
         <div className="container">
           <div className="cta__content">
-            <h2>Готові до перетворення?</h2>
-            <p>Запишіться на макіяж прямо зараз та отримайте знижку 10% на перше відвідування</p>
+            <h2>{t("servicesPage.cta")}</h2>
+            <p>{t("servicesPage.ctaText")}</p>
             <div className="cta__buttons">
               <button 
                 className="btn btn--primary btn--large"
                 onClick={() => goToBooking()}
               >
-                Записатись онлайн
+                {t("servicesPage.online")}
               </button>
               <button
   type="button"
@@ -567,7 +568,7 @@ export default function ServicesPage() {
                 {selectedService ? `Запис на: ${selectedService.name}` : 'Записатись на консультацію'}
               </h3>
               <p className="services__modal-subtitle">
-                Заповніть форму і ми зв'яжемось з вами найближчим часом
+                {t("servicesPage.modalSubtitle")}
               </p>
             </div>
 
@@ -582,7 +583,7 @@ export default function ServicesPage() {
                   onChange={handleChange}
                   className="services__modal-input"
                 />
-                <label className="services__modal-label">Ваше ім'я *</label>
+                <label className="services__modal-label">{t("servicesPage.name")}</label>
                 {errors.name && <span className="services__modal-error">{errors.name}</span>}
               </div>
 
@@ -610,7 +611,7 @@ export default function ServicesPage() {
                   onChange={handleChange}
                   className="services__modal-input"
                 />
-                <label className="services__modal-label">Телефон (необов'язково)</label>
+                <label className="services__modal-label">{t("servicesPage.phone")}</label>
                 {errors.phone && <span className="services__modal-error">{errors.phone}</span>}
               </div>
 
@@ -624,7 +625,7 @@ export default function ServicesPage() {
                 {formStatus.loading ? (
                   <>
                     <span className="services__modal-spinner"></span>
-                    Відправка...
+                    {t("servicesPage.sending")}
                   </>
                 ) : (
                   <>

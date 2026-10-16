@@ -9,8 +9,10 @@ import { IoClose } from "react-icons/io5";
 import emailjs from '@emailjs/browser';
 import "./Treatments.css";
 import { treatmentsData } from "../../data/treatments";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 export default function Treatments() {
+  const { t } = useLanguage();
   const [activeFilter, setActiveFilter] = useState("all");
   const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
   const [particles, setParticles] = useState([]);
@@ -46,9 +48,9 @@ export default function Treatments() {
 
   // Категорії для фільтрації
   const categories = [
-    { id: "all", label: "Всі послуги", icon: <GiSparkles /> },
-    { id: "Face", label: "Обличчя", icon: <MdFace /> },
-    { id: "Body", label: "Тіло", icon: <MdSpa /> }
+    { id: "all", label: t("treatments.filterAll"), icon: <GiSparkles /> },
+    { id: "Face", label: t("treatments.filterFace"), icon: <MdFace /> },
+    { id: "Body", label: t("treatments.filterBody"), icon: <MdSpa /> }
   ];
 
   // Генерація частинок
@@ -263,15 +265,14 @@ export default function Treatments() {
         <div className="treatments__header">
           <span className="treatments__subtitle">
             <BsStars className="treatments__subtitle-icon" />
-            Ексклюзивні процедури
+            {t("treatments.treatmentsEyebrow")}
           </span>
           <h2 className="treatments__title">
-            <span className="treatments__title-text">Наші</span>
-            <span className="treatments__title-highlight">послуги</span>
+            <span className="treatments__title-text">{t("treatments.treatmentsTitleFirst")}</span>
+            <span className="treatments__title-highlight">{t("treatments.treatmentsTitleSecond")}</span>
           </h2>
           <p className="treatments__description">
-            Відкрийте для себе світ професійного догляду та краси. 
-            Індивідуальний підхід та преміальні матеріали.
+            {t("treatments.treatmentsDescription")}
           </p>
         </div>
 
@@ -305,9 +306,9 @@ export default function Treatments() {
               <div className="treatments__card-badge">
                 <span>
                   {treatment.category === "Face" ? (
-                    <><MdFace /> Обличчя</>
+                    <><MdFace /> {t("treatments.categoryFace")}</>
                   ) : (
-                    <><MdSpa /> Тіло</>
+                    <><MdSpa /> {t("treatments.categoryBody")}</>
                   )}
                 </span>
               </div>
@@ -345,7 +346,7 @@ export default function Treatments() {
                 </div>
 
                 <button className="treatments__card-btn">
-                  <span>Детальніше</span>
+                  <span>{t("treatments.details")}</span>
                   <FiArrowRight className="treatments__card-btn-icon" />
                   <span className="treatments__card-btn-glow"></span>
                 </button>
@@ -360,15 +361,15 @@ export default function Treatments() {
         {/* CTA секція */}
         <div className="treatments__cta">
           <div className="treatments__cta-content">
-            <h3 className="treatments__cta-title">Не знаєте що обрати?</h3>
+            <h3 className="treatments__cta-title">{t("treatments.consultationTitle")}</h3>
             <p className="treatments__cta-text">
-              Отримайте безкоштовну консультацію нашого експерта
+              {t("treatments.consultationText")}
             </p>
             <button 
               className="treatments__cta-btn"
               onClick={() => setIsModalOpen(true)}
             >
-              Записатись на консультацію
+              {t("treatments.consultationButton")}
               <FiArrowRight className="treatments__cta-btn-icon" />
               <span className="treatments__cta-btn-glow"></span>
             </button>
@@ -390,9 +391,9 @@ export default function Treatments() {
             </button>
             
             <div className="treatments__modal-header">
-              <h3 className="treatments__modal-title">Записатись на консультацію</h3>
+              <h3 className="treatments__modal-title">{t("treatments.modalTitle")}</h3>
               <p className="treatments__modal-subtitle">
-                Заповніть форму і ми зв'яжемось з вами найближчим часом
+                 {t("treatments.modalSubtitle")}
               </p>
             </div>
 
@@ -407,7 +408,7 @@ export default function Treatments() {
                   onChange={handleChange}
                   className="treatments__modal-input"
                 />
-                <label className="treatments__modal-label">Ваше ім'я *</label>
+                <label className="treatments__modal-label">{t("treatments.nameLabel")}</label>
                 {errors.name && <span className="treatments__modal-error">{errors.name}</span>}
               </div>
 
@@ -435,7 +436,7 @@ export default function Treatments() {
                   onChange={handleChange}
                   className="treatments__modal-input"
                 />
-                <label className="treatments__modal-label">Телефон (необов'язково)</label>
+                <label className="treatments__modal-label">{t("treatments.phoneLabel")}</label>
                 {errors.phone && <span className="treatments__modal-error">{errors.phone}</span>}
               </div>
 
@@ -447,12 +448,12 @@ export default function Treatments() {
                 {formStatus.loading ? (
                   <>
                     <span className="treatments__modal-spinner"></span>
-                    Відправка...
+                    {t("treatments.sending")}
                   </>
                 ) : (
                   <>
                     <FaPaperPlane className="treatments__modal-submit-icon" />
-                    Записатись
+                    {t("treatments.submit")}
                     <span className="treatments__modal-submit-glow"></span>
                   </>
                 )}

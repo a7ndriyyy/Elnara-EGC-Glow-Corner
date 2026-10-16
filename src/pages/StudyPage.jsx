@@ -6,6 +6,7 @@ import { FaPaperPlane, FaCheckCircle, FaTimesCircle, FaPhone, FaEnvelope, FaUser
 import { IoClose } from "react-icons/io5";
 import emailjs from '@emailjs/browser';
 import "./StudyPage.css";
+import { useLanguage } from "../i18n/LanguageContext";
 
 // Імпорт зображень (замініть на свої)
 import courseImage1 from "../../public/Images/ImagesStudy/Makeup-Course.webp";
@@ -17,6 +18,7 @@ import videoPreview1 from "../../public/Images/ImagesStudy/video-preview.webp";
 import videoPreview2 from "../../public/Images/ImagesStudy/video-preview.webp";
 
 export default function StudyPage() {
+  const { t } = useLanguage();
   const [activeVideo, setActiveVideo] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -224,20 +226,20 @@ export default function StudyPage() {
         </div>
         
         <div className="study-hero__content">
-          <span className="study-hero__badge" data-animate="fade-up">Освіта від Elnara</span>
+          <span className="study-hero__badge" data-animate="fade-up">{t("study.badge")}</span>
           <h1 className="study-hero__title" data-animate="fade-up" data-delay="100">
-            Стань професіоналом
-            <span>в індустрії краси</span>
+            {t("study.title")}
+            <span>{t("study.title2")}</span>
           </h1>
           <p className="study-hero__subtitle" data-animate="fade-up" data-delay="200">
-            Авторські курси з макіяжу від міжнародного експерта з 15-річним досвідом
+            {t("study.subtitle")}
           </p>
           <div className="study-hero__buttons" data-animate="fade-up" data-delay="300">
             <button 
               className="study-btn study-btn--primary"
               onClick={() => openModal()}
             >
-              Обрати курс
+              {t("study.choose")}
               <FiArrowRight />
             </button>
             <button className="study-btn study-btn--outline" onClick={() => setActiveVideo("intro")}>
@@ -245,7 +247,7 @@ export default function StudyPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              Дивитись презентацію
+              {t("study.presentation")}
             </button>
           </div>
         </div>
@@ -254,19 +256,19 @@ export default function StudyPage() {
         <div className="study-hero__stats">
           <div className="stat-item" data-animate="fade-up">
             <span className="stat-number">500+</span>
-            <span className="stat-label">Випускників</span>
+            <span className="stat-label">{t("study.graduates")}</span>
           </div>
           <div className="stat-item" data-animate="fade-up" data-delay="100">
             <span className="stat-number">15</span>
-            <span className="stat-label">Років досвіду</span>
+            <span className="stat-label">{t("study.experience")}</span>
           </div>
           <div className="stat-item" data-animate="fade-up" data-delay="200">
             <span className="stat-number">50+</span>
-            <span className="stat-label">Майстер-класів</span>
+            <span className="stat-label">{t("study.masterclasses")}</span>
           </div>
           <div className="stat-item" data-animate="fade-up" data-delay="300">
             <span className="stat-number">100%</span>
-            <span className="stat-label">Практики</span>
+            <span className="stat-label">{t("study.practice")}</span>
           </div>
         </div>
       </section>
@@ -283,7 +285,7 @@ export default function StudyPage() {
           </div>
           
           <div className="study-about__content" data-animate="fade-left">
-            <span className="section-badge">Хто веде курси</span>
+            <span className="section-badge">{t("study.instructor")}</span>
             <h2 className="section-title">Elnara <span>Makeup Artist</span></h2>
             <p className="section-text">
               Міжнародний візажист, сертифікований тренер та засновниця студії краси. 
@@ -294,22 +296,22 @@ export default function StudyPage() {
               <div className="feature">
                 <div className="feature-icon">🎓</div>
                 <div>
-                  <h4>Міжнародна сертифікація</h4>
-                  <p>Дипломи визнаються в Європі та США</p>
+                  <h4>{t("study.certification")}</h4>
+                  <p>{t("study.certificationText")}</p>
                 </div>
               </div>
               <div className="feature">
                 <div className="feature-icon">💄</div>
                 <div>
-                  <h4>Авторська методика</h4>
-                  <p>Унікальний підхід, який працює</p>
+                  <h4>{t("study.method")}</h4>
+                  <p>{t("study.methodText")}</p>
                 </div>
               </div>
               <div className="feature">
                 <div className="feature-icon">🤝</div>
                 <div>
-                  <h4>Підтримка 24/7</h4>
-                  <p>Допомагаю навіть після курсів</p>
+                  <h4>{t("study.support")}</h4>
+                  <p>{t("study.supportText")}</p>
                 </div>
               </div>
             </div>
@@ -327,11 +329,10 @@ export default function StudyPage() {
       <section id="courses" className="study-courses">
         <div className="container">
           <div className="section-header" data-animate="fade-up">
-            <span className="section-badge">Навчання</span>
-            <h2 className="section-title">Виберіть свій <span>формат</span></h2>
+            <span className="section-badge">{t("study.training")}</span>
+            <h2 className="section-title">{t("study.format")}</h2>
             <p className="section-subtitle">
-              Кожен курс створений для конкретного рівня та цілей. 
-              Від початківців до професіоналів.
+              {t("study.courseIntro")}
             </p>
           </div>
 
@@ -386,8 +387,8 @@ export default function StudyPage() {
       <section className="study-videos">
         <div className="container">
           <div className="section-header" data-animate="fade-up">
-            <span className="section-badge">Відеоуроки</span>
-            <h2 className="section-title">Дивіться та <span>навчайтесь</span></h2>
+            <span className="section-badge">{t("study.videos")}</span>
+            <h2 className="section-title">{t("study.watch")}</h2>
             <p className="section-subtitle">
               Безкоштовні уроки, щоб познайомитись з моїм стилем викладання
             </p>
@@ -425,23 +426,23 @@ export default function StudyPage() {
           <div className="format-grid">
             <div className="format-item" data-animate="fade-up">
               <div className="format-icon">📚</div>
-              <h3>Теорія</h3>
-              <p>Структуровані матеріали, відеоуроки, презентації та робочі зошити</p>
+              <h3>{t("study.theory")}</h3>
+              <p>{t("study.theoryText")}</p>
             </div>
             <div className="format-item" data-animate="fade-up" data-delay="100">
               <div className="format-icon">✨</div>
               <h3>Практика</h3>
-              <p>Відпрацювання на моделях під моїм особистим контролем</p>
+              <p>{t("study.practiceText")}</p>
             </div>
             <div className="format-item" data-animate="fade-up" data-delay="200">
               <div className="format-icon">🎯</div>
-              <h3>Розбір</h3>
-              <p>Детальний аналіз ваших робіт та індивідуальні рекомендації</p>
+              <h3>{t("study.feedback")}</h3>
+              <p>{t("study.feedbackText")}</p>
             </div>
             <div className="format-item" data-animate="fade-up" data-delay="300">
               <div className="format-icon">🏆</div>
-              <h3>Результат</h3>
-              <p>Сертифікат та готове портфоліо для старту кар'єри</p>
+              <h3>{t("study.result")}</h3>
+              <p>{t("study.resultText")}</p>
             </div>
           </div>
         </div>
@@ -451,20 +452,20 @@ export default function StudyPage() {
       <section className="study-cta">
         <div className="container">
           <div className="cta-content" data-animate="zoom-in">
-            <h2>Почни свою подорож у світ краси</h2>
-            <p>Запишись на безкоштовну консультацію та обери свій ідеальний курс</p>
+            <h2>{t("study.cta")}</h2>
+            <p>{t("study.ctaText")}</p>
             <div className="cta-buttons">
               <button 
                 className="study-btn study-btn--primary study-btn--large"
                 onClick={() => openModal()}
               >
-                Отримати консультацію
+                {t("study.consultation")}
               </button>
               <button 
                 className="study-btn study-btn--outline study-btn--large"
                 onClick={() => window.location.href = 'tel:+1234567890'}
               >
-                Зателефонувати
+                {t("study.call")}
               </button>
             </div>
           </div>
@@ -542,10 +543,10 @@ export default function StudyPage() {
             
             <div className="study__modal-header">
               <h3 className="study__modal-title">
-                {selectedCourse ? `Запис на курс: ${selectedCourse.title}` : 'Записатись на консультацію'}
+                {selectedCourse ? `${t("study.enroll")}: ${selectedCourse.title}` : t("study.consultation")}
               </h3>
               <p className="study__modal-subtitle">
-                Заповніть форму і ми зв'яжемось з вами найближчим часом
+                {t("study.modalSubtitle")}
               </p>
             </div>
 
@@ -560,7 +561,7 @@ export default function StudyPage() {
                   onChange={handleChange}
                   className="study__modal-input"
                 />
-                <label className="study__modal-label">Ваше ім'я *</label>
+                <label className="study__modal-label">{t("study.name")}</label>
                 {errors.name && <span className="study__modal-error">{errors.name}</span>}
               </div>
 
@@ -588,7 +589,7 @@ export default function StudyPage() {
                   onChange={handleChange}
                   className="study__modal-input"
                 />
-                <label className="study__modal-label">Телефон (необов'язково)</label>
+                <label className="study__modal-label">{t("study.phone")}</label>
                 {errors.phone && <span className="study__modal-error">{errors.phone}</span>}
               </div>
 
@@ -602,7 +603,7 @@ export default function StudyPage() {
                 {formStatus.loading ? (
                   <>
                     <span className="study__modal-spinner"></span>
-                    Відправка...
+                    {t("study.sending")}
                   </>
                 ) : (
                   <>
