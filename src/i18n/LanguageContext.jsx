@@ -105,7 +105,7 @@ export function LanguageProvider({ children }) {
 
         for (const part of parts) value = value?.[part];
 
-        return typeof value === "string" ? value : key;
+        return value !== undefined ? value : key;
       },
       supportedLanguages: SUPPORTED_LANGUAGES,
     }),
