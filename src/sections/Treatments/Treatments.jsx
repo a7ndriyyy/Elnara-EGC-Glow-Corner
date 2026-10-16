@@ -272,8 +272,7 @@ export default function Treatments() {
             <span className="treatments__title-highlight">{t("treatments.treatmentsTitleSecond")}</span>
           </h2>
           <p className="treatments__description">
-            Відкрийте для себе світ професійного догляду та краси. 
-            Індивідуальний підхід та преміальні матеріали.
+            {t("treatments.treatmentsDescription")}
           </p>
         </div>
 
