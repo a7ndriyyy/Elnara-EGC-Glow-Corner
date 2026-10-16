@@ -353,7 +353,28 @@ export default function BookingPage() {
             setAvailableSlots([]);
             setSlotsError(t("booking.refreshError"));
           } else {
-            setAvailableSlots(refreshedSlots || []);
+            const { data: holds, error: holdsError } = await supabase.rpc(
+              "get_active_reschedule_holds",
+              { p_date: date }
+            );
+
+            if (holdsError) {
+              console.error("Failed to refresh rescheduling holds:", holdsError);
+              setAvailableSlots([]);
+              setSlotsError(t("booking.refreshError"));
+            } else {
+              const durationMs = (selectedService?.durationMinutes || 0) * 60_000;
+              setAvailableSlots(
+                (refreshedSlots || []).filter((slot) => {
+                  const slotStart = new Date(slot.starts_at).getTime();
+                  const slotEnd = slotStart + durationMs;
+                  return !(holds || []).some((hold) =>
+                    slotStart < new Date(hold.ends_at).getTime() &&
+                    slotEnd > new Date(hold.starts_at).getTime()
+                  );
+                })
+              );
+            }
           }
 
           setSlotsLoading(false);
