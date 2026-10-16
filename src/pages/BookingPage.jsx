@@ -519,7 +519,7 @@ export default function BookingPage() {
                       .join(" ")}
                     disabled={!day.inCurrentMonth || !isAllowed}
                     aria-pressed={isSelected}
-                    aria-label={day.date.toLocaleDateString("en-GB", {
+                    aria-label={day.date.toLocaleDateString(locale, {
                       day: "numeric",
                       month: "long",
                       year: "numeric",
@@ -545,7 +545,7 @@ export default function BookingPage() {
               <p className="booking-selected-date">
                 {t("booking.selectedDate")}{" "}
                 <strong>
-                  {parseDate(date).toLocaleDateString("en-GB", {
+                  {parseDate(date).toLocaleDateString(locale, {
                     day: "numeric",
                     month: "long",
                     year: "numeric",
