@@ -8,7 +8,7 @@ This branch is **not deployed**. The payment flow must be tested against a dedic
 - Do not apply the migration to production.
 - The Checkout function rejects Stripe secret keys that do not start with `sk_test_`; the status endpoint only accepts `cs_test_` Checkout Session IDs.
 - Never add Stripe keys, webhook secrets, or Supabase service-role keys to Git, frontend `VITE_*` variables, or chat messages.
-- A booking is created only by the signed Stripe webhook after the server verifies the paid Checkout Session and checks its amount/currency against the private hold.
+- A booking is created and marked `confirmed` only by the signed Stripe webhook after the server verifies the paid Checkout Session and checks its amount/currency against the private hold.
 - The frontend success redirect is not proof of payment; it polls the server-side payment status.
 - Deposit percentage is intentionally configurable. Agree the percentage before setting `STRIPE_DEPOSIT_PERCENT`.
 
