@@ -511,7 +511,7 @@ export default function StudyPage() {
               fontSize: '20px',
               cursor: 'pointer',
               zIndex: 10
-            }} onClick={() => setActiveVideo(null)}>✕</button>
+            }} onClick={() => setActiveVideo(null)}><IoClose aria-hidden="true" /></button>
             
             <div style={{
               position: 'relative',
