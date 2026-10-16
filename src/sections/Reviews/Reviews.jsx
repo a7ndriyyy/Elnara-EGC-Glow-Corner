@@ -3,6 +3,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { FaStar, FaRegStar, FaQuoteRight, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { reviewsData } from "../../data/reviews";
 import "./Reviews.css";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 function Stars({ value = 0 }) {
   return (
@@ -17,6 +18,7 @@ function Stars({ value = 0 }) {
 }
 
 export default function Reviews() {
+  const { t } = useLanguage();
   const [active, setActive] = useState(0);
   const [direction, setDirection] = useState('next');
   const [isAnimating, setIsAnimating] = useState(false);
@@ -136,9 +138,9 @@ export default function Reviews() {
         <div className="reviews__header">
           <span className="reviews__subtitle">
             <FaQuoteRight className="reviews__subtitle-icon" />
-            {reviewsData.subtitle}
+            {t("reviews.reviewsSubtitle")}
           </span>
-          <h2 className="reviews__title">{reviewsData.title}</h2>
+          <h2 className="reviews__title">{t("reviews.reviewsTitle")}</h2>
         </div>
 
         <div className="reviews__grid">
@@ -148,7 +150,7 @@ export default function Reviews() {
               <img
                 className="reviews__bg"
                 src={reviewsData.backgroundImage}
-                alt="Reviews background"
+                alt={t("reviews.reviewsTitle")}
               />
               <div className="reviews__bg-overlay"></div>
               
@@ -206,7 +208,7 @@ export default function Reviews() {
                   className="reviews__arrow reviews__arrow--prev" 
                   onClick={handlePrev}
                   disabled={isAnimating}
-                  aria-label="Previous review"
+                  aria-label={t("reviews.previousReview")}
                 >
                   <FaChevronLeft />
                   <span className="reviews__arrow-glow"></span>
@@ -215,7 +217,7 @@ export default function Reviews() {
                   className="reviews__arrow reviews__arrow--next" 
                   onClick={handleNext}
                   disabled={isAnimating}
-                  aria-label="Next review"
+                  aria-label={t("reviews.nextReview")}
                 >
                   <FaChevronRight />
                   <span className="reviews__arrow-glow"></span>
@@ -223,14 +225,14 @@ export default function Reviews() {
               </div>
 
               {/* Точки */}
-              <div className="reviews__dots" aria-label="Review navigation">
+              <div className="reviews__dots" aria-label={t("reviews.reviewNavigation")}>
                 {items.map((r, idx) => (
                   <button
                     key={r.id}
                     className={`reviews__dot ${idx === active ? 'active' : ''}`}
                     onClick={() => handleDotClick(idx)}
                     disabled={isAnimating}
-                    aria-label={`Go to review ${idx + 1}`}
+                    aria-label={`${t("reviews.goToReview")} ${idx + 1}`}
                   >
                     <span className="reviews__dot-inner"></span>
                   </button>
