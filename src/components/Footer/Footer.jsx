@@ -2,8 +2,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Footer.css';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 export default function Footer() {
+  const { t } = useLanguage();
   return (
     <footer className="footer">
       <div className="container footer__inner">
@@ -12,7 +14,7 @@ export default function Footer() {
         </div>
 
         <Link to="/admin-login" className="footer__professional">
-          Espace professionnel
+          {t('nav.professional')}
         </Link>
       </div>
     </footer>
