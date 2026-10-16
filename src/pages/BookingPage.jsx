@@ -3,16 +3,16 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { supabase } from "../lib/supabase";
+import { useLanguage } from "../i18n/LanguageContext";
 import "./BookingPage.css";
 
 const categoryLabels = {
-  Макіяж: "Макіяж",
-  Обличчя: "Догляд за обличчям",
-  "Тіло та масаж": "Тіло та масаж",
-  "Брови та вії": "Брови та вії",
+  Макіяж: "booking.categoryMakeup",
+  Обличчя: "booking.categoryFace",
+  "Тіло та масаж": "booking.categoryBody",
+  "Брови та вії": "booking.categoryBrows",
 };
 
-const weekdayLabels = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Нд"];
 
 const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 
@@ -34,8 +34,8 @@ function addDays(date, amount) {
   return result;
 }
 
-function getMonthLabel(date) {
-  return new Intl.DateTimeFormat("en-GB", {
+function getMonthLabel(date, locale) {
+  return new Intl.DateTimeFormat(locale, {
     month: "long",
     year: "numeric",
   }).format(date);
@@ -62,6 +62,9 @@ function getCalendarDays(monthDate) {
 }
 
 export default function BookingPage() {
+  const { t, language } = useLanguage();
+  const locale = { en: "en-GB", fr: "fr-FR", uk: "uk-UA", ru: "ru-RU" }[language] || "en-GB";
+  const weekdayLabels = t("booking.weekdays");
   const [searchParams] = useSearchParams();
   const initialService = searchParams.get("service") || "";
 
@@ -119,7 +122,7 @@ export default function BookingPage() {
 
       if (error) {
         console.error("Failed to load services:", error);
-        setServicesError("Unable to load services. Please try again later.");
+        setServicesError(t("booking.servicesError"));
         setServicesLoading(false);
         return;
       }
@@ -188,7 +191,7 @@ export default function BookingPage() {
 
       if (error) {
         console.error("Failed to load available slots:", error);
-        setSlotsError("Unable to load available times. Please try again.");
+        setSlotsError(t("booking.refreshError"));
         setAvailableSlots([]);
       } else {
         setAvailableSlots(data || []);
@@ -251,13 +254,14 @@ export default function BookingPage() {
       !phone.trim() ||
       !email.trim()
     ) {
+      setSubmitMessage(t("booking.required"));
       setStatus("error");
       return;
     }
 
     if (!turnstileSiteKey) {
       setSubmitMessage(
-        "Security verification is not configured. Please try again later."
+        t("booking.security")
       );
       setStatus("failed");
       return;
@@ -322,19 +326,19 @@ export default function BookingPage() {
           if (refreshError) {
             console.error("Failed to refresh available slots:", refreshError);
             setAvailableSlots([]);
-            setSlotsError("Unable to refresh available times. Please try again.");
+            setSlotsError(t("booking.refreshError"));
           } else {
             setAvailableSlots(refreshedSlots || []);
           }
 
           setSlotsLoading(false);
           setSubmitMessage(
-            "This time slot was just booked by someone else. Available times have been refreshed. Please choose another time."
+            t("booking.conflict")
           );
         } else {
           setSubmitMessage(
             responseMessage ||
-              "We could not submit your request. Please try again."
+              t("booking.failed")
           );
         }
 
@@ -344,7 +348,7 @@ export default function BookingPage() {
 
       setStatus("success");
       setSubmitMessage(
-        "Your appointment request has been received. Please wait for confirmation."
+        t("booking.success")
       );
 
       setTurnstileToken("");
@@ -353,7 +357,7 @@ export default function BookingPage() {
       console.error("Unexpected booking error:", error);
 
       setSubmitMessage(
-        "A connection error occurred. Please try again."
+        t("booking.connection")
       );
       setStatus("failed");
     } finally {
@@ -365,25 +369,23 @@ export default function BookingPage() {
   return (
     <main className="booking-page">
       <section className="booking-card">
-        <p className="booking-eyebrow">ELNARA BEAUTY</p>
-        <h1>Book an appointment</h1>
+        <p className="booking-eyebrow">{t("booking.eyebrow")}</p>
+        <h1>{t("booking.title")}</h1>
 
         <p className="booking-intro">
-          Choose a service and your preferred date, then leave your contact
-          details. We will confirm availability before your appointment.
+          {t("booking.intro")}
         </p>
 
         <div className="booking-notice" role="note">
-          <strong>Appointment requests</strong>
+          <strong>{t("booking.request")}</strong>
           <p>
-            Available times are checked against the booking calendar.
-            Your appointment is not confirmed until you receive confirmation.
+            {t("booking.notice")}
           </p>
         </div>
 
         <form onSubmit={handleSubmit}>
           {servicesLoading && (
-            <p role="status">Loading services...</p>
+            <p role="status">{t("booking.loadingServices")}</p>
           )}
 
           {servicesError && (
@@ -392,7 +394,7 @@ export default function BookingPage() {
             </p>
           )}
 
-          <label htmlFor="booking-service">Service</label>
+          <label htmlFor="booking-service">{t("booking.service")}</label>
           <select
             id="booking-service"
             value={serviceId}
@@ -405,7 +407,7 @@ export default function BookingPage() {
             required
             disabled={servicesLoading || Boolean(servicesError)}
           >
-            <option value="">Choose a service</option>
+            <option value="">{t("booking.chooseService")}</option>
 
             {Object.entries(categoryLabels).map(([category, label]) => {
               const categoryServices = allServices.filter(
@@ -415,7 +417,7 @@ export default function BookingPage() {
               if (categoryServices.length === 0) return null;
 
               return (
-                <optgroup key={category} label={label}>
+                <optgroup key={category} label={t(label)}>
                   {categoryServices.map((service) => (
                     <option key={service.id} value={service.id}>
                       {service.name} — {service.price}
@@ -429,25 +431,25 @@ export default function BookingPage() {
           {selectedService && (
             <div className="booking-service-summary">
               <p>
-                <strong>Service:</strong> {selectedService.name}
+                <strong>{t("booking.service")}:</strong> {selectedService.name}
               </p>
               <p>
-                <strong>Price:</strong> {selectedService.price}
+                <strong>{t("booking.price")}:</strong> {selectedService.price}
               </p>
               <p>
-                <strong>Duration:</strong> {selectedService.duration}
+                <strong>{t("booking.duration")}:</strong> {selectedService.duration}
               </p>
             </div>
           )}
 
           <fieldset className="booking-calendar">
-            <legend>Preferred date</legend>
+            <legend>{t("booking.date")}</legend>
 
             <div className="booking-calendar-header">
               <button
                 type="button"
                 className="booking-month-nav"
-                aria-label="Previous month"
+                aria-label={t("booking.previousMonth")}
                 disabled={!canGoPrevious}
                 onClick={() =>
                   setVisibleMonth(
@@ -462,12 +464,12 @@ export default function BookingPage() {
                 ‹
               </button>
 
-              <h2>{getMonthLabel(visibleMonth)}</h2>
+              <h2>{getMonthLabel(visibleMonth, locale)}</h2>
 
               <button
                 type="button"
                 className="booking-month-nav"
-                aria-label="Next month"
+                aria-label={t("booking.nextMonth")}
                 disabled={!canGoNext}
                 onClick={() =>
                   setVisibleMonth(
@@ -486,7 +488,7 @@ export default function BookingPage() {
             <div
               className="booking-calendar-grid"
               role="group"
-              aria-label="Choose a date"
+              aria-label={t("booking.chooseDate")}
             >
               {weekdayLabels.map((weekday) => (
                 <span key={weekday} className="booking-weekday">
@@ -517,7 +519,7 @@ export default function BookingPage() {
                       .join(" ")}
                     disabled={!day.inCurrentMonth || !isAllowed}
                     aria-pressed={isSelected}
-                    aria-label={day.date.toLocaleDateString("en-GB", {
+                    aria-label={day.date.toLocaleDateString(locale, {
                       day: "numeric",
                       month: "long",
                       year: "numeric",
@@ -532,18 +534,18 @@ export default function BookingPage() {
 
             <div className="booking-calendar-legend">
               <span>
-                <i className="legend-dot selected-dot" /> Selected
+                <i className="legend-dot selected-dot" /> {t("booking.selected")}
               </span>
               <span>
-                <i className="legend-dot unavailable-dot" /> Unavailable
+                <i className="legend-dot unavailable-dot" /> {t("booking.unavailable")}
               </span>
             </div>
 
             {date && (
               <p className="booking-selected-date">
-                Selected date:{" "}
+                {t("booking.selectedDate")}{" "}
                 <strong>
-                  {parseDate(date).toLocaleDateString("en-GB", {
+                  {parseDate(date).toLocaleDateString(locale, {
                     day: "numeric",
                     month: "long",
                     year: "numeric",
@@ -553,32 +555,31 @@ export default function BookingPage() {
             )}
 
             <p className="booking-hint">
-              Choose a date to check actual available times. Selecting a date
-              does not reserve an appointment.
+              {t("booking.dateHint")}
             </p>
           </fieldset>
 
           <fieldset className="booking-times">
-            <legend>Available times</legend>
+            <legend>{t("booking.times")}</legend>
 
             {!serviceId || !date ? (
               <p className="booking-hint">
-                Choose a service and date to see available times.
+                {t("booking.chooseServiceDate")}
               </p>
             ) : slotsLoading ? (
-              <p role="status">Loading available times...</p>
+              <p role="status">{t("booking.loadingTimes")}</p>
             ) : slotsError ? (
               <p className="booking-error" role="alert">
                 {slotsError}
               </p>
             ) : availableSlots.length === 0 ? (
               <p className="booking-hint">
-                No available times for this date. Please choose another date.
+                {t("booking.noTimes")}
               </p>
             ) : (
               <div className="booking-time-slot-grid">
                 {availableSlots.map((slot) => {
-                  const time = new Intl.DateTimeFormat("en-GB", {
+                  const time = new Intl.DateTimeFormat(locale, {
                     timeZone: "Europe/Paris",
                     hour: "2-digit",
                     minute: "2-digit",
@@ -609,7 +610,7 @@ export default function BookingPage() {
             )}
           </fieldset>
 
-          <label htmlFor="booking-name">Full name</label>
+          <label htmlFor="booking-name">{t("booking.name")}</label>
           <input
             id="booking-name"
             type="text"
@@ -622,7 +623,7 @@ export default function BookingPage() {
             required
           />
 
-          <label htmlFor="booking-phone">Phone</label>
+          <label htmlFor="booking-phone">{t("booking.phone")}</label>
           <input
             id="booking-phone"
             type="tel"
@@ -635,7 +636,7 @@ export default function BookingPage() {
             required
           />
 
-          <label htmlFor="booking-email">Email</label>
+          <label htmlFor="booking-email">{t("booking.email")}</label>
           <input
             id="booking-email"
             type="email"
@@ -661,26 +662,26 @@ export default function BookingPage() {
                 onError={() => {
                   setTurnstileToken("");
                   setSubmitMessage(
-                    "Security verification failed. Please reload the verification and try again."
+                    t("booking.security")
                   );
                 }}
               />
             ) : (
               <p className="booking-error" role="alert">
-                Security verification is not configured.
+                {t("booking.security")}
               </p>
             )}
           </div>
 
           {status === "error" && (
             <p className="booking-error" role="alert">
-              Please complete all required fields and select an available time.
+              {t("booking.required")}
             </p>
           )}
 
           {status === "captcha" && (
             <p className="booking-error" role="alert">
-              Please complete the security verification before submitting.
+              {t("booking.captcha")}
             </p>
           )}
 
@@ -711,10 +712,10 @@ export default function BookingPage() {
             }
           >
             {status === "submitting"
-              ? "Submitting request..."
+              ? t("booking.submitting")
               : status === "success"
-                ? "Request submitted"
-                : "Request appointment"}
+                ? t("booking.success")
+                : t("booking.submit")}
           </button>
         </form>
       </section>

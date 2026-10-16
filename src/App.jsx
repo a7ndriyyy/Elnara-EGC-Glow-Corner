@@ -12,6 +12,7 @@ import PricesPage from "./pages/PricesPage";
 import BookingPage from "./pages/BookingPage";
 import AdminLogin from "./pages/AdminLogin";
 import AdminPage from "./pages/AdminPage";
+import { LanguageProvider } from "./i18n/LanguageContext";
 // Додайте імпорт для скролу до секцій
 
 
@@ -38,6 +39,7 @@ function ScrollToHash() {
 export default function App() {
   return (
     <React.StrictMode>
+    <LanguageProvider>
     <HashRouter >
       <ScrollToHash />
       <Routes>
@@ -55,6 +57,7 @@ export default function App() {
         </Route>
       </Routes>
     </HashRouter>
+    </LanguageProvider>
     </React.StrictMode>
   );
 }
