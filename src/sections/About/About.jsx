@@ -5,8 +5,10 @@ import { FaFacebookF, FaYoutube, FaInstagram, FaTwitter, FaGlobe } from "react-i
 import { BsStars } from "react-icons/bs";
 import { GiSparkles } from "react-icons/gi";
 import "./About.css";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 export default function About() {
+  const { t } = useLanguage();
   const textRef = useRef([]);
   const [particles, setParticles] = useState([]);
   const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
@@ -127,17 +129,17 @@ useEffect(() => {
           <div className="about__header">
             <span className="about__subtitle">
               <BsStars className="about__subtitle-icon" />
-              Наша історія
+              {t("home.aboutEyebrow")}
             </span>
             <h2 className="about__title">
-              <span className="about__title-text">{aboutData.title}</span>
+              <span className="about__title-text">{t("home.aboutTitle")}</span>
               <GiSparkles className="about__title-icon" />
             </h2>
           </div>
 
           {/* Текст з анімацією */}
           <div className="about__text">
-            {aboutData.text.map((p, idx) => (
+            {[t("home.aboutText1"), t("home.aboutText2")].map((p, idx) => (
               <p 
                 key={idx} 
                 className="about__paragraph"
@@ -150,7 +152,7 @@ useEffect(() => {
 
           {/* Соціальні мережі з React Icons */}
           <div className="about__socials">
-            <span className="about__socials-title">Слідкуй за нами</span>
+            <span className="about__socials-title">{t("home.followUs")}</span>
             <div className="about__socials-grid">
               {aboutData.socials.map((social) => {
                 const Icon = social.icon || socialIcons[social.id];
@@ -192,7 +194,7 @@ useEffect(() => {
             <div className="about__person">
               <div className="about__person-info">
                 <h3 className="about__person-name">{aboutData.name}</h3>
-                <p className="about__person-role">{aboutData.role}</p>
+                <p className="about__person-role">{t("home.specialistRole")}</p>
               </div>
               <div className="about__person-decoration">
                 <GiSparkles />
