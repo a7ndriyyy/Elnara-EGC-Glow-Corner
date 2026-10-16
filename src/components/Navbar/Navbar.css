@@ -414,3 +414,12 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 80px;
 }
+
+/* Accessible language selection */
+.navbar__language-wrap { display: inline-flex; }
+.navbar__language-select { appearance: none; min-width: 64px; font: inherit; }
+.navbar__language-select option { color: #202020; background: #fff; }
+.navbar__mobile-lang { gap: 12px; }
+.navbar__mobile-lang select { max-width: 100px; border: 0; background: transparent; color: inherit; font: inherit; cursor: pointer; }
+.navbar__mobile-lang select option { color: #202020; background: #fff; }
+.navbar__sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
