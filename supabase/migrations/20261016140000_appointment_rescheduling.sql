@@ -293,3 +293,28 @@ $$;
 
 revoke all on function public.get_active_reschedule_holds(date) from public;
 grant execute on function public.get_active_reschedule_holds(date) to anon, authenticated;
+
+
+-- If an appointment is cancelled/completed, its pending customer links must
+-- stop reserving time immediately.
+create or replace function public.cancel_reschedule_proposals_for_inactive_appointment()
+returns trigger
+language plpgsql
+security definer
+set search_path = public, pg_temp
+as $$
+begin
+  if new.status in ('cancelled', 'completed')
+     and old.status is distinct from new.status then
+    update public.reschedule_proposals
+      set status = 'cancelled', responded_at = now()
+      where appointment_id = new.id and status = 'pending';
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists cancel_reschedule_proposals_for_inactive_appointment on public.appointments;
+create trigger cancel_reschedule_proposals_for_inactive_appointment
+after update of status on public.appointments
+for each row execute function public.cancel_reschedule_proposals_for_inactive_appointment();
