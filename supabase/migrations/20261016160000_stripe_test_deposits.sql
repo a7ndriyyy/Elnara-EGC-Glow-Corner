@@ -51,6 +51,7 @@ declare
   v_local_end timestamp;
   v_weekday integer;
   v_hours public.business_hours%rowtype;
+  v_has_reschedule_conflict boolean := false;
 begin
   perform pg_advisory_xact_lock(721904116);
 
@@ -104,12 +105,18 @@ begin
     raise exception 'This time slot is blocked.';
   end if;
 
-  if to_regclass('public.reschedule_proposals') is not null and exists (
-    select 1 from public.reschedule_proposals rp
-    where rp.status = 'pending' and rp.expires_at > now()
-      and rp.proposed_starts_at < v_end and rp.proposed_ends_at > p_starts_at
-  ) then
-    raise exception 'This time is held for a rescheduling proposal.';
+  if to_regclass('public.reschedule_proposals') is not null then
+    execute
+      'select exists (
+         select 1 from public.reschedule_proposals rp
+         where rp.status = ''pending'' and rp.expires_at > now()
+           and rp.proposed_starts_at < $1 and rp.proposed_ends_at > $2
+       )'
+      into v_has_reschedule_conflict
+      using v_end, p_starts_at;
+    if v_has_reschedule_conflict then
+      raise exception 'This time is held for a rescheduling proposal.';
+    end if;
   end if;
 
   update public.booking_payment_holds
@@ -131,7 +138,7 @@ begin
     customer_email, amount_total_cents, expires_at
   ) values (
     p_service_id, p_starts_at, v_end, trim(p_customer_name), trim(p_customer_phone),
-    lower(trim(p_customer_email)), p_amount_total_cents, now() + interval '30 minutes'
+    lower(trim(p_customer_email)), p_amount_total_cents, now() + interval '36 minutes'
   )
   returning id, booking_payment_holds.ends_at, booking_payment_holds.expires_at;
 end;
