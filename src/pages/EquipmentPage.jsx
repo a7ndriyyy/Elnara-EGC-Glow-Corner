@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useRef} from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 import { IoClose } from "react-icons/io5";
 import { FaUser, FaEnvelope, FaPhone, FaPaperPlane, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
@@ -13,6 +13,7 @@ import machine1 from "../../public/Images/ImageEquipment/machine1.webp";
 
 export default function EquipmentPage() {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const [selectedMachine, setSelectedMachine] = useState(null);
   const [selectedService, setSelectedService] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -268,7 +269,7 @@ export default function EquipmentPage() {
                   </button>
                   <button 
               className="btn btn--outline"
-              onClick={() => openModal()}
+              onClick={() => navigate("/booking")}
             >
               {t("equipmentPage.book")}
             </button>
@@ -344,7 +345,7 @@ export default function EquipmentPage() {
             <div className="cta-buttons">
                   <button 
               className="btn btn--outline"
-              onClick={() => openModal()}
+              onClick={() => navigate("/booking")}
             >
               {t("equipmentPage.book")}
             </button>
@@ -373,7 +374,7 @@ export default function EquipmentPage() {
             </ul>
             <button 
               className="btn btn--outline"
-              onClick={() => openModal()}
+              onClick={() => navigate("/booking")}
             >
               {t("equipmentPage.book")}
             </button>
