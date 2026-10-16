@@ -3,6 +3,8 @@ import "./Navbar.css";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useLanguage } from "../../i18n/LanguageContext";
+import { FaInstagram, FaFacebook } from "react-icons/fa";
+import { IoClose } from "react-icons/io5";
 
 const navLinks = [
   { id: "salon", labelKey: "nav.salonServices", path: "/services" },
@@ -158,8 +160,8 @@ export default function Navbar() {
           <div className="navbar__mobile-social">
             <span>{t("nav.followUs")}</span>
             <div className="navbar__mobile-social-icons">
-              <a href="#" aria-label="Instagram">📷</a>
-              <a href="#" aria-label="Facebook">📘</a>
+              <a href="#" aria-label="Instagram"><FaInstagram aria-hidden="true" /></a>
+              <a href="#" aria-label="Facebook"><FaFacebook aria-hidden="true" /></a>
             </div>
           </div>
         </div>
