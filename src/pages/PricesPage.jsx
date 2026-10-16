@@ -2,19 +2,16 @@ import React from 'react';
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./PricesPage.css";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export default function PricesPage() {
   const [activeCategory, setActiveCategory] = useState("all");
+  const { t } = useLanguage();
+  const content = t("pageContent.prices");
 
-  // Категорії послуг
-  const categories = [
-    { id: "all", name: "Всі послуги" },
-    { id: "makeup", name: "Макіяж" },
-    { id: "face", name: "Догляд за обличчям" },
-    { id: "body", name: "Догляд за тілом" },
-    { id: "massage", name: "Масаж" },
-    { id: "brows", name: "Брови та вії" }
-  ];
+  // Category labels are translated while category IDs and prices remain unchanged.
+  const categoryIds = ["all", "makeup", "face", "body", "massage", "brows"];
+  const categories = categoryIds.map((id, index) => ({ id, name: content.categories[index] }));
 
   // Всі послуги з цінами - БЕЗ oldPrice, isPopular, isNew
   const services = [
@@ -57,19 +54,25 @@ export default function PricesPage() {
     { id: 28, name: "Ламінування вій", category: "brows", price: "55", duration: "1 год" }
   ];
 
-  // Фільтрація послуг
-  const filteredServices = activeCategory === "all" 
-    ? services 
-    : services.filter(s => s.category === activeCategory);
+  const localizedServices = services.map((service, index) => ({
+    ...service,
+    name: content.names[index] || service.name,
+    duration: content.durations[index] || service.duration,
+  }));
+
+  // Filter by stable IDs so changing language does not affect the selected category.
+  const filteredServices = activeCategory === "all"
+    ? localizedServices
+    : localizedServices.filter(s => s.category === activeCategory);
 
   return (
     <div className="prices-page">
       {/* Hero секція - мінімалістична */}
       <section className="prices-hero">
         <div className="container">
-          <h1 className="prices-hero__title">Ціни на послуги</h1>
+          <h1 className="prices-hero__title">{content.title}</h1>
           <p className="prices-hero__subtitle">
-            Обирайте процедури, які підходять саме вам
+            {content.subtitle}
           </p>
         </div>
       </section>
@@ -110,7 +113,7 @@ export default function PricesPage() {
 
           {filteredServices.length === 0 && (
             <div className="no-services">
-              <p>В цій категорії поки немає послуг</p>
+              <p>{content.empty}</p>
             </div>
           )}
         </div>
@@ -120,8 +123,8 @@ export default function PricesPage() {
       <section className="prices-info">
         <div className="container">
           <div className="info-note">
-            <p>* Вартість може змінюватись залежно від складності та використаних матеріалів</p>
-            <p>Для уточнення деталей та запису:</p>
+            <p>{content.note}</p>
+            <p>{content.contact}</p>
             <a href="tel:+33456756578" className="info-phone">+33 4 56 75 65 78</a>
           </div>
         </div>
