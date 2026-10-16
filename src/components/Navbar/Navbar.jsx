@@ -66,13 +66,13 @@ export default function Navbar() {
             to="/services" 
             className={`navbar__link ${isActive("/services") ? "navbar__link--active" : ""}`}
           >
-            Salon Services
+            {t("nav.salonServices")}
           </Link>
           <Link 
             to="/about" 
             className={`navbar__link ${isActive("/about") ? "navbar__link--active" : ""}`}
           >
-            Study with us
+            {t("nav.study")}
           </Link>
         </nav>
 
@@ -126,7 +126,7 @@ export default function Navbar() {
           <button 
             className="navbar__mobile-close" 
             onClick={closeMenu}
-            aria-label="Close menu"
+            aria-label={t("nav.closeMenu")}
           >
             ✕
           </button>
