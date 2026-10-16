@@ -227,3 +227,33 @@ end;
 $$;
 revoke all on function public.complete_paid_booking(uuid, text, text) from public, anon, authenticated;
 grant execute on function public.complete_paid_booking(uuid, text, text) to service_role;
+
+
+-- Defense in depth: appointments created by admins or other server paths must not
+-- take a slot currently held for an in-progress Checkout session. The webhook marks
+-- its own hold as 'processing' in the same transaction before creating the appointment.
+create or replace function public.prevent_appointment_over_active_payment_hold()
+returns trigger
+language plpgsql
+security definer
+set search_path = public, pg_temp
+as $$
+begin
+  if new.status in ('pending', 'confirmed') and exists (
+    select 1
+    from public.booking_payment_holds h
+    where h.status = 'pending'
+      and h.expires_at > now()
+      and h.starts_at < new.ends_at
+      and h.ends_at > new.starts_at
+  ) then
+    raise exception 'This time is temporarily held for an online deposit payment.';
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists prevent_appointment_over_active_payment_hold on public.appointments;
+create trigger prevent_appointment_over_active_payment_hold
+before insert or update of starts_at, ends_at, status on public.appointments
+for each row execute function public.prevent_appointment_over_active_payment_hold();
