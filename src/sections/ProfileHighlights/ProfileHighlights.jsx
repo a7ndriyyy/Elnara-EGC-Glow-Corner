@@ -6,8 +6,10 @@ import { GiDiploma, GiAchievement, GiStarMedal } from "react-icons/gi";
 import { FaRegHandshake, FaRegHeart } from "react-icons/fa";
 import { BsStars } from "react-icons/bs";
 import "./ProfileHighlights.css";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 export default function ProfileHighlights() {
+  const { t } = useLanguage();
   const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
   const [activeCard, setActiveCard] = useState(null);
   const sectionRef = useRef(null);
@@ -121,10 +123,10 @@ export default function ProfileHighlights() {
         <div className="highlights__header">
           <span className="highlights__subtitle">
             <BsStars className="highlights__subtitle-icon" />
-            Чому обирають нас
+            {t("home.whyChoose")}
           </span>
           <h2 className="highlights__title">
-            Наші <span className="highlights__title-highlight">переваги</span>
+            {t("home.ourAdvantages")}
           </h2>
         </div>
 
@@ -158,14 +160,14 @@ export default function ProfileHighlights() {
 
                 {/* Контент */}
                 <div className="highlights__card-content">
-                  <h3 className="highlights__card-title">{h.title}</h3>
-                  <p className="highlights__card-text">{h.text}</p>
+                  <h3 className="highlights__card-title">{t(`home.${["certifications", "pathway", "experience"][index]}`)}</h3>
+                  <p className="highlights__card-text">{t(`home.${["certificationsText", "pathwayText", "experienceText"][index]}`)}</p>
                 </div>
 
                 {/* Бейдж */}
                 <div className="highlights__card-badge">
                   <MdVerified className="highlights__card-badge-icon" />
-                  <span>{h.badge}</span>
+                  <span>{t(`home.${["international", "years", "premium"][index]}`)}</span>
                 </div>
 
                 {/* Статистика */}
@@ -181,7 +183,7 @@ export default function ProfileHighlights() {
                 {/* Ефект при наведенні */}
                 <div className={`highlights__card-overlay ${activeCard === index ? 'active' : ''}`}>
                   <FaRegHandshake className="highlights__card-overlay-icon" />
-                  <span>Дізнатись більше</span>
+                  <span>{t("home.learnOverlay")}</span>
                 </div>
               </div>
             );
@@ -193,7 +195,7 @@ export default function ProfileHighlights() {
           <div className="highlights__footer-content">
             <FaRegHeart className="highlights__footer-icon" />
             <p className="highlights__footer-text">
-              Кожен клієнт отримує індивідуальний підхід та турботу
+              {t("home.clientCare")}
             </p>
           </div>
         </div>
