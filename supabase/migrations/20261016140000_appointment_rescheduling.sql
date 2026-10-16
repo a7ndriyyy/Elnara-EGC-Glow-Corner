@@ -279,17 +279,23 @@ for each row execute function public.prevent_booking_over_active_reschedule_prop
 -- Expose only the busy intervals for active proposals; no customer or token data.
 create or replace function public.get_active_reschedule_holds(p_date date)
 returns table (starts_at timestamptz, ends_at timestamptz)
-language sql
-stable
+language plpgsql
 security definer
 set search_path = public, pg_temp
-as $$
-  select rp.proposed_starts_at, rp.proposed_ends_at
-  from public.reschedule_proposals rp
-  where rp.status = 'pending'
-    and rp.expires_at > now()
-    and (rp.proposed_starts_at at time zone 'Europe/Paris')::date = p_date;
-$$;
+as $
+begin
+  update public.reschedule_proposals
+    set status = 'expired', responded_at = now()
+    where status = 'pending' and expires_at <= now();
+
+  return query
+    select rp.proposed_starts_at, rp.proposed_ends_at
+    from public.reschedule_proposals rp
+    where rp.status = 'pending'
+      and rp.expires_at > now()
+      and (rp.proposed_starts_at at time zone 'Europe/Paris')::date = p_date;
+end;
+$;
 
 revoke all on function public.get_active_reschedule_holds(date) from public;
 grant execute on function public.get_active_reschedule_holds(date) to anon, authenticated;
