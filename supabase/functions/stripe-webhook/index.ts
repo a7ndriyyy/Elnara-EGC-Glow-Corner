@@ -44,7 +44,7 @@ async function verifyStripeSignature(rawBody: string, header: string, secret: st
 
 Deno.serve(async (req: Request) => {
   if (req.method !== "POST") return new Response("Method not allowed", { status: 405 });
-  if (!stripeSecretKey || !webhookSecret) {
+  if (!stripeSecretKey || !stripeSecretKey.startsWith("sk_test_") || !webhookSecret) {
     console.error("Stripe webhook server configuration is incomplete.");
     return new Response("Webhook not configured", { status: 503 });
   }
