@@ -67,6 +67,8 @@ export default function BookingPage() {
   const weekdayLabels = t("booking.weekdays");
   const [searchParams] = useSearchParams();
   const initialService = searchParams.get("service") || "";
+  const paymentState = searchParams.get("payment") || "";
+  const checkoutSessionId = searchParams.get("session_id") || "";
 
   const [allServices, setAllServices] = useState([]);
   const [servicesLoading, setServicesLoading] = useState(true);
@@ -267,6 +269,66 @@ export default function BookingPage() {
     clearStatus();
   }
 
+  useEffect(() => {
+    let cancelled = false;
+    let timeoutId;
+    let attempts = 0;
+
+    if (paymentState === "cancelled") {
+      setStatus("paymentCancelled");
+      setSubmitMessage(t("booking.paymentCancelled"));
+      return () => {};
+    }
+
+    if (paymentState !== "processing") return () => {};
+
+    if (!checkoutSessionId) {
+      setStatus("failed");
+      setSubmitMessage(t("booking.paymentFailed"));
+      return () => {};
+    }
+
+    setStatus("paymentPending");
+    setSubmitMessage(t("booking.paymentPending"));
+
+    async function checkPayment() {
+      attempts += 1;
+      const { data, error } = await supabase.functions.invoke(
+        "booking-payment-status",
+        { body: { session_id: checkoutSessionId } }
+      );
+
+      if (cancelled) return;
+
+      if (!error && data?.status === "paid") {
+        setStatus("success");
+        setSubmitMessage(t("booking.paymentSuccess"));
+        return;
+      }
+
+      if (!error && (data?.status === "not_paid" || data?.status === "unknown") && attempts >= 40) {
+        setStatus("paymentUnverified");
+        setSubmitMessage(t("booking.paymentFailed"));
+        return;
+      }
+
+      if (attempts >= 40) {
+        setStatus("paymentUnverified");
+        setSubmitMessage(t("booking.paymentFailed"));
+        return;
+      }
+
+      timeoutId = setTimeout(checkPayment, 2500);
+    }
+
+    checkPayment();
+
+    return () => {
+      cancelled = true;
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [paymentState, checkoutSessionId, t]);
+
   async function handleSubmit(event) {
     event.preventDefault();
     clearStatus();
@@ -285,9 +347,7 @@ export default function BookingPage() {
     }
 
     if (!turnstileSiteKey) {
-      setSubmitMessage(
-        t("booking.security")
-      );
+      setSubmitMessage(t("booking.security"));
       setStatus("failed");
       return;
     }
@@ -301,7 +361,7 @@ export default function BookingPage() {
 
     try {
       const { data, error } = await supabase.functions.invoke(
-        "create-appointment",
+        "create-checkout-session",
         {
           body: {
             service_id: serviceId,
@@ -314,97 +374,33 @@ export default function BookingPage() {
         }
       );
 
-      if (error || !data?.success) {
-        console.error("Appointment request failed:", error || data);
-
-        // Supabase FunctionsHttpError keeps the non-2xx response in error.context.
-        // Read its JSON body so the customer sees the real conflict message.
+      if (error || !data?.checkout_url) {
+        console.error("Checkout session request failed:", error || data);
         let responseData = data;
 
         if (error?.context && typeof error.context.clone === "function") {
           try {
             responseData = await error.context.clone().json();
           } catch {
-            // Fall back to the generic message if the response is not JSON.
+            // Keep the generic message when the response is not JSON.
           }
         }
 
-        const responseMessage =
-          responseData?.error || data?.error || "";
-        const isSlotConflict =
-          error?.context?.status === 409 ||
-          /no longer available|just been booked|outside business hours/i.test(
-            responseMessage
-          );
-
-        if (isSlotConflict) {
-          setSelectedSlot("");
-          setSlotsLoading(true);
-          setSlotsError("");
-
-          const { data: refreshedSlots, error: refreshError } =
-            await supabase.rpc("get_available_slots", {
-              p_service_id: serviceId,
-              p_date: date,
-            });
-
-          if (refreshError) {
-            console.error("Failed to refresh available slots:", refreshError);
-            setAvailableSlots([]);
-            setSlotsError(t("booking.refreshError"));
-          } else {
-            const { data: holds, error: holdsError } = await supabase.rpc(
-              "get_active_reschedule_holds",
-              { p_date: date }
-            );
-
-            if (holdsError) {
-              console.error("Failed to refresh rescheduling holds:", holdsError);
-              setAvailableSlots([]);
-              setSlotsError(t("booking.refreshError"));
-            } else {
-              const durationMs = (selectedService?.durationMinutes || 0) * 60_000;
-              setAvailableSlots(
-                (refreshedSlots || []).filter((slot) => {
-                  const slotStart = new Date(slot.starts_at).getTime();
-                  const slotEnd = slotStart + durationMs;
-                  return !(holds || []).some((hold) =>
-                    slotStart < new Date(hold.ends_at).getTime() &&
-                    slotEnd > new Date(hold.starts_at).getTime()
-                  );
-                })
-              );
-            }
-          }
-
-          setSlotsLoading(false);
-          setSubmitMessage(
-            t("booking.conflict")
-          );
-        } else {
-          setSubmitMessage(
-            responseMessage ||
-              t("booking.failed")
-          );
-        }
-
+        const message = responseData?.error || data?.error || t("booking.failed");
+        setSubmitMessage(message);
         setStatus("failed");
         return;
       }
 
-      setStatus("success");
-      setSubmitMessage(
-        t("booking.success")
-      );
-
-      setTurnstileToken("");
-      setTurnstileKey((key) => key + 1);
+      // Only the server-created Stripe Checkout URL is allowed to redirect the client.
+      const checkoutUrl = new URL(data.checkout_url);
+      if (checkoutUrl.protocol !== "https:" || checkoutUrl.hostname !== "checkout.stripe.com") {
+        throw new Error("Unexpected checkout URL.");
+      }
+      window.location.assign(checkoutUrl.toString());
     } catch (error) {
-      console.error("Unexpected booking error:", error);
-
-      setSubmitMessage(
-        t("booking.connection")
-      );
+      console.error("Unexpected checkout error:", error);
+      setSubmitMessage(t("booking.connection"));
       setStatus("failed");
     } finally {
       setTurnstileToken("");
@@ -428,6 +424,8 @@ export default function BookingPage() {
             {t("booking.notice")}
           </p>
         </div>
+
+        <p className="booking-payment-notice" role="note">{t("booking.depositNotice")}</p>
 
         <form onSubmit={handleSubmit}>
           {servicesLoading && (
@@ -737,8 +735,8 @@ export default function BookingPage() {
             </p>
           )}
 
-          {status === "success" && (
-            <p role="status">
+          {(status === "success" || status === "paymentPending" || status === "paymentCancelled" || status === "paymentUnverified") && (
+            <p role="status" className={status === "paymentCancelled" || status === "paymentUnverified" ? "booking-error" : undefined}>
               {submitMessage}
             </p>
           )}
@@ -753,15 +751,19 @@ export default function BookingPage() {
               slotsLoading ||
               Boolean(slotsError) ||
               status === "submitting" ||
+              status === "paymentPending" ||
+              status === "paymentUnverified" ||
               status === "success" ||
               !turnstileSiteKey
             }
           >
             {status === "submitting"
-              ? t("booking.submitting")
-              : status === "success"
-                ? t("booking.success")
-                : t("booking.submit")}
+              ? t("booking.paymentSub")
+              : status === "paymentPending"
+                ? t("booking.paymentPending")
+                : status === "success"
+                  ? t("booking.paymentSuccess")
+                  : t("booking.payDeposit")}
           </button>
         </form>
       </section>

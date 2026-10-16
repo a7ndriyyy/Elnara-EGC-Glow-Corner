@@ -634,3 +634,15 @@
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 }
+
+
+.booking-payment-notice {
+  margin: 1rem 0;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(196, 168, 130, 0.45);
+  border-radius: 0.75rem;
+  background: rgba(196, 168, 130, 0.08);
+  color: var(--text-color, inherit);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}

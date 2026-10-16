@@ -424,3 +424,21 @@ entrypoint = "./functions/create-appointment/index.ts"
 # Specifies static files to be bundled with the function. Supports glob patterns.
 # For example, if you want to serve static HTML pages in your function:
 # static_files = [ "./functions/create-appointment/*.html" ]
+
+
+# Stripe Checkout endpoints are public but protected by Turnstile, strict input
+# validation, test-session ID checks, and a signed Stripe webhook.
+[functions.create-checkout-session]
+enabled = true
+verify_jwt = false
+entrypoint = "./functions/create-checkout-session/index.ts"
+
+[functions.booking-payment-status]
+enabled = true
+verify_jwt = false
+entrypoint = "./functions/booking-payment-status/index.ts"
+
+[functions.stripe-webhook]
+enabled = true
+verify_jwt = false
+entrypoint = "./functions/stripe-webhook/index.ts"
