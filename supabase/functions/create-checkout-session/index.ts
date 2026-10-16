@@ -37,7 +37,7 @@ Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
   if (req.method !== "POST") return respond({ error: "Method not allowed." }, 405, cors);
 
-  if (!stripeSecretKey || !turnstileSecret || !appUrl || !Number.isInteger(depositPercent) || depositPercent < 1 || depositPercent > 100) {
+  if (!stripeSecretKey || !stripeSecretKey.startsWith("sk_test_") || !turnstileSecret || !appUrl || !Number.isInteger(depositPercent) || depositPercent < 1 || depositPercent > 100) {
     console.error("Stripe checkout server configuration is incomplete.");
     return respond({ error: "Online deposit payments are not configured yet." }, 503, cors);
   }
@@ -113,7 +113,7 @@ Deno.serve(async (req: Request) => {
     stripeParams.set("cancel_url", cancelUrl);
     stripeParams.set("customer_email", customerEmail);
     stripeParams.set("client_reference_id", holdId);
-    stripeParams.set("expires_at", String(Math.floor(Date.now() / 1000) + 30 * 60));
+    stripeParams.set("expires_at", String(Math.floor(Date.now() / 1000) + 31 * 60));
     stripeParams.set("metadata[hold_id]", holdId);
     stripeParams.set("line_items[0][quantity]", "1");
     stripeParams.set("line_items[0][price_data][currency]", "eur");
