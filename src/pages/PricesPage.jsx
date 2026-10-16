@@ -104,8 +104,9 @@ export default function PricesPage() {
                   <h3 className="price-item__name">{service.name}</h3>
                   <span className="price-item__duration">{service.duration}</span>
                 </div>
-                <div className="price-item__value">
-                  {service.price} €
+                <div className="price-item__action">
+                  <div className="price-item__value">{service.price} €</div>
+                  <Link className="price-item__book" to="/booking">{t("servicesPage.book")}</Link>
                 </div>
               </div>
             ))}

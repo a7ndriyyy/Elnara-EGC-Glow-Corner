@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import { FiClock, FiArrowRight } from "react-icons/fi";
 import { MdFace, MdSpa } from "react-icons/md";
@@ -345,11 +346,11 @@ export default function Treatments() {
                   <div className="treatments__card-price">{treatment.price}</div>
                 </div>
 
-                <button className="treatments__card-btn">
+                <Link to="/services" className="treatments__card-btn">
                   <span>{t("treatments.details")}</span>
                   <FiArrowRight className="treatments__card-btn-icon" />
                   <span className="treatments__card-btn-glow"></span>
-                </button>
+                </Link>
               </div>
 
               {/* Декоративний елемент */}
