@@ -179,6 +179,9 @@ export default function ServicesPage() {
     }
   ];
 
+  const translatedServices = t("pageContent.serviceCards");
+  services.forEach((service, index) => Object.assign(service, translatedServices[index] || {}));
+
   // Фільтрація послуг
   const filteredServices = activeFilter === "all" 
     ? services 
@@ -388,7 +391,7 @@ export default function ServicesPage() {
                      goToBooking(service);
                        }}
                       >
-                     Записатися →
+                     {t("servicesPage.book")} →
                     </button>
                   </div>
                 </div>
@@ -474,7 +477,7 @@ export default function ServicesPage() {
                   goToBooking(service);
                 }}
               >
-                Записатися →
+                {t("servicesPage.book")} →
               </button>
             </div>
               </div>
@@ -488,7 +491,7 @@ export default function ServicesPage() {
         <div className="container">
           <div className="section-header">
             <span className="section-badge">{t("servicesPage.process")}</span>
-            <h2 className="section-title">Ваш шлях до <span>ідеального образу</span></h2>
+            <h2 className="section-title">{t("servicesPage.processTitle")}</h2>
           </div>
 
           <div className="process__steps">
@@ -545,7 +548,7 @@ export default function ServicesPage() {
   className="btn btn--outline btn--large"
   onClick={openModal}
 >
-  Отримати консультацію
+  {t("servicesPage.getConsultation")}
 </button>
               <a href="tel:+33456756578" className="btn btn--outline btn--large">
                 +33 4 56 75 65 78
@@ -565,7 +568,7 @@ export default function ServicesPage() {
             
             <div className="services__modal-header">
               <h3 className="services__modal-title">
-                {selectedService ? `Запис на: ${selectedService.name}` : 'Записатись на консультацію'}
+                {selectedService ? `${t("servicesPage.book")}: ${selectedService.name}` : t("servicesPage.getConsultation")}
               </h3>
               <p className="services__modal-subtitle">
                 {t("servicesPage.modalSubtitle")}
@@ -630,7 +633,7 @@ export default function ServicesPage() {
                 ) : (
                   <>
                     <FaPaperPlane className="services__modal-submit-icon" />
-                    {selectedService ? 'Записатись' : 'Отримати консультацію'}
+                    {selectedService ? t("servicesPage.book") : t("servicesPage.getConsultation")}
                     <span className="services__modal-submit-glow"></span>
                   </>
                 )}
