@@ -307,13 +307,13 @@ export default function BookingPage() {
       }
 
       if (!error && (data?.status === "not_paid" || data?.status === "unknown") && attempts >= 40) {
-        setStatus("failed");
+        setStatus("paymentUnverified");
         setSubmitMessage(t("booking.paymentFailed"));
         return;
       }
 
       if (attempts >= 40) {
-        setStatus("failed");
+        setStatus("paymentUnverified");
         setSubmitMessage(t("booking.paymentFailed"));
         return;
       }
@@ -735,8 +735,8 @@ export default function BookingPage() {
             </p>
           )}
 
-          {(status === "success" || status === "paymentPending" || status === "paymentCancelled") && (
-            <p role="status" className={status === "paymentCancelled" ? "booking-error" : undefined}>
+          {(status === "success" || status === "paymentPending" || status === "paymentCancelled" || status === "paymentUnverified") && (
+            <p role="status" className={status === "paymentCancelled" || status === "paymentUnverified" ? "booking-error" : undefined}>
               {submitMessage}
             </p>
           )}
@@ -752,6 +752,7 @@ export default function BookingPage() {
               Boolean(slotsError) ||
               status === "submitting" ||
               status === "paymentPending" ||
+              status === "paymentUnverified" ||
               status === "success" ||
               !turnstileSiteKey
             }
