@@ -1,6 +1,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FiCalendar, FiSettings } from 'react-icons/fi';
 import { supabase } from '../lib/supabase';
 import './AdminPage.css';
 
@@ -1482,7 +1483,7 @@ export default function AdminPage() {
               className={section === 'appointments' ? 'is-active' : ''}
               onClick={() => setSection('appointments')}
             >
-              <span aria-hidden="true">☷</span> Rendez-vous
+              <FiCalendar aria-hidden="true" /> Rendez-vous
             </button>
 
             <button
@@ -1490,7 +1491,7 @@ export default function AdminPage() {
               className={section === 'settings' ? 'is-active' : ''}
               onClick={() => setSection('settings')}
             >
-              <span aria-hidden="true">⚙</span> Paramètres
+              <FiSettings aria-hidden="true" /> Paramètres
             </button>
           </nav>
 
