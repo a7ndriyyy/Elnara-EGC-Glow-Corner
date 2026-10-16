@@ -8,6 +8,13 @@ export default function PricesPage() {
   const [activeCategory, setActiveCategory] = useState("all");
   const { t } = useLanguage();
   const translations = t("prices");
+  const formatDuration = (duration) => {
+    const hours = duration.match(/([0-9]+(?:\\.[0-9]+)?)\\s*год/);
+    const minutes = duration.match(/([0-9]+)\\s*хв/);
+    if (hours) return hours[1] + " " + translations.durationHour;
+    if (minutes) return minutes[1] + " " + translations.durationMinute;
+    return duration;
+  };
 
   const categories = [
     { id: "all", name: translations.all },
@@ -102,7 +109,7 @@ export default function PricesPage() {
               <div key={service.id} className="price-item">
                 <div className="price-item__info">
                   <h3 className="price-item__name">{service.name}</h3>
-                  <span className="price-item__duration">{service.duration}</span>
+                  <span className="price-item__duration">{formatDuration(service.duration)}</span>
                 </div>
                 <div className="price-item__value">
                   {service.price} €
