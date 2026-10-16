@@ -27,7 +27,7 @@ This branch is **not deployed**. The payment flow must be tested against a dedic
    - `checkout.session.completed`
    - `checkout.session.expired`
 6. Set the frontend's `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, and `VITE_TURNSTILE_SITE_KEY` to the **test project** values in a local-only env file. Do not commit that file.
-7. Deploy these functions to the test project only: `create-checkout-session`, `stripe-webhook`, and `booking-payment-status`. Do not deploy `create-appointment` or change production functions as part of this preparation without separately reviewing whether the test project needs them.
+7. Deploy these functions to the test project only: `create-checkout-session`, `stripe-webhook`, and `booking-payment-status`. Also deploy the updated `create-appointment` function, which now rejects direct unpaid booking requests; otherwise an older deployed copy could bypass the deposit flow. Do not deploy any of these functions to production during this preparation.
 
 ## Test checklist
 
