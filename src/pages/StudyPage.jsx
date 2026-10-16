@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { FiArrowRight, FiClock} from "react-icons/fi";
-import { FaPaperPlane, FaCheckCircle, FaTimesCircle, FaPhone, FaEnvelope, FaUser } from "react-icons/fa";
+import { FaPaperPlane, FaCheckCircle, FaTimesCircle, FaPhone, FaEnvelope, FaUser, FaGraduationCap, FaPaintBrush, FaHandshake, FaInstagram, FaFacebook, FaYoutube, FaBookOpen, FaStar, FaBullseye, FaTrophy } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import emailjs from '@emailjs/browser';
 import "./StudyPage.css";
@@ -298,21 +298,21 @@ export default function StudyPage() {
             
             <div className="study-about__features">
               <div className="feature">
-                <div className="feature-icon">🎓</div>
+                <div className="feature-icon"><FaGraduationCap aria-hidden="true" /></div>
                 <div>
                   <h4>{t("study.certification")}</h4>
                   <p>{t("study.certificationText")}</p>
                 </div>
               </div>
               <div className="feature">
-                <div className="feature-icon">💄</div>
+                <div className="feature-icon"><FaPaintBrush aria-hidden="true" /></div>
                 <div>
                   <h4>{t("study.method")}</h4>
                   <p>{t("study.methodText")}</p>
                 </div>
               </div>
               <div className="feature">
-                <div className="feature-icon">🤝</div>
+                <div className="feature-icon"><FaHandshake aria-hidden="true" /></div>
                 <div>
                   <h4>{t("study.support")}</h4>
                   <p>{t("study.supportText")}</p>
@@ -321,9 +321,9 @@ export default function StudyPage() {
             </div>
 
             <div className="study-about__social">
-              <a href="#" className="social-link">📷 Instagram</a>
-              <a href="#" className="social-link">📘 Facebook</a>
-              <a href="#" className="social-link">▶️ YouTube</a>
+              <a href="#" className="social-link"><FaInstagram aria-hidden="true" /> Instagram</a>
+              <a href="#" className="social-link"><FaFacebook aria-hidden="true" /> Facebook</a>
+              <a href="#" className="social-link"><FaYoutube aria-hidden="true" /> YouTube</a>
             </div>
           </div>
         </div>
@@ -429,22 +429,22 @@ export default function StudyPage() {
         <div className="container">
           <div className="format-grid">
             <div className="format-item" data-animate="fade-up">
-              <div className="format-icon">📚</div>
+              <div className="format-icon"><FaBookOpen aria-hidden="true" /></div>
               <h3>{t("study.theory")}</h3>
               <p>{t("study.theoryText")}</p>
             </div>
             <div className="format-item" data-animate="fade-up" data-delay="100">
-              <div className="format-icon">✨</div>
+              <div className="format-icon"><FaStar aria-hidden="true" /></div>
               <h3>{t("study.practice")}</h3>
               <p>{t("study.practiceText")}</p>
             </div>
             <div className="format-item" data-animate="fade-up" data-delay="200">
-              <div className="format-icon">🎯</div>
+              <div className="format-icon"><FaBullseye aria-hidden="true" /></div>
               <h3>{t("study.feedback")}</h3>
               <p>{t("study.feedbackText")}</p>
             </div>
             <div className="format-item" data-animate="fade-up" data-delay="300">
-              <div className="format-icon">🏆</div>
+              <div className="format-icon"><FaTrophy aria-hidden="true" /></div>
               <h3>{t("study.result")}</h3>
               <p>{t("study.resultText")}</p>
             </div>
@@ -511,7 +511,7 @@ export default function StudyPage() {
               fontSize: '20px',
               cursor: 'pointer',
               zIndex: 10
-            }} onClick={() => setActiveVideo(null)}>✕</button>
+            }} onClick={() => setActiveVideo(null)}><IoClose aria-hidden="true" /></button>
             
             <div style={{
               position: 'relative',

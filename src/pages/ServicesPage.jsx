@@ -7,6 +7,10 @@ import {
   FaPhone,
   FaEnvelope,
   FaUser,
+  FaPaintBrush,
+  FaStar,
+  FaGraduationCap,
+  FaGem,
 } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import AOS from "aos";
@@ -331,25 +335,25 @@ export default function ServicesPage() {
         <div className="container">
           <div className="features__grid">
             <div className="feature-card" data-aos="fade-up">
-              <div className="feature-card__icon">💄</div>
+              <div className="feature-card__icon"><FaPaintBrush aria-hidden="true" /></div>
               <h3>{t("servicesPage.cosmetics")}</h3>
               <p>{t("servicesPage.cosmeticsText")}</p>
             </div>
             
             <div className="feature-card" data-aos="fade-up" data-delay="100">
-              <div className="feature-card__icon">✨</div>
+              <div className="feature-card__icon"><FaStar aria-hidden="true" /></div>
               <h3>{t("servicesPage.hygiene")}</h3>
               <p>{t("servicesPage.hygieneText")}</p>
             </div>
             
             <div className="feature-card" data-aos="fade-up" data-delay="200">
-              <div className="feature-card__icon">🎓</div>
+              <div className="feature-card__icon"><FaGraduationCap aria-hidden="true" /></div>
               <h3>{t("servicesPage.experience")}</h3>
               <p>{t("servicesPage.experienceText")}</p>
             </div>
             
             <div className="feature-card" data-aos="fade-up" data-delay="300">
-              <div className="feature-card__icon">💎</div>
+              <div className="feature-card__icon"><FaGem aria-hidden="true" /></div>
               <h3>{t("servicesPage.personal")}</h3>
               <p>{t("servicesPage.personalText")}</p>
             </div>
