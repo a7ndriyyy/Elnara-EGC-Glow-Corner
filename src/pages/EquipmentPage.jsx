@@ -238,7 +238,7 @@ export default function EquipmentPage() {
                     <span className="machine-stat__label">{t("equipmentPage.country")}</span>
                   </div>
                   <div className="machine-stat">
-                    <span className="machine-stat__value">✓</span>
+                    <span className="machine-stat__value"><FaCheckCircle aria-hidden="true" /></span>
                     <span className="machine-stat__label">{t("equipmentPage.certified")}</span>
                   </div>
                   <div className="machine-stat">
