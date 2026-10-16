@@ -274,3 +274,22 @@ drop trigger if exists prevent_booking_over_active_reschedule_proposal on public
 create trigger prevent_booking_over_active_reschedule_proposal
 before insert or update of starts_at, ends_at, status on public.appointments
 for each row execute function public.prevent_booking_over_active_reschedule_proposal();
+
+
+-- Expose only the busy intervals for active proposals; no customer or token data.
+create or replace function public.get_active_reschedule_holds(p_date date)
+returns table (starts_at timestamptz, ends_at timestamptz)
+language sql
+stable
+security definer
+set search_path = public, pg_temp
+as $$
+  select rp.proposed_starts_at, rp.proposed_ends_at
+  from public.reschedule_proposals rp
+  where rp.status = 'pending'
+    and rp.expires_at > now()
+    and (rp.proposed_starts_at at time zone 'Europe/Paris')::date = p_date;
+$$;
+
+revoke all on function public.get_active_reschedule_holds(date) from public;
+grant execute on function public.get_active_reschedule_holds(date) to anon, authenticated;
