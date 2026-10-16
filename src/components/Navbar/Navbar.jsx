@@ -130,7 +130,7 @@ export default function Navbar() {
             onClick={closeMenu}
             aria-label={t("nav.closeMenu")}
           >
-            ✕
+            <IoClose aria-hidden="true" />
           </button>
         </div>
 
