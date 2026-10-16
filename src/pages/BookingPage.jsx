@@ -425,6 +425,8 @@ export default function BookingPage() {
           </p>
         </div>
 
+        <p className="booking-payment-notice" role="note">{t("booking.depositNotice")}</p>
+
         <form onSubmit={handleSubmit}>
           {servicesLoading && (
             <p role="status">{t("booking.loadingServices")}</p>
