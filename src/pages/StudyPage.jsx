@@ -543,10 +543,10 @@ export default function StudyPage() {
             
             <div className="study__modal-header">
               <h3 className="study__modal-title">
-                {selectedCourse ? `Запис на курс: ${selectedCourse.title}` : 'Записатись на консультацію'}
+                {selectedCourse ? `${t("study.enroll")}: ${selectedCourse.title}` : t("study.consultation")}
               </h3>
               <p className="study__modal-subtitle">
-                Заповніть форму і ми зв'яжемось з вами найближчим часом
+                {t("study.modalSubtitle")}
               </p>
             </div>
 
