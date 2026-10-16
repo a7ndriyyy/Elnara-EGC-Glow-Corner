@@ -288,10 +288,56 @@ export default function BookingPage() {
       if (error || !data?.success) {
         console.error("Appointment request failed:", error || data);
 
-        setSubmitMessage(
-          data?.error ||
-            "We could not submit your request. Please try again."
-        );
+        // Supabase FunctionsHttpError keeps the non-2xx response in error.context.
+        // Read its JSON body so the customer sees the real conflict message.
+        let responseData = data;
+
+        if (error?.context && typeof error.context.clone === "function") {
+          try {
+            responseData = await error.context.clone().json();
+          } catch {
+            // Fall back to the generic message if the response is not JSON.
+          }
+        }
+
+        const responseMessage =
+          responseData?.error || data?.error || "";
+        const isSlotConflict =
+          error?.context?.status === 409 ||
+          /no longer available|just been booked|outside business hours/i.test(
+            responseMessage
+          );
+
+        if (isSlotConflict) {
+          setSelectedSlot("");
+          setSlotsLoading(true);
+          setSlotsError("");
+
+          const { data: refreshedSlots, error: refreshError } =
+            await supabase.rpc("get_available_slots", {
+              p_service_id: serviceId,
+              p_date: date,
+            });
+
+          if (refreshError) {
+            console.error("Failed to refresh available slots:", refreshError);
+            setAvailableSlots([]);
+            setSlotsError("Unable to refresh available times. Please try again.");
+          } else {
+            setAvailableSlots(refreshedSlots || []);
+          }
+
+          setSlotsLoading(false);
+          setSubmitMessage(
+            "This time slot was just booked by someone else. Available times have been refreshed. Please choose another time."
+          );
+        } else {
+          setSubmitMessage(
+            responseMessage ||
+              "We could not submit your request. Please try again."
+          );
+        }
+
         setStatus("failed");
         return;
       }
