@@ -2,18 +2,20 @@ import React from 'react';
 import "./Navbar.css";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 const navLinks = [
-  { id: "salon", label: "Salon Services", path: "/services" },
-  { id: "study", label: "Study with us", path: "/about" },
-  { id: "massages", label: "Massages and Procedures", path: "/equipment" },
-  { id: "prices", label: "Prices", path: "/prices" },
+  { id: "salon", labelKey: "nav.salonServices", path: "/services" },
+  { id: "study", labelKey: "nav.study", path: "/about" },
+  { id: "massages", labelKey: "nav.massages", path: "/equipment" },
+  { id: "prices", labelKey: "nav.prices", path: "/prices" },
 ];
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const { language, setLanguage, t, supportedLanguages } = useLanguage();
 
   // Lock body scroll when menu is open
   useEffect(() => {
@@ -86,27 +88,27 @@ export default function Navbar() {
             to="/equipment" 
             className={`navbar__link ${isActive("/#reviews") ? "navbar__link--active" : ""}`}
           >
-            Massages and Procedures 
+            {t("nav.massages")}
           </Link>
           <Link 
             to="/prices" 
             className={`navbar__link ${isActive("/#contact") ? "navbar__link--active" : ""}`}
           >
-            Prices
+            {t("nav.prices")}
           </Link>
-          <button className="navbar__lang-btn">
-            EN
-            <svg className="navbar__lang-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
+          <label className="navbar__language-wrap">
+            <span className="navbar__sr-only">{t("nav.language")}</span>
+            <select className="navbar__lang-btn navbar__language-select" value={language} onChange={(event) => setLanguage(event.target.value)} aria-label={t("nav.language")}>
+              {supportedLanguages.map((code) => <option key={code} value={code}>{code.toUpperCase()}</option>)}
+            </select>
+          </label>
         </nav>
 
         {/* Burger Button */}
         <button
           className={`navbar__burger ${open ? "navbar__burger--open" : ""}`}
           onClick={() => setOpen(!open)}
-          aria-label="Toggle menu"
+          aria-label={t("nav.menu")}
           aria-expanded={open}
         >
           <span></span>
@@ -138,7 +140,7 @@ export default function Navbar() {
               className={`navbar__mobile-link ${isActive(link.path) ? "navbar__mobile-link--active" : ""}`}
               onClick={closeMenu}
             >
-              {link.label}
+              {t(link.labelKey)}
               <svg className="navbar__mobile-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
@@ -147,14 +149,14 @@ export default function Navbar() {
         </nav>
 
         <div className="navbar__mobile-footer">
-          <button className="navbar__mobile-lang">
-            <span>EN</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
-            </svg>
-          </button>
+          <label className="navbar__mobile-lang">
+            <span>{t("nav.language")}</span>
+            <select value={language} onChange={(event) => setLanguage(event.target.value)} aria-label={t("nav.language")}>
+              {supportedLanguages.map((code) => <option key={code} value={code}>{code.toUpperCase()}</option>)}
+            </select>
+          </label>
           <div className="navbar__mobile-social">
-            <span>Follow us</span>
+            <span>{t("nav.followUs")}</span>
             <div className="navbar__mobile-social-icons">
               <a href="#" aria-label="Instagram">📷</a>
               <a href="#" aria-label="Facebook">📘</a>
