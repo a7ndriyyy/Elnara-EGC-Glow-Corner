@@ -63,7 +63,7 @@ export default function EquipmentPage() {
     }
   ];
 
-  const mainMachine = equipment[0];
+  const mainMachine = { ...equipment[0], ...t("pageContent.equipment") };
 
 
   // Обробка відправки форми
@@ -295,10 +295,7 @@ export default function EquipmentPage() {
                 <div className="procedure-number">{index + 1}</div>
                 <h3>{procedure}</h3>
                 <p>
-                  {index === 0 && "Ефективне зменшення целюліту, моделювання силуету"}
-                  {index === 1 && "Виведення зайвої рідини, зменшення набряків"}
-                  {index === 2 && "Корекція фігури, зменшення об'ємів, підтяжка"}
-                  {index === 3 && "Відновлення після травм, регенерація тканин"}
+                  {mainMachine.procedureDescriptions[index]}
                 </p>
               </div>
             ))}
@@ -349,7 +346,7 @@ export default function EquipmentPage() {
               className="btn btn--outline"
               onClick={() => openModal()}
             >
-              Записатись
+              {t("equipmentPage.book")}
             </button>
               <a href="tel:+33456756578" className="btn btn--outline btn--large">
                 +33 4 56 75 65 78
@@ -378,7 +375,7 @@ export default function EquipmentPage() {
               className="btn btn--outline"
               onClick={() => openModal()}
             >
-              Записатись
+              {t("equipmentPage.book")}
             </button>
           </div>
         </div>
@@ -459,7 +456,7 @@ export default function EquipmentPage() {
                       ) : (
                         <>
                           <FaPaperPlane className="services__modal-submit-icon" />
-                          {selectedService ? 'Записатись' : 'Отримати консультацію'}
+                          {selectedService ? t("equipmentPage.book") : t("equipmentPage.consultation")}
                           <span className="services__modal-submit-glow"></span>
                         </>
                       )}
