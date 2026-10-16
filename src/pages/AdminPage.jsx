@@ -196,6 +196,12 @@ export default function AdminPage() {
   const [blockMode, setBlockMode] = useState('single');
   const [blockDays, setBlockDays] = useState([1, 3, 5]);
 
+  const [rescheduleTarget, setRescheduleTarget] = useState(null);
+  const [rescheduleStart, setRescheduleStart] = useState('');
+  const [rescheduleLink, setRescheduleLink] = useState('');
+  const [rescheduleBusy, setRescheduleBusy] = useState(false);
+  const [rescheduleError, setRescheduleError] = useState('');
+
   const [blockForm, setBlockForm] = useState(() => ({
     starts_at: currentParisDateTimeLocal(),
     ends_at: '',
@@ -663,6 +669,69 @@ export default function AdminPage() {
     }
   }
 
+  function openReschedule(appointment) {
+    setRescheduleTarget(appointment);
+    setRescheduleStart(`${addDays(dateKey(new Date()), 1)}T10:00`);
+    setRescheduleLink('');
+    setRescheduleError('');
+  }
+
+  async function createRescheduleProposal(event) {
+    event.preventDefault();
+    if (!rescheduleTarget || !rescheduleStart) return;
+
+    setRescheduleBusy(true);
+    setRescheduleError('');
+
+    try {
+      const bytes = new Uint8Array(32);
+      window.crypto.getRandomValues(bytes);
+      const token = Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
+      const digest = await window.crypto.subtle.digest(
+        'SHA-256',
+        new TextEncoder().encode(token)
+      );
+      const tokenHash = Array.from(new Uint8Array(digest), (byte) =>
+        byte.toString(16).padStart(2, '0')
+      ).join('');
+
+      const proposedStartsAt = parisDateTimeToISO(rescheduleStart);
+      const { data, error: proposalError } = await supabase.rpc(
+        'create_reschedule_proposal',
+        {
+          p_appointment_id: rescheduleTarget.id,
+          p_proposed_starts_at: proposedStartsAt,
+          p_token_hash: tokenHash,
+        }
+      );
+
+      if (proposalError) throw proposalError;
+      if (!data || !data.length) {
+        throw new Error('La proposition n’a pas pu être créée.');
+      }
+
+      setRescheduleLink(`${window.location.origin}/#/reschedule?token=${token}`);
+      await loadAppointments();
+    } catch (err) {
+      setRescheduleError(
+        err.message || 'Impossible de proposer ce nouvel horaire.'
+      );
+    } finally {
+      setRescheduleBusy(false);
+    }
+  }
+
+  async function copyRescheduleLink() {
+    if (!rescheduleLink) return;
+    try {
+      await navigator.clipboard.writeText(rescheduleLink);
+    } catch {
+      setRescheduleError(
+        'Copie automatique impossible. Sélectionnez et copiez le lien affiché.'
+      );
+    }
+  }
+
   async function signOut() {
     const { error: signOutError } = await supabase.auth.signOut();
 
@@ -767,6 +836,16 @@ export default function AdminPage() {
           >
             {updatingId === appointment.id ? 'Modification…' : 'Confirmer'}
           </button>
+
+          {['pending', 'confirmed'].includes(appointment.status) && (
+            <button
+              type="button"
+              onClick={() => openReschedule(appointment)}
+              disabled={updatingId === appointment.id}
+            >
+              Proposer un autre horaire
+            </button>
+          )}
 
           <button
             type="button"
@@ -1434,6 +1513,82 @@ export default function AdminPage() {
           </div>
         </aside>
       </div>
+
+      {rescheduleTarget && (
+        <div className="reschedule-admin-overlay" role="presentation">
+          <section
+            className="reschedule-admin-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="reschedule-admin-title"
+          >
+            <button
+              type="button"
+              className="reschedule-admin-modal__close"
+              aria-label="Fermer"
+              onClick={() => setRescheduleTarget(null)}
+            >
+              ×
+            </button>
+            <p className="admin-eyebrow">MODIFICATION DU RENDEZ-VOUS</p>
+            <h2 id="reschedule-admin-title">
+              Proposer un autre horaire à {rescheduleTarget.customer_name}
+            </h2>
+            <p>
+              L’horaire proposé est réservé pendant 24 heures. Le rendez-vous
+              actuel reste inchangé tant que le client n’accepte pas.
+            </p>
+
+            {!rescheduleLink ? (
+              <form onSubmit={createRescheduleProposal}>
+                <label>
+                  Nouvelle date et heure (heure de Paris)
+                  <input
+                    type="datetime-local"
+                    required
+                    min={currentParisDateTimeLocal()}
+                    value={rescheduleStart}
+                    onChange={(event) => setRescheduleStart(event.target.value)}
+                  />
+                </label>
+                {rescheduleError && (
+                  <p className="admin-page__error" role="alert">{rescheduleError}</p>
+                )}
+                <div className="reschedule-admin-modal__actions">
+                  <button type="submit" disabled={rescheduleBusy}>
+                    {rescheduleBusy ? 'Création…' : 'Créer la proposition'}
+                  </button>
+                  <button type="button" onClick={() => setRescheduleTarget(null)}>
+                    Fermer
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <div className="reschedule-admin-modal__success">
+                <p role="status">
+                  Proposition créée. Elle expire dans 24 heures. Envoyez ce lien
+                  au client par le canal de votre choix.
+                </p>
+                <label>
+                  Lien sécurisé pour le client
+                  <input readOnly value={rescheduleLink} onFocus={(event) => event.target.select()} />
+                </label>
+                {rescheduleError && (
+                  <p className="admin-page__error" role="alert">{rescheduleError}</p>
+                )}
+                <div className="reschedule-admin-modal__actions">
+                  <button type="button" onClick={copyRescheduleLink}>
+                    Copier le lien
+                  </button>
+                  <button type="button" onClick={() => setRescheduleTarget(null)}>
+                    Terminé
+                  </button>
+                </div>
+              </div>
+            )}
+          </section>
+        </div>
+      )}
     </main>
   );
 }

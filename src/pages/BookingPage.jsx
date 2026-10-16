@@ -142,6 +142,7 @@ export default function BookingPage() {
               : service.duration_minutes > 60
                 ? `${Math.floor(service.duration_minutes / 60)} hr ${service.duration_minutes % 60} min`
                 : `${service.duration_minutes} min`,
+          durationMinutes: service.duration_minutes,
         }))
       );
 
@@ -194,7 +195,31 @@ export default function BookingPage() {
         setSlotsError(t("booking.refreshError"));
         setAvailableSlots([]);
       } else {
-        setAvailableSlots(data || []);
+        // Hide intervals temporarily held while a customer considers a
+        // rescheduling proposal. Fail closed if the hold query fails.
+        const { data: holds, error: holdsError } = await supabase.rpc(
+          "get_active_reschedule_holds",
+          { p_date: date }
+        );
+
+        if (holdsError) {
+          console.error("Failed to load rescheduling holds:", holdsError);
+          setSlotsError(t("booking.refreshError"));
+          setAvailableSlots([]);
+        } else {
+          const activeHolds = holds || [];
+          const durationMs = (selectedService?.durationMinutes || 0) * 60_000;
+          setAvailableSlots(
+            (data || []).filter((slot) => {
+              const slotStart = new Date(slot.starts_at).getTime();
+              const slotEnd = slotStart + durationMs;
+              return !activeHolds.some((hold) =>
+                slotStart < new Date(hold.ends_at).getTime() &&
+                slotEnd > new Date(hold.starts_at).getTime()
+              );
+            })
+          );
+        }
       }
 
       setSlotsLoading(false);
@@ -205,7 +230,7 @@ export default function BookingPage() {
     return () => {
       cancelled = true;
     };
-  }, [serviceId, date, servicesLoading, servicesError]);
+  }, [serviceId, date, servicesLoading, servicesError, selectedService?.durationMinutes]);
 
   const calendarDays = useMemo(
     () => getCalendarDays(visibleMonth),
@@ -328,7 +353,28 @@ export default function BookingPage() {
             setAvailableSlots([]);
             setSlotsError(t("booking.refreshError"));
           } else {
-            setAvailableSlots(refreshedSlots || []);
+            const { data: holds, error: holdsError } = await supabase.rpc(
+              "get_active_reschedule_holds",
+              { p_date: date }
+            );
+
+            if (holdsError) {
+              console.error("Failed to refresh rescheduling holds:", holdsError);
+              setAvailableSlots([]);
+              setSlotsError(t("booking.refreshError"));
+            } else {
+              const durationMs = (selectedService?.durationMinutes || 0) * 60_000;
+              setAvailableSlots(
+                (refreshedSlots || []).filter((slot) => {
+                  const slotStart = new Date(slot.starts_at).getTime();
+                  const slotEnd = slotStart + durationMs;
+                  return !(holds || []).some((hold) =>
+                    slotStart < new Date(hold.ends_at).getTime() &&
+                    slotEnd > new Date(hold.starts_at).getTime()
+                  );
+                })
+              );
+            }
           }
 
           setSlotsLoading(false);

@@ -12,6 +12,7 @@ import PricesPage from "./pages/PricesPage";
 import BookingPage from "./pages/BookingPage";
 import AdminLogin from "./pages/AdminLogin";
 import AdminPage from "./pages/AdminPage";
+import RescheduleResponse from "./pages/RescheduleResponse";
 import { LanguageProvider } from "./i18n/LanguageContext";
 // Додайте імпорт для скролу до секцій
 
@@ -50,6 +51,7 @@ export default function App() {
           <Route path="equipment" element={<EquipmentPage />} />
           <Route path="prices" element={<PricesPage />} />
           <Route path="booking" element={<BookingPage />} />
+          <Route path="reschedule" element={<RescheduleResponse />} />
 
 
             <Route path="admin-login" element={<AdminLogin />} />
