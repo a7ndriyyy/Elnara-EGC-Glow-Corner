@@ -3,7 +3,7 @@ import { useState, useRef} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 import { IoClose } from "react-icons/io5";
-import { FaUser, FaEnvelope, FaPhone, FaPaperPlane, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaPhone, FaPaperPlane, FaCheckCircle, FaTimesCircle, FaGlobeEurope, FaMicroscope, FaUserMd, FaStar } from "react-icons/fa";
 import "./Equipmentpage.css";
 import { useLanguage } from "../i18n/LanguageContext";
 
@@ -313,22 +313,22 @@ export default function EquipmentPage() {
 
           <div className="benefits-grid">
             <div className="benefit-item">
-              <div className="benefit-icon">🇮🇹</div>
+              <div className="benefit-icon"><FaGlobeEurope aria-hidden="true" /></div>
               <h3>{t("equipmentPage.italian")}</h3>
               <p>{t("equipmentPage.italianText")}</p>
             </div>
             <div className="benefit-item">
-              <div className="benefit-icon">🔬</div>
+              <div className="benefit-icon"><FaMicroscope aria-hidden="true" /></div>
               <h3>{t("equipmentPage.science")}</h3>
               <p>{t("equipmentPage.scienceText")}</p>
             </div>
             <div className="benefit-item">
-              <div className="benefit-icon">⚕️</div>
+              <div className="benefit-icon"><FaUserMd aria-hidden="true" /></div>
               <h3>{t("equipmentPage.safety")}</h3>
               <p>{t("equipmentPage.safetyText")}</p>
             </div>
             <div className="benefit-item">
-              <div className="benefit-icon">✨</div>
+              <div className="benefit-icon"><FaStar aria-hidden="true" /></div>
               <h3>{t("equipmentPage.comfort")}</h3>
               <p>{t("equipmentPage.comfortText")}</p>
             </div>
