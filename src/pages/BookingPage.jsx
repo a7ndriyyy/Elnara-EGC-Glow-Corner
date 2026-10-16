@@ -579,7 +579,7 @@ export default function BookingPage() {
             ) : (
               <div className="booking-time-slot-grid">
                 {availableSlots.map((slot) => {
-                  const time = new Intl.DateTimeFormat("en-GB", {
+                  const time = new Intl.DateTimeFormat(locale, {
                     timeZone: "Europe/Paris",
                     hour: "2-digit",
                     minute: "2-digit",
@@ -662,26 +662,26 @@ export default function BookingPage() {
                 onError={() => {
                   setTurnstileToken("");
                   setSubmitMessage(
-                    "Security verification failed. Please reload the verification and try again."
+                    t("booking.security")
                   );
                 }}
               />
             ) : (
               <p className="booking-error" role="alert">
-                Security verification is not configured.
+                {t("booking.security")}
               </p>
             )}
           </div>
 
           {status === "error" && (
             <p className="booking-error" role="alert">
-              Please complete all required fields and select an available time.
+              {t("booking.required")}
             </p>
           )}
 
           {status === "captcha" && (
             <p className="booking-error" role="alert">
-              Please complete the security verification before submitting.
+              {t("booking.captcha")}
             </p>
           )}
 
@@ -712,9 +712,9 @@ export default function BookingPage() {
             }
           >
             {status === "submitting"
-              ? "Submitting request..."
+              ? t("booking.submitting")
               : status === "success"
-                ? "Request submitted"
+                ? t("booking.success")
                 : t("booking.submit")}
           </button>
         </form>
