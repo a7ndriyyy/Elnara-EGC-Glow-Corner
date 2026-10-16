@@ -371,7 +371,7 @@ export default function ServicesPage() {
               >
                 <div className="popular-card__image">
                   <img src={service.image} alt={service.name} />
-                  <span className="popular-card__badge">Популярне</span>
+                  <span className="popular-card__badge">{t("servicesPage.popular")}</span>
                 </div>
                 <div className="popular-card__content">
                   <h3>{service.name}</h3>
@@ -398,7 +398,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* Всі послуги */}
+      {/* {t("servicesPage.all")} */}
       <section id="services" className="services">
         <div className="container">
           <div className="section-header">
@@ -412,7 +412,7 @@ export default function ServicesPage() {
               className={`filter-btn ${activeFilter === 'all' ? 'active' : ''}`}
               onClick={() => setActiveFilter('all')}
             >
-              Всі послуги
+              {t("servicesPage.all")}
             </button>
             <button 
               className={`filter-btn ${activeFilter === 'bridal' ? 'active' : ''}`}
@@ -568,7 +568,7 @@ export default function ServicesPage() {
                 {selectedService ? `Запис на: ${selectedService.name}` : 'Записатись на консультацію'}
               </h3>
               <p className="services__modal-subtitle">
-                Заповніть форму і ми зв'яжемось з вами найближчим часом
+                {t("servicesPage.modalSubtitle")}
               </p>
             </div>
 
