@@ -3,7 +3,7 @@
 
 create table if not exists public.booking_payment_holds (
   id uuid primary key default gen_random_uuid(),
-  service_id uuid not null references public.services(id),
+  service_id text not null references public.services(id),
   starts_at timestamptz not null,
   ends_at timestamptz not null,
   customer_name text not null,
@@ -32,7 +32,7 @@ revoke all on public.booking_payment_holds from anon, authenticated;
 -- Keep this table private. Only Edge Functions using service_role may read/write it.
 -- Serializes the single-practitioner booking/payment critical section.
 create or replace function public.create_booking_payment_hold(
-  p_service_id uuid,
+  p_service_id text,
   p_starts_at timestamptz,
   p_customer_name text,
   p_customer_phone text,
@@ -144,8 +144,8 @@ begin
 end;
 $$;
 
-revoke all on function public.create_booking_payment_hold(uuid, timestamptz, text, text, text, integer) from public, anon, authenticated;
-grant execute on function public.create_booking_payment_hold(uuid, timestamptz, text, text, text, integer) to service_role;
+revoke all on function public.create_booking_payment_hold(text, timestamptz, text, text, text, integer) from public, anon, authenticated;
+grant execute on function public.create_booking_payment_hold(text, timestamptz, text, text, text, integer) to service_role;
 
 create or replace function public.release_booking_payment_hold(p_hold_id uuid)
 returns void
@@ -214,7 +214,8 @@ begin
 
   -- A verified deposit is the condition that confirms the appointment.
   update public.appointments
-    set status = 'confirmed'
+    set status = 'confirmed',
+        payment_status = 'deposit_paid'
     where id = (v_appointment->>'appointment_id')::uuid
       and status in ('pending', 'confirmed');
   if not found then

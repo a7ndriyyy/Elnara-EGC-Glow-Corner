@@ -13,7 +13,6 @@ const categoryLabels = {
   "Брови та вії": "booking.categoryBrows",
 };
 
-
 const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 
 function formatDate(date) {
@@ -63,7 +62,10 @@ function getCalendarDays(monthDate) {
 
 export default function BookingPage() {
   const { t, language } = useLanguage();
-  const locale = { en: "en-GB", fr: "fr-FR", uk: "uk-UA", ru: "ru-RU" }[language] || "en-GB";
+  const locale =
+    { en: "en-GB", fr: "fr-FR", uk: "uk-UA", ru: "ru-RU" }[language] ||
+    "en-GB";
+
   const weekdayLabels = t("booking.weekdays");
   const [searchParams] = useSearchParams();
   const initialService = searchParams.get("service") || "";
@@ -179,52 +181,86 @@ export default function BookingPage() {
 
     if (!serviceId || !date || servicesLoading || servicesError) {
       setSlotsLoading(false);
-      return;
+      return () => {
+        cancelled = true;
+      };
     }
 
     async function loadAvailableSlots() {
       setSlotsLoading(true);
 
-      const { data, error } = await supabase.rpc("get_available_slots", {
-        p_service_id: serviceId,
-        p_date: date,
-      });
+      try {
+        const { data, error } = await supabase.rpc(
+          "get_available_slots",
+          {
+            p_service_id: serviceId,
+            p_date: date,
+          }
+        );
 
-      if (cancelled) return;
+        if (cancelled) return;
 
-      if (error) {
-        console.error("Failed to load available slots:", error);
-        setSlotsError(t("booking.refreshError"));
-        setAvailableSlots([]);
-      } else {
-        // Hide intervals temporarily held while a customer considers a
-        // rescheduling proposal. Fail closed if the hold query fails.
+        if (error) {
+          console.error("Failed to load available slots:", error);
+          setSlotsError(t("booking.refreshError"));
+          setAvailableSlots([]);
+          return;
+        }
+
         const { data: holds, error: holdsError } = await supabase.rpc(
           "get_active_reschedule_holds",
           { p_date: date }
         );
 
+        if (cancelled) return;
+
         if (holdsError) {
-          console.error("Failed to load rescheduling holds:", holdsError);
-          setSlotsError(t("booking.refreshError"));
-          setAvailableSlots([]);
-        } else {
-          const activeHolds = holds || [];
-          const durationMs = (selectedService?.durationMinutes || 0) * 60_000;
-          setAvailableSlots(
-            (data || []).filter((slot) => {
-              const slotStart = new Date(slot.starts_at).getTime();
-              const slotEnd = slotStart + durationMs;
-              return !activeHolds.some((hold) =>
+          // Permit normal booking when the optional rescheduling RPC
+          // has not been installed. Other errors still fail closed.
+          if (holdsError.code === "PGRST202") {
+            console.warn(
+              "Rescheduling holds RPC is not installed; showing regular available slots."
+            );
+            setAvailableSlots(data || []);
+          } else {
+            console.error(
+              "Failed to load rescheduling holds:",
+              holdsError
+            );
+            setSlotsError(t("booking.refreshError"));
+            setAvailableSlots([]);
+          }
+
+          return;
+        }
+
+        const activeHolds = holds || [];
+        const durationMs =
+          (selectedService?.durationMinutes || 0) * 60_000;
+
+        setAvailableSlots(
+          (data || []).filter((slot) => {
+            const slotStart = new Date(slot.starts_at).getTime();
+            const slotEnd = slotStart + durationMs;
+
+            return !activeHolds.some(
+              (hold) =>
                 slotStart < new Date(hold.ends_at).getTime() &&
                 slotEnd > new Date(hold.starts_at).getTime()
-              );
-            })
-          );
+            );
+          })
+        );
+      } catch (error) {
+        if (cancelled) return;
+
+        console.error("Unexpected error loading available slots:", error);
+        setSlotsError(t("booking.refreshError"));
+        setAvailableSlots([]);
+      } finally {
+        if (!cancelled) {
+          setSlotsLoading(false);
         }
       }
-
-      setSlotsLoading(false);
     }
 
     loadAvailableSlots();
@@ -232,7 +268,14 @@ export default function BookingPage() {
     return () => {
       cancelled = true;
     };
-  }, [serviceId, date, servicesLoading, servicesError, selectedService?.durationMinutes]);
+  }, [
+    serviceId,
+    date,
+    servicesLoading,
+    servicesError,
+    selectedService?.durationMinutes,
+    t,
+  ]);
 
   const calendarDays = useMemo(
     () => getCalendarDays(visibleMonth),
@@ -280,7 +323,9 @@ export default function BookingPage() {
       return () => {};
     }
 
-    if (paymentState !== "processing") return () => {};
+    if (paymentState !== "processing") {
+      return () => {};
+    }
 
     if (!checkoutSessionId) {
       setStatus("failed");
@@ -293,6 +338,7 @@ export default function BookingPage() {
 
     async function checkPayment() {
       attempts += 1;
+
       const { data, error } = await supabase.functions.invoke(
         "booking-payment-status",
         { body: { session_id: checkoutSessionId } }
@@ -306,7 +352,11 @@ export default function BookingPage() {
         return;
       }
 
-      if (!error && (data?.status === "not_paid" || data?.status === "unknown") && attempts >= 40) {
+      if (
+        !error &&
+        (data?.status === "not_paid" || data?.status === "unknown") &&
+        attempts >= 40
+      ) {
         setStatus("paymentUnverified");
         setSubmitMessage(t("booking.paymentFailed"));
         return;
@@ -375,7 +425,11 @@ export default function BookingPage() {
       );
 
       if (error || !data?.checkout_url) {
-        console.error("Checkout session request failed:", error || data);
+        console.error(
+          "Checkout session request failed:",
+          error || data
+        );
+
         let responseData = data;
 
         if (error?.context && typeof error.context.clone === "function") {
@@ -386,17 +440,24 @@ export default function BookingPage() {
           }
         }
 
-        const message = responseData?.error || data?.error || t("booking.failed");
+        const message =
+          responseData?.error || data?.error || t("booking.failed");
+
         setSubmitMessage(message);
         setStatus("failed");
         return;
       }
 
-      // Only the server-created Stripe Checkout URL is allowed to redirect the client.
+      // Redirect only to the expected Stripe Checkout host.
       const checkoutUrl = new URL(data.checkout_url);
-      if (checkoutUrl.protocol !== "https:" || checkoutUrl.hostname !== "checkout.stripe.com") {
+
+      if (
+        checkoutUrl.protocol !== "https:" ||
+        checkoutUrl.hostname !== "checkout.stripe.com"
+      ) {
         throw new Error("Unexpected checkout URL.");
       }
+
       window.location.assign(checkoutUrl.toString());
     } catch (error) {
       console.error("Unexpected checkout error:", error);
@@ -414,18 +475,16 @@ export default function BookingPage() {
         <p className="booking-eyebrow">{t("booking.eyebrow")}</p>
         <h1>{t("booking.title")}</h1>
 
-        <p className="booking-intro">
-          {t("booking.intro")}
-        </p>
+        <p className="booking-intro">{t("booking.intro")}</p>
 
         <div className="booking-notice" role="note">
           <strong>{t("booking.request")}</strong>
-          <p>
-            {t("booking.notice")}
-          </p>
+          <p>{t("booking.notice")}</p>
         </div>
 
-        <p className="booking-payment-notice" role="note">{t("booking.depositNotice")}</p>
+        <p className="booking-payment-notice" role="note">
+          {t("booking.depositNotice")}
+        </p>
 
         <form onSubmit={handleSubmit}>
           {servicesLoading && (
@@ -438,7 +497,10 @@ export default function BookingPage() {
             </p>
           )}
 
-          <label htmlFor="booking-service">{t("booking.service")}</label>
+          <label htmlFor="booking-service">
+            {t("booking.service")}
+          </label>
+
           <select
             id="booking-service"
             value={serviceId}
@@ -475,13 +537,16 @@ export default function BookingPage() {
           {selectedService && (
             <div className="booking-service-summary">
               <p>
-                <strong>{t("booking.service")}:</strong> {selectedService.name}
+                <strong>{t("booking.service")}:</strong>{" "}
+                {selectedService.name}
               </p>
               <p>
-                <strong>{t("booking.price")}:</strong> {selectedService.price}
+                <strong>{t("booking.price")}:</strong>{" "}
+                {selectedService.price}
               </p>
               <p>
-                <strong>{t("booking.duration")}:</strong> {selectedService.duration}
+                <strong>{t("booking.duration")}:</strong>{" "}
+                {selectedService.duration}
               </p>
             </div>
           )}
@@ -578,10 +643,12 @@ export default function BookingPage() {
 
             <div className="booking-calendar-legend">
               <span>
-                <i className="legend-dot selected-dot" /> {t("booking.selected")}
+                <i className="legend-dot selected-dot" />{" "}
+                {t("booking.selected")}
               </span>
               <span>
-                <i className="legend-dot unavailable-dot" /> {t("booking.unavailable")}
+                <i className="legend-dot unavailable-dot" />{" "}
+                {t("booking.unavailable")}
               </span>
             </div>
 
@@ -598,9 +665,7 @@ export default function BookingPage() {
               </p>
             )}
 
-            <p className="booking-hint">
-              {t("booking.dateHint")}
-            </p>
+            <p className="booking-hint">{t("booking.dateHint")}</p>
           </fieldset>
 
           <fieldset className="booking-times">
@@ -617,9 +682,7 @@ export default function BookingPage() {
                 {slotsError}
               </p>
             ) : availableSlots.length === 0 ? (
-              <p className="booking-hint">
-                {t("booking.noTimes")}
-              </p>
+              <p className="booking-hint">{t("booking.noTimes")}</p>
             ) : (
               <div className="booking-time-slot-grid">
                 {availableSlots.map((slot) => {
@@ -705,9 +768,7 @@ export default function BookingPage() {
                 onExpire={() => setTurnstileToken("")}
                 onError={() => {
                   setTurnstileToken("");
-                  setSubmitMessage(
-                    t("booking.security")
-                  );
+                  setSubmitMessage(t("booking.security"));
                 }}
               />
             ) : (
@@ -735,8 +796,21 @@ export default function BookingPage() {
             </p>
           )}
 
-          {(status === "success" || status === "paymentPending" || status === "paymentCancelled" || status === "paymentUnverified") && (
-            <p role="status" className={status === "paymentCancelled" || status === "paymentUnverified" ? "booking-error" : undefined}>
+          {[
+            "success",
+            "paymentPending",
+            "paymentCancelled",
+            "paymentUnverified",
+          ].includes(status) && (
+            <p
+              role="status"
+              className={
+                status === "paymentCancelled" ||
+                status === "paymentUnverified"
+                  ? "booking-error"
+                  : undefined
+              }
+            >
               {submitMessage}
             </p>
           )}

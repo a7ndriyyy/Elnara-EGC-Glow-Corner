@@ -282,11 +282,8 @@ returns table (starts_at timestamptz, ends_at timestamptz)
 language plpgsql
 security definer
 set search_path = public, pg_temp
-as $
+as $$
 begin
-  update public.reschedule_proposals
-    set status = 'expired', responded_at = now()
-    where status = 'pending' and expires_at <= now();
 
   return query
     select rp.proposed_starts_at, rp.proposed_ends_at
@@ -295,7 +292,7 @@ begin
       and rp.expires_at > now()
       and (rp.proposed_starts_at at time zone 'Europe/Paris')::date = p_date;
 end;
-$;
+$$;
 
 revoke all on function public.get_active_reschedule_holds(date) from public;
 grant execute on function public.get_active_reschedule_holds(date) to anon, authenticated;
