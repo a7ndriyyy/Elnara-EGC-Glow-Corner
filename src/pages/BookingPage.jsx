@@ -7,13 +7,12 @@ import { useLanguage } from "../i18n/LanguageContext";
 import "./BookingPage.css";
 
 const categoryLabels = {
-  Макіяж: "Макіяж",
-  Обличчя: "Догляд за обличчям",
-  "Тіло та масаж": "Тіло та масаж",
-  "Брови та вії": "Брови та вії",
+  Макіяж: "booking.categoryMakeup",
+  Обличчя: "booking.categoryFace",
+  "Тіло та масаж": "booking.categoryBody",
+  "Брови та вії": "booking.categoryBrows",
 };
 
-const weekdayLabels = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Нд"];
 
 const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 
@@ -65,6 +64,7 @@ function getCalendarDays(monthDate) {
 export default function BookingPage() {
   const { t, language } = useLanguage();
   const locale = { en: "en-GB", fr: "fr-FR", uk: "uk-UA", ru: "ru-RU" }[language] || "en-GB";
+  const weekdayLabels = t("booking.weekdays");
   const [searchParams] = useSearchParams();
   const initialService = searchParams.get("service") || "";
 
@@ -122,7 +122,7 @@ export default function BookingPage() {
 
       if (error) {
         console.error("Failed to load services:", error);
-        setServicesError(t("booking.loadingServices"));
+        setServicesError(t("booking.servicesError"));
         setServicesLoading(false);
         return;
       }
@@ -417,7 +417,7 @@ export default function BookingPage() {
               if (categoryServices.length === 0) return null;
 
               return (
-                <optgroup key={category} label={label}>
+                <optgroup key={category} label={t(label)}>
                   {categoryServices.map((service) => (
                     <option key={service.id} value={service.id}>
                       {service.name} — {service.price}
