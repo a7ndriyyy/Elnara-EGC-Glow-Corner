@@ -103,6 +103,11 @@ export default function StudyPage() {
     { id: 3, title: "Секрети контурування", duration: "18:45", preview: videoPreview1, videoUrl: "https://www.youtube.com/embed/..." },
   ];
 
+  const translatedCourses = t("pageContent.studyCourses");
+  courses.forEach((course, index) => Object.assign(course, translatedCourses[index] || {}));
+  const translatedVideos = t("pageContent.studyVideos");
+  videos.forEach((video, index) => { video.title = translatedVideos[index] || video.title; });
+
   // Валідація форми
   const validateForm = () => {
     const newErrors = {};
@@ -280,7 +285,7 @@ export default function StudyPage() {
             <img src={elnaraPortrait} alt="Elnara - makeup artist" />
             <div className="study-about__experience">
               <span>15+</span>
-              <p>років в індустрії краси</p>
+              <p>{t("study.experience")}</p>
             </div>
           </div>
           
@@ -288,8 +293,7 @@ export default function StudyPage() {
             <span className="section-badge">{t("study.instructor")}</span>
             <h2 className="section-title">Elnara <span>Makeup Artist</span></h2>
             <p className="section-text">
-              Міжнародний візажист, сертифікований тренер та засновниця студії краси. 
-              Працювала з Vogue, Elle, Harper's Bazaar та топ-моделями світового рівня.
+              {t("study.aboutText")}
             </p>
             
             <div className="study-about__features">
@@ -372,7 +376,7 @@ export default function StudyPage() {
                       className="course-card__btn"
                       onClick={() => openModal(course)}
                     >
-                      Записатись
+                      {t("study.enroll")}
                       <FiArrowRight />
                     </button>
                   </div>
@@ -390,7 +394,7 @@ export default function StudyPage() {
             <span className="section-badge">{t("study.videos")}</span>
             <h2 className="section-title">{t("study.watch")}</h2>
             <p className="section-subtitle">
-              Безкоштовні уроки, щоб познайомитись з моїм стилем викладання
+              {t("study.videoIntro")}
             </p>
           </div>
 
@@ -431,7 +435,7 @@ export default function StudyPage() {
             </div>
             <div className="format-item" data-animate="fade-up" data-delay="100">
               <div className="format-icon">✨</div>
-              <h3>Практика</h3>
+              <h3>{t("study.practice")}</h3>
               <p>{t("study.practiceText")}</p>
             </div>
             <div className="format-item" data-animate="fade-up" data-delay="200">
