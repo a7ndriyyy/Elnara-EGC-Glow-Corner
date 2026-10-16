@@ -394,10 +394,10 @@ export default function EquipmentPage() {
                   
                   <div className="services__modal-header">
                     <h3 className="services__modal-title">
-                      {selectedService ? `Запис на: ${selectedService.name}` : 'Записатись на консультацію'}
+                      {selectedService ? `${t("equipmentPage.book")}: ${selectedService.name}` : t("equipmentPage.consultation")}
                     </h3>
                     <p className="services__modal-subtitle">
-                      Заповніть форму і ми зв'яжемось з вами найближчим часом
+                      {t("equipmentPage.modalSubtitle")}
                     </p>
                   </div>
       
