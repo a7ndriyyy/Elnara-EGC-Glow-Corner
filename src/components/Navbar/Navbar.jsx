@@ -6,11 +6,23 @@ import { useLanguage } from "../../i18n/LanguageContext";
 import { FaInstagram, FaFacebook } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 
-const navLinks = [
+// Desktop header: links either side of the logo. The mobile menu shows all of
+// them plus "Booking" (on desktop booking is the floating gold button).
+const leftLinks = [
   { id: "salon", labelKey: "nav.salonServices", path: "/services" },
-  { id: "study", labelKey: "nav.study", path: "/about" },
   { id: "massages", labelKey: "nav.massages", path: "/equipment" },
+];
+
+const rightLinks = [
+  { id: "study", labelKey: "nav.study", path: "/about" },
   { id: "prices", labelKey: "nav.prices", path: "/prices" },
+  { id: "master", labelKey: "nav.master", path: "/master" },
+];
+
+const navLinks = [
+  ...leftLinks,
+  ...rightLinks,
+  { id: "booking", labelKey: "nav.booking", path: "/booking" },
 ];
 
 export default function Navbar() {
@@ -64,18 +76,16 @@ export default function Navbar() {
       <div className="navbar__container">
         {/* Desktop Left Navigation */}
         <nav className="navbar__nav navbar__nav--left">
-          <Link 
-            to="/services" 
-            className={`navbar__link ${isActive("/services") ? "navbar__link--active" : ""}`}
-          >
-            {t("nav.salonServices")}
-          </Link>
-          <Link 
-            to="/about" 
-            className={`navbar__link ${isActive("/about") ? "navbar__link--active" : ""}`}
-          >
-            {t("nav.study")}
-          </Link>
+          {leftLinks.map((link) => (
+            <Link
+              key={link.id}
+              to={link.path}
+              className={`navbar__link ${isActive(link.path) ? "navbar__link--active" : ""}`}
+              aria-current={isActive(link.path) ? "page" : undefined}
+            >
+              {t(link.labelKey)}
+            </Link>
+          ))}
         </nav>
 
         {/* Logo */}
@@ -86,18 +96,16 @@ export default function Navbar() {
 
         {/* Desktop Right Navigation */}
         <nav className="navbar__nav navbar__nav--right">
-          <Link 
-            to="/equipment" 
-            className={`navbar__link ${isActive("/#reviews") ? "navbar__link--active" : ""}`}
-          >
-            {t("nav.massages")}
-          </Link>
-          <Link 
-            to="/prices" 
-            className={`navbar__link ${isActive("/#contact") ? "navbar__link--active" : ""}`}
-          >
-            {t("nav.prices")}
-          </Link>
+          {rightLinks.map((link) => (
+            <Link
+              key={link.id}
+              to={link.path}
+              className={`navbar__link ${isActive(link.path) ? "navbar__link--active" : ""}`}
+              aria-current={isActive(link.path) ? "page" : undefined}
+            >
+              {t(link.labelKey)}
+            </Link>
+          ))}
           <label className="navbar__language-wrap">
             <span className="navbar__sr-only">{t("nav.language")}</span>
             <select className="navbar__lang-btn navbar__language-select" value={language} onChange={(event) => setLanguage(event.target.value)} aria-label={t("nav.language")}>

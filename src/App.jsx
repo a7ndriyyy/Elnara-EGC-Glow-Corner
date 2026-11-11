@@ -9,6 +9,7 @@ import AboutPage from "./pages/StudyPage";
 import ServicesPage from "./pages/ServicesPage";
 import EquipmentPage from "./pages/EquipmentPage";
 import PricesPage from "./pages/PricesPage";
+import MasterPage from "./pages/MasterPage";
 import BookingPage from "./pages/BookingPage";
 import AdminLogin from "./pages/AdminLogin";
 import AdminPage from "./pages/AdminPage";
@@ -50,6 +51,7 @@ export default function App() {
           <Route path="services" element={<ServicesPage />} />
           <Route path="equipment" element={<EquipmentPage />} />
           <Route path="prices" element={<PricesPage />} />
+          <Route path="master" element={<MasterPage />} />
           <Route path="booking" element={<BookingPage />} />
           <Route path="reschedule" element={<RescheduleResponse />} />
 

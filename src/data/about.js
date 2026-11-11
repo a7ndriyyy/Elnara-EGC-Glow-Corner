@@ -15,11 +15,10 @@ export const aboutData = {
   ],
   name: "Master Beauty Elnara",
   role: "Beauty specialist",
-  image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-  // Альтернативні зображення для різних типів
+  // Elnara's real photo (public/Images). The hover swap in About.jsx picks from `images`,
+  // so it only holds her own photos — no stock pictures labelled as Elnara.
+  image: `${import.meta.env.BASE_URL}Images/elnara-hero.jpg`,
   images: {
-    main: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    makeup: "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    salon: "https://images.unsplash.com/photo-1560066984-13812e1f6d99?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    main: `${import.meta.env.BASE_URL}Images/elnara-hero.jpg`,
   }
 };
