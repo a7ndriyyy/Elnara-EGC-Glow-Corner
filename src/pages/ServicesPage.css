@@ -1438,3 +1438,17 @@
     font-size: 0.85rem;
   }
 }
+
+/* ===== Service groups: makeup / brows / massage (TZ step 6) ===== */
+.services__group {
+  margin-top: clamp(40px, 6vw, 72px);
+  scroll-margin-top: 110px;
+}
+
+.services__group .stitle {
+  margin-bottom: 32px;
+}
+
+.services__group .stitle__heading {
+  font-size: clamp(24px, 3vw, 36px);
+}

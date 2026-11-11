@@ -11,6 +11,7 @@
 // confirmed with Elnara (TODO: уточнити в Ельнари).
 
 import { findApparatus } from "./apparatus";
+import { makeupTypes, massageProcedures } from "./salonServices";
 
 const img = (path) => `${import.meta.env.BASE_URL}Images/${path}`;
 
@@ -83,65 +84,8 @@ export const directions = [
       fr: "Un maquillage professionnel pour chaque occasion — du quotidien au mariage.",
       ru: "Профессиональный макияж для любого события — от повседневного образа до свадьбы.",
     },
-    // TODO: підтвердити список типів макіяжу (крок 6)
-    subdirections: [
-      {
-        slug: "day",
-        title: { uk: "Денний", en: "Day makeup", fr: "Maquillage de jour", ru: "Дневной" },
-        image: img("ImagesServices/makeup-day.webp"),
-        description: {
-          uk: "Свіжий натуральний образ для роботи, зустрічей і щоденного життя.",
-          en: "A fresh, natural look for work, meetings and everyday life.",
-          fr: "Un look frais et naturel pour le travail, les rendez-vous et le quotidien.",
-          ru: "Свежий натуральный образ для работы, встреч и повседневной жизни.",
-        },
-        duration: 60,
-        priceFrom: 120,
-        bookingId: "day-makeup",
-      },
-      {
-        slug: "evening",
-        title: { uk: "Вечірній", en: "Evening makeup", fr: "Maquillage de soirée", ru: "Вечерний" },
-        image: img("ImagesServices/makeup-evening.webp"),
-        description: {
-          uk: "Виразний стійкий макіяж для вечірок і свят.",
-          en: "Expressive long-lasting makeup for parties and celebrations.",
-          fr: "Un maquillage intense et tenace pour les soirées et les fêtes.",
-          ru: "Выразительный стойкий макияж для вечеринок и праздников.",
-        },
-        duration: 90,
-        priceFrom: 180,
-        bookingId: "evening-makeup",
-      },
-      {
-        slug: "bridal",
-        title: { uk: "Весільний", en: "Bridal makeup", fr: "Maquillage de mariée", ru: "Свадебный" },
-        image: img("ImagesServices/makeup-brida.webp"),
-        description: {
-          uk: "Ніжний образ, що тримається весь день. Пробний макіяж включено.",
-          en: "A soft look that lasts all day. Trial makeup included.",
-          fr: "Un look tout en douceur qui tient toute la journée. Essai inclus.",
-          ru: "Нежный образ, который держится весь день. Пробный макияж включён.",
-        },
-        duration: 120,
-        priceFrom: 250,
-        bookingId: "bridal-makeup",
-      },
-      {
-        slug: "photoshoot",
-        title: { uk: "Для фотосесії", en: "Photoshoot makeup", fr: "Maquillage photo", ru: "Для фотосессии" },
-        image: img("ImagesServices/makeup-editorial.webp"),
-        // TODO: уточнити в Ельнари — тривалість і ціна
-        description: {
-          uk: "Макіяж, який гарно виглядає в кадрі та під студійним світлом.",
-          en: "Makeup that looks great on camera and under studio lights.",
-          fr: "Un maquillage qui rend parfaitement en photo et sous les projecteurs.",
-          ru: "Макияж, который отлично смотрится в кадре и под студийным светом.",
-        },
-        duration: null,
-        priceFrom: null,
-      },
-    ],
+    // Makeup types are defined once in ./salonServices.js (step 6).
+    subdirections: makeupTypes,
   },
   {
     slug: "brows",
@@ -247,60 +191,9 @@ export const directions = [
       fr: "Massages manuels et soins du corps par appareil — récupération, légèreté et tonus.",
       ru: "Ручные массажи и аппаратные процедуры для тела — восстановление, лёгкость и тонус.",
     },
-    // Massage procedures (step 6) + apparatus (step 5). TODO: підтвердити список
+    // Massage procedures (./salonServices.js, step 6) + apparatus (./apparatus.js, step 5).
     subdirections: [
-      {
-        slug: "classic-back",
-        title: { uk: "Класичний масаж спини", en: "Classic back massage", fr: "Massage classique du dos", ru: "Классический массаж спины" },
-        image: null,
-        description: {
-          uk: "Знімає напругу та втому м'язів спини.",
-          en: "Relieves tension and fatigue in the back muscles.",
-          fr: "Soulage les tensions et la fatigue du dos.",
-          ru: "Снимает напряжение и усталость мышц спины.",
-        },
-        duration: 45,
-        priceFrom: 70,
-      },
-      {
-        slug: "full-body",
-        title: { uk: "Загальний масаж тіла", en: "Full-body massage", fr: "Massage corps entier", ru: "Общий массаж тела" },
-        image: null,
-        description: {
-          uk: "Глибоке розслаблення та відновлення всього тіла.",
-          en: "Deep relaxation and recovery for the whole body.",
-          fr: "Détente profonde et récupération de tout le corps.",
-          ru: "Глубокое расслабление и восстановление всего тела.",
-        },
-        duration: 90,
-        priceFrom: 120,
-      },
-      {
-        slug: "anti-cellulite",
-        title: { uk: "Антицелюлітний масаж", en: "Anti-cellulite massage", fr: "Massage anticellulite", ru: "Антицеллюлитный массаж" },
-        image: null,
-        description: {
-          uk: "Покращує тонус шкіри та зменшує прояви целюліту.",
-          en: "Improves skin tone and reduces the look of cellulite.",
-          fr: "Améliore la tonicité de la peau et atténue la cellulite.",
-          ru: "Улучшает тонус кожи и уменьшает проявления целлюлита.",
-        },
-        duration: 60,
-        priceFrom: 90,
-      },
-      {
-        slug: "lymphatic",
-        title: { uk: "Лімфодренажний масаж", en: "Lymphatic drainage massage", fr: "Drainage lymphatique", ru: "Лимфодренажный массаж" },
-        image: null,
-        description: {
-          uk: "Зменшує набряки та дарує відчуття легкості.",
-          en: "Reduces swelling and leaves a feeling of lightness.",
-          fr: "Réduit les gonflements et procure une sensation de légèreté.",
-          ru: "Уменьшает отёки и дарит ощущение лёгкости.",
-        },
-        duration: 60,
-        priceFrom: 100,
-      },
+      ...massageProcedures,
       // Apparatus (step 5), shared with the equipment page.
       findApparatus("vacuum-massage"),
       findApparatus("pressotherapy"),
