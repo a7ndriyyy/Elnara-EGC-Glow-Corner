@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./PricesPage.css";
 import { useLanguage } from "../i18n/LanguageContext";
+import HoursNotice from "../components/HoursNotice/HoursNotice";
 
 export default function PricesPage() {
   const [activeCategory, setActiveCategory] = useState("all");
@@ -117,6 +118,9 @@ export default function PricesPage() {
           )}
         </div>
       </section>
+
+      {/* Години роботи та доплати (TZ step 7) */}
+      <HoursNotice />
 
       {/* Додаткова інформація - проста */}
       <section className="prices-info">

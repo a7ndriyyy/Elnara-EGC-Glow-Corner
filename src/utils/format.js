@@ -22,6 +22,11 @@ export function formatDuration(minutes, lang = "uk") {
   return `${hours} ${u.h} ${rest} ${u.min}`;
 }
 
+/** Replaces {name} placeholders in a translated string; unknown names are left as-is. */
+export function fill(text, vars = {}) {
+  return String(text).replace(/\{(\w+)\}/g, (match, key) => (key in vars ? String(vars[key]) : match));
+}
+
 /** Picks the current language from a { uk, en, fr, ru } object (falls back to uk, then en). */
 export function localize(value, lang = "uk") {
   if (value == null || typeof value !== "object") return value ?? "";

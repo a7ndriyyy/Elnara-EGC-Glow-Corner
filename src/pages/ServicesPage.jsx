@@ -19,6 +19,7 @@ import emailjs from "@emailjs/browser";
 import "./ServicesPage.css";
 import ServiceCard from "../components/ServiceCard/ServiceCard";
 import SectionTitle from "../components/SectionTitle/SectionTitle";
+import HoursNotice from "../components/HoursNotice/HoursNotice";
 import { makeupTypes, massageProcedures } from "../data/salonServices";
 import { bookingLink, findDirection } from "../data/directions";
 import { formatDuration, localize } from "../utils/format";
@@ -297,6 +298,9 @@ export default function ServicesPage() {
           ))}
         </div>
       </section>
+
+      {/* Години роботи та доплати (TZ step 7) */}
+      <HoursNotice />
 
       {/* Як ми працюємо */}
       <section className="process">

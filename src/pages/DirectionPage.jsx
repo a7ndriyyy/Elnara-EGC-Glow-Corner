@@ -3,6 +3,7 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import ServiceCard from "../components/ServiceCard/ServiceCard";
 import SectionTitle from "../components/SectionTitle/SectionTitle";
+import HoursNotice from "../components/HoursNotice/HoursNotice";
 import { bookingLink, findDirection } from "../data/directions";
 import { formatDuration, localize } from "../utils/format";
 import { useLanguage } from "../i18n/LanguageContext";
@@ -60,6 +61,9 @@ export default function DirectionPage() {
             />
           ))}
         </div>
+
+        {/* Години роботи та доплати (TZ step 7) */}
+        <HoursNotice />
       </div>
     </section>
   );

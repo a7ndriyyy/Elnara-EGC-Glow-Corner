@@ -8,6 +8,7 @@ import "./Equipmentpage.css";
 import { useLanguage } from "../i18n/LanguageContext";
 import ServiceCard from "../components/ServiceCard/ServiceCard";
 import SectionTitle from "../components/SectionTitle/SectionTitle";
+import HoursNotice from "../components/HoursNotice/HoursNotice";
 import { apparatus } from "../data/apparatus";
 import { formatDuration, localize } from "../utils/format";
 
@@ -201,6 +202,9 @@ export default function EquipmentPage() {
           </div>
         </div>
       </section>
+
+      {/* Години роботи та доплати (TZ step 7) */}
+      <HoursNotice />
 
       {/* Переваги */}
       <section className="equipment-benefits">

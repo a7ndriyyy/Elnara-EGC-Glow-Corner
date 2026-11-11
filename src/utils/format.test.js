@@ -1,6 +1,12 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { formatDuration, localize } from "./format.js";
+import { fill, formatDuration, localize } from "./format.js";
+
+test("fill replaces known placeholders only", () => {
+  assert.equal(fill("{start} – {end}", { start: "09:00", end: "18:00" }), "09:00 – 18:00");
+  assert.equal(fill("price {price} €", { price: 240 }), "price 240 €");
+  assert.equal(fill("keep {unknown}", {}), "keep {unknown}");
+});
 
 test("formatDuration per language", () => {
   assert.equal(formatDuration(45, "uk"), "45 хв");

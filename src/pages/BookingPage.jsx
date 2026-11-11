@@ -4,6 +4,11 @@ import { useSearchParams } from "react-router-dom";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { supabase } from "../lib/supabase";
 import { useLanguage } from "../i18n/LanguageContext";
+import { FiCalendar, FiClock, FiHome, FiTag } from "react-icons/fi";
+import { pricingRules } from "../data/pricingRules";
+import { bookingNotices, timeInZone } from "../utils/schedule";
+import { fill } from "../utils/format";
+import HoursNotice from "../components/HoursNotice/HoursNotice";
 import "./BookingPage.css";
 
 const categoryLabels = {
@@ -109,6 +114,22 @@ export default function BookingPage() {
     (service) => service.id === serviceId
   );
 
+  // TZ 7.2: surcharge / double-rate hints for the chosen date, time and options.
+  // The home-visit choice is shown to the client only; it is not sent with the
+  // booking yet (that needs a backend field) — the hint says it is confirmed later.
+  const [homeVisit, setHomeVisit] = useState(false);
+  const rateNotices = useMemo(
+    () =>
+      bookingNotices({
+        date,
+        time: selectedSlot ? timeInZone(selectedSlot, pricingRules.timeZone) : null,
+        homeVisit,
+        price: selectedService?.priceEur ?? null,
+        rules: pricingRules,
+      }),
+    [date, selectedSlot, homeVisit, selectedService]
+  );
+
   useEffect(() => {
     let cancelled = false;
 
@@ -136,6 +157,7 @@ export default function BookingPage() {
           id: service.id,
           category: service.category,
           name: service.name,
+          priceEur: service.price_eur == null ? null : Number(service.price_eur),
           price:
             service.price_eur == null
               ? "Price to be confirmed"
@@ -486,6 +508,9 @@ export default function BookingPage() {
           {t("booking.depositNotice")}
         </p>
 
+        {/* Години роботи та доплати (TZ step 7) */}
+        <HoursNotice className="hours-notice--in-card" />
+
         <form onSubmit={handleSubmit}>
           {servicesLoading && (
             <p role="status">{t("booking.loadingServices")}</p>
@@ -716,6 +741,46 @@ export default function BookingPage() {
               </div>
             )}
           </fieldset>
+
+          {/* TZ 7.2: home visit option + live tariff hints */}
+          <label className="booking-home-visit">
+            <input
+              type="checkbox"
+              checked={homeVisit}
+              onChange={(event) => setHomeVisit(event.target.checked)}
+            />
+            <span>{t("schedule.homeVisitLabel")}</span>
+          </label>
+
+          {(rateNotices.early || rateNotices.late || rateNotices.rate || rateNotices.homeVisit) && (
+            <ul className="booking-rate-hints" role="status" aria-live="polite">
+              {(rateNotices.early || rateNotices.late) && (
+                <li><FiClock aria-hidden="true" /> {t("schedule.hintOffHours")}</li>
+              )}
+              {rateNotices.rate === "weekend" && (
+                <li><FiCalendar aria-hidden="true" /> {t("schedule.hintWeekend")}</li>
+              )}
+              {rateNotices.rate === "holiday" && (
+                <li>
+                  <FiCalendar aria-hidden="true" />{" "}
+                  {fill(t("schedule.hintHoliday"), {
+                    holiday: t(`schedule.holidayNames.${rateNotices.holidayKey}`),
+                  })}
+                </li>
+              )}
+              {rateNotices.adjustedPrice != null && (
+                <li>
+                  <FiTag aria-hidden="true" />{" "}
+                  {fill(t("schedule.hintPrice"), {
+                    price: rateNotices.adjustedPrice.toLocaleString(locale),
+                  })}
+                </li>
+              )}
+              {rateNotices.homeVisit && (
+                <li><FiHome aria-hidden="true" /> {t("schedule.hintHomeVisit")}</li>
+              )}
+            </ul>
+          )}
 
           <label htmlFor="booking-name">{t("booking.name")}</label>
           <input
