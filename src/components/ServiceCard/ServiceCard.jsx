@@ -91,7 +91,12 @@ export default function ServiceCard({
           {image ? (
             <img className="svc-card__img" src={image} alt={imageAlt ?? title} loading="lazy" />
           ) : (
-            <div className="svc-card__img svc-card__img--placeholder" aria-hidden="true" />
+            // No photo yet: decorative gold initial instead of an empty box.
+            <div className="svc-card__img svc-card__img--placeholder" aria-hidden="true">
+              <span className="svc-card__ph-ring">
+                <span className="svc-card__ph-letter">{title?.charAt(0)}</span>
+              </span>
+            </div>
           )}
           {badge && <span className="svc-card__badge">{badge}</span>}
           {locked && (

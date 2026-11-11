@@ -10,6 +10,7 @@ import ServicesPage from "./pages/ServicesPage";
 import EquipmentPage from "./pages/EquipmentPage";
 import PricesPage from "./pages/PricesPage";
 import MasterPage from "./pages/MasterPage";
+import DirectionPage from "./pages/DirectionPage";
 import BookingPage from "./pages/BookingPage";
 import AdminLogin from "./pages/AdminLogin";
 import AdminPage from "./pages/AdminPage";
@@ -23,6 +24,15 @@ function ScrollToHash() {
   const location = useLocation();
   
   useEffect(() => {
+    // <Link state={{ scrollTo: "section-id" }}> → land on that section of the new page.
+    const targetId = location.state?.scrollTo;
+    if (targetId) {
+      const timer = setTimeout(() => {
+        const element = document.getElementById(targetId);
+        if (element) element.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+      return () => clearTimeout(timer);
+    }
     if (location.hash) {
       const element = document.getElementById(location.hash.substring(1));
       if (element) {
@@ -52,6 +62,7 @@ export default function App() {
           <Route path="equipment" element={<EquipmentPage />} />
           <Route path="prices" element={<PricesPage />} />
           <Route path="master" element={<MasterPage />} />
+          <Route path="directions/:slug" element={<DirectionPage />} />
           <Route path="booking" element={<BookingPage />} />
           <Route path="reschedule" element={<RescheduleResponse />} />
 

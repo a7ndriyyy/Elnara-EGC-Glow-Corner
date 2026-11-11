@@ -18,6 +18,5 @@ export const heroConfig = {
   countDuration: 2000,
 
   // Section the "Послуги" button scrolls to (id on the home page).
-  // Will point to the "Головні напрямки" section after step 4.
-  servicesSectionId: "treatments",
+  servicesSectionId: "directions",
 };

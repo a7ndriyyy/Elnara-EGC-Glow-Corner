@@ -1,7 +1,7 @@
 import React from 'react';
 import MasterHero from "../sections/MasterHero/MasterHero";
 import QuickLinks from "../sections/QuickLinks/QuickLinks";
-import Treatments from "../sections/Treatments/Treatments";
+import Directions from "../sections/Directions/Directions";
 import Reviews from "../sections/Reviews/Reviews";
 import "./HomePage.css";
 
@@ -15,8 +15,8 @@ export default function HomePage() {
       <QuickLinks />
 
       <main className="home__content">
-        {/* 3. Main directions — the services grid until step 4 replaces it */}
-        <Treatments />
+        {/* 3. Main directions */}
+        <Directions />
 
         {/* 4. Promotions / news — added in step 9; hidden while there are none */}
 

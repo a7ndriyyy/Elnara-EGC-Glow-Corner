@@ -3,6 +3,7 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from "
 import { uiMessages } from "./ui";
 import { heroMessages } from "./hero";
 import { sectionMessages } from "./sections";
+import { directionsMessages } from "./directions";
 
 const LANGUAGE_STORAGE_KEY = "elnara-language";
 const SUPPORTED_LANGUAGES = ["en", "fr", "uk", "ru"];
@@ -121,6 +122,7 @@ pageContent: {
 for (const lang of Object.keys(messages)) {
   messages[lang].ui = uiMessages[lang];
   messages[lang].hero = heroMessages[lang];
+  messages[lang].directions = directionsMessages[lang];
   const { nav: extraNav, ...sections } = sectionMessages[lang];
   messages[lang].nav = { ...messages[lang].nav, ...extraNav };
   Object.assign(messages[lang], sections);
