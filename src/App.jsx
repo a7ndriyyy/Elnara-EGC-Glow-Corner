@@ -1,27 +1,27 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import "../src/index.css";
 import Layout from "./components/Layout/Layout";
 import HomePage from "./pages/HomePage";
-import AboutPage from "./pages/StudyPage";
-import ServicesPage from "./pages/ServicesPage";
-import EquipmentPage from "./pages/EquipmentPage";
-import PricesPage from "./pages/PricesPage";
-import MasterPage from "./pages/MasterPage";
-import DirectionPage from "./pages/DirectionPage";
-import TrainingLockedPage from "./pages/TrainingLockedPage";
-import PromotionsPage from "./pages/PromotionsPage";
 import { features } from "./data/features";
-import BookingPage from "./pages/BookingPage";
-import AdminLogin from "./pages/AdminLogin";
-import AdminPage from "./pages/AdminPage";
-import RescheduleResponse from "./pages/RescheduleResponse";
 import { LanguageProvider } from "./i18n/LanguageContext";
-// Додайте імпорт для скролу до секцій
 
-
+// Home loads with the app; every other page is split into its own chunk and
+// fetched on first visit (keeps the first download small on phones).
+const AboutPage = lazy(() => import("./pages/StudyPage"));
+const ServicesPage = lazy(() => import("./pages/ServicesPage"));
+const EquipmentPage = lazy(() => import("./pages/EquipmentPage"));
+const PricesPage = lazy(() => import("./pages/PricesPage"));
+const MasterPage = lazy(() => import("./pages/MasterPage"));
+const DirectionPage = lazy(() => import("./pages/DirectionPage"));
+const TrainingLockedPage = lazy(() => import("./pages/TrainingLockedPage"));
+const PromotionsPage = lazy(() => import("./pages/PromotionsPage"));
+const BookingPage = lazy(() => import("./pages/BookingPage"));
+const AdminLogin = lazy(() => import("./pages/AdminLogin"));
+const AdminPage = lazy(() => import("./pages/AdminPage"));
+const RescheduleResponse = lazy(() => import("./pages/RescheduleResponse"));
 // Компонент для скролу до елемента при наявності hash в URL
 function ScrollToHash() {
   const location = useLocation();

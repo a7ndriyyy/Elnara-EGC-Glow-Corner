@@ -227,8 +227,10 @@ export default function ServicesPage() {
       </section>
 
       {/* Чому ми */}
-      <section className="features">
+      <section className="features" aria-labelledby="services-features-title">
         <div className="container">
+          {/* Hidden heading keeps the h1 → h2 → h3 outline valid for screen readers */}
+          <h2 id="services-features-title" className="sr-only">{t("home.whyChoose")}</h2>
           <div className="features__grid">
             <div className="feature-card" data-aos="fade-up">
               <div className="feature-card__icon"><FaPaintBrush aria-hidden="true" /></div>

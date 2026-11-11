@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useId, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FiClock, FiRotateCw, FiLock } from "react-icons/fi";
 import { useLanguage } from "../../i18n/LanguageContext";
@@ -34,8 +34,12 @@ export default function ServiceCard({
   locked = false,
   lockedText,
   className = "",
+  headingLevel = 3,
 }) {
   const { t } = useLanguage();
+  const titleId = useId();
+  const hintId = useId();
+  const Heading = `h${headingLevel}`;
   const [flipped, setFlipped] = useState(false);
 
   const hasSubdirections = Array.isArray(subdirections) && subdirections.length > 0;
@@ -86,15 +90,19 @@ export default function ServiceCard({
   ) : null;
 
   return (
-    <article
+    <div
       className={`svc-card${flipped ? " is-flipped" : ""}${locked ? " is-locked" : ""}${lockedLink ? " is-linked" : ""} ${className}`.trim()}
       tabIndex={0}
       role={lockedLink ? "link" : "button"}
       aria-pressed={locked ? undefined : flipped}
-      aria-label={locked ? `${title} — ${lockedText || t("ui.soon")}` : `${title}. ${flipped ? t("ui.flipBack") : t("ui.flip")}`}
+      aria-labelledby={titleId}
+      aria-describedby={hintId}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
     >
+      <span id={hintId} className="sr-only">
+        {locked ? lockedText || t("ui.soon") : flipped ? t("ui.flipBack") : t("ui.flip")}
+      </span>
       <div className="svc-card__inner">
         <div className="svc-card__face svc-card__front" aria-hidden={flipped}>
           {image ? (
@@ -112,7 +120,7 @@ export default function ServiceCard({
             <span className="svc-card__lock" aria-hidden="true"><FiLock /></span>
           )}
           <div className="svc-card__plate">
-            <h3 className="svc-card__title">{title}</h3>
+            <Heading className="svc-card__title" id={titleId}>{title}</Heading>
             {locked ? (
               <span className="svc-card__plate-note">{lockedText || t("ui.soon")}</span>
             ) : (
@@ -123,7 +131,7 @@ export default function ServiceCard({
 
         {!locked && (
           <div className="svc-card__face svc-card__back" aria-hidden={!flipped}>
-            <h3 className="svc-card__title svc-card__title--back">{title}</h3>
+            <Heading className="svc-card__title svc-card__title--back" aria-hidden="true">{title}</Heading>
             {description && <p className="svc-card__desc">{description}</p>}
 
             {hasSubdirections ? (
@@ -151,6 +159,6 @@ export default function ServiceCard({
           </div>
         )}
       </div>
-    </article>
+    </div>
   );
 }

@@ -6,12 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0F0D0B" />
     <title>Elnara — Beauty & Permanent Makeup</title>
+    <!-- Replaced per page and language at runtime (src/hooks/usePageMeta.js). -->
+    <meta
+      name="description"
+      content="Elnara — maquillage permanent, maquillage, sourcils, lamination et massages. 21 ans d’expérience. Réservez en ligne."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Elnara — Beauty & Permanent Makeup" />
+    <meta
+      property="og:description"
+      content="Maquillage permanent, maquillage, sourcils, lamination et massages. Réservez en ligne."
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Fonts load without blocking the first paint (display=swap shows a system font for a moment). -->
     <link
-      rel="stylesheet"
+      rel="preload"
+      as="style"
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Great+Vibes&family=Montserrat:wght@400;500;600&display=swap&subset=cyrillic"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Great+Vibes&family=Montserrat:wght@400;500;600&display=swap&subset=cyrillic"
+      />
+    </noscript>
   </head>
   <body>
     <div id="root"></div>

@@ -3,6 +3,8 @@
 // `{price}` is replaced at runtime.
 export const uiMessages = {
   uk: {
+    metaHomeTitle: "Перманентний макіяж і б'юті-салон",
+    metaDescription: "Ельнара — перманентний макіяж, макіяж, брови, ламінування та масажі. 21 рік досвіду. Онлайн-запис.",
     priceFrom: "від {price} €",
     book: "Записатися",
     more: "Детальніше",
@@ -12,6 +14,8 @@ export const uiMessages = {
     soon: "Скоро",
   },
   en: {
+    metaHomeTitle: "Permanent makeup & beauty salon",
+    metaDescription: "Elnara — permanent makeup, makeup, brows, lamination and massage. 21 years of experience. Book online.",
     priceFrom: "from {price} €",
     book: "Book now",
     more: "Learn more",
@@ -21,6 +25,8 @@ export const uiMessages = {
     soon: "Coming soon",
   },
   fr: {
+    metaHomeTitle: "Maquillage permanent & institut de beauté",
+    metaDescription: "Elnara — maquillage permanent, maquillage, sourcils, lamination et massages. 21 ans d’expérience. Réservez en ligne.",
     priceFrom: "à partir de {price} €",
     book: "Réserver",
     more: "En savoir plus",
@@ -30,6 +36,8 @@ export const uiMessages = {
     soon: "Bientôt",
   },
   ru: {
+    metaHomeTitle: "Перманентный макияж и бьюти-салон",
+    metaDescription: "Эльнара — перманентный макияж, макияж, брови, ламинирование и массаж. 21 год опыта. Онлайн-запись.",
     priceFrom: "от {price} €",
     book: "Записаться",
     more: "Подробнее",

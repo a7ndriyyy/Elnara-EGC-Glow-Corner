@@ -103,6 +103,11 @@ img { max-width: 100%; display: block; }
   flex: 1;
   display: flex;
   flex-direction: column;
+  /* Decorative glows (SectionTitle halo, .glow) may bleed past the edges;
+     clip them so phones never get a sideways scroll. `clip` (unlike hidden)
+     does not create a scroll container; `hidden` is the older-browser fallback. */
+  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 

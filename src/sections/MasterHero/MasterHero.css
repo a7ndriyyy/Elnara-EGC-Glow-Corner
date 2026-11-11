@@ -34,8 +34,10 @@
   z-index: -1;
   width: 130%;
   aspect-ratio: 1;
-  background: radial-gradient(closest-side, rgba(var(--gold-rgb), .45), rgba(var(--gold-rgb), .14) 48%, transparent 74%);
-  filter: blur(10px);
+  /* Soft by its own gradient — no blur filter, which made every animation frame
+     re-rasterize the glow. Only opacity/transform animate (GPU-composited). */
+  background: radial-gradient(closest-side, rgba(var(--gold-rgb), .42), rgba(var(--gold-rgb), .16) 45%, rgba(var(--gold-rgb), .05) 65%, transparent 78%);
+  will-change: transform, opacity;
   animation: mhero-breathe 7s ease-in-out infinite;
 }
 

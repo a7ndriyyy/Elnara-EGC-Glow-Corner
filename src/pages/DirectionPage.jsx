@@ -58,6 +58,7 @@ export default function DirectionPage() {
               priceFrom={sub.priceFrom}
               to={sub.to || bookingLink(sub)}
               actionLabel={sub.to ? t("ui.more") : t("ui.book")}
+              headingLevel={2}
             />
           ))}
         </div>
