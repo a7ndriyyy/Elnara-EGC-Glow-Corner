@@ -2,6 +2,7 @@ import React from 'react';
 import MasterHero from "../sections/MasterHero/MasterHero";
 import QuickLinks from "../sections/QuickLinks/QuickLinks";
 import Directions from "../sections/Directions/Directions";
+import PromotionsPreview from "../sections/PromotionsPreview/PromotionsPreview";
 import Reviews from "../sections/Reviews/Reviews";
 import "./HomePage.css";
 
@@ -18,7 +19,8 @@ export default function HomePage() {
         {/* 3. Main directions */}
         <Directions />
 
-        {/* 4. Promotions / news — added in step 9; hidden while there are none */}
+        {/* 4. Promotions / news — hidden while there are none */}
+        <PromotionsPreview />
 
         {/* 5. Gallery + Reviews + FAQ — reviews now, gallery & FAQ in step 10 */}
         <Reviews />

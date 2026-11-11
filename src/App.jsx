@@ -12,6 +12,7 @@ import PricesPage from "./pages/PricesPage";
 import MasterPage from "./pages/MasterPage";
 import DirectionPage from "./pages/DirectionPage";
 import TrainingLockedPage from "./pages/TrainingLockedPage";
+import PromotionsPage from "./pages/PromotionsPage";
 import { features } from "./data/features";
 import BookingPage from "./pages/BookingPage";
 import AdminLogin from "./pages/AdminLogin";
@@ -66,6 +67,7 @@ export default function App() {
           <Route path="prices" element={<PricesPage />} />
           <Route path="master" element={<MasterPage />} />
           <Route path="directions/:slug" element={<DirectionPage />} />
+          <Route path="promotions" element={<PromotionsPage />} />
           <Route path="booking" element={<BookingPage />} />
           <Route path="reschedule" element={<RescheduleResponse />} />
 

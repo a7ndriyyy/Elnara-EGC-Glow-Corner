@@ -1,0 +1,207 @@
+/* Admin "Promotions & nouveautés" — light admin palette (see AdminPage.css) */
+.admin-promos {
+  display: grid;
+  gap: 22px;
+}
+
+.admin-promos__head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.admin-promos__head h2 { margin: 0 0 6px; }
+.admin-promos__head p { margin: 0; max-width: 60ch; color: var(--muted-dark); line-height: 1.5; }
+
+.admin-page .admin-promos__primary {
+  background: #3c3028;
+  border-color: #3c3028;
+  color: #fff;
+}
+
+.admin-page .admin-promos__danger {
+  color: #9b2c2c;
+  border-color: #e3b9b9;
+}
+
+.admin-promos__form {
+  display: grid;
+  gap: 16px;
+  padding: clamp(18px, 3vw, 28px);
+  border: 1px solid rgba(31, 30, 28, 0.12);
+  border-radius: 18px;
+  background: #fff;
+}
+
+.admin-promos__form h3 { margin: 0; }
+
+.admin-promos__form label {
+  display: grid;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.admin-promos__form input[type="text"],
+.admin-promos__form input[type="date"],
+.admin-promos__form select,
+.admin-promos__form textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 11px 12px;
+  border: 1px solid #d8d0c9;
+  border-radius: 10px;
+  background: #fff;
+  color: var(--text-dark);
+  font: inherit;
+  font-weight: 400;
+}
+
+.admin-promos__form textarea { resize: vertical; }
+
+.admin-promos__form small {
+  font-weight: 400;
+  color: var(--muted-dark);
+}
+
+.admin-promos__field-error {
+  font-weight: 500;
+  font-size: 0.85rem;
+  color: #9b2c2c;
+}
+
+.admin-promos__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+}
+
+.admin-promos__image {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.admin-promos__image img,
+.admin-promos__image .admin-promos__noimg {
+  width: 140px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.admin-promos__image > div {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+}
+
+.admin-promos__noimg {
+  display: grid;
+  place-items: center;
+  background: #eee7dc;
+  color: var(--muted-dark);
+  font-size: 0.85rem;
+}
+
+.admin-promos__form .admin-promos__file {
+  position: relative;
+  display: inline-block;
+  padding: 9px 14px;
+  border: 1px solid #3c3028;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.admin-promos__file input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.admin-promos__form .admin-promos__check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+}
+
+.admin-promos__check input { width: 18px; height: 18px; accent-color: #3c3028; }
+
+.admin-promos__actions,
+.admin-promos__row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-promos__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.admin-promos__item {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding: 14px;
+  border: 1px solid rgba(31, 30, 28, 0.1);
+  border-radius: 14px;
+  background: #fff;
+}
+
+.admin-promos__item > img,
+.admin-promos__item > .admin-promos__noimg {
+  width: 96px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.admin-promos__info {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.admin-promos__info strong { overflow-wrap: anywhere; }
+
+.admin-promos__meta { color: var(--muted-dark); font-size: 0.9rem; }
+.admin-promos__meta b { color: var(--text-dark); }
+
+.admin-promos__tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.admin-promos__type,
+.admin-promos__status {
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.admin-promos__type--promotion { background: #f6e8c9; color: #6b4e1f; }
+.admin-promos__type--new { background: #e3e8f6; color: #2f3d6b; }
+.admin-promos__status--live { background: #dce9d9; color: #2c5a2a; }
+.admin-promos__status--scheduled { background: #eee9df; color: #5c5345; }
+.admin-promos__status--expired,
+.admin-promos__status--off { background: #f0dada; color: #7a2b2b; }
+
+@media (max-width: 720px) {
+  .admin-promos__item {
+    grid-template-columns: 72px minmax(0, 1fr);
+  }
+
+  .admin-promos__item > img,
+  .admin-promos__item > .admin-promos__noimg { width: 72px; }
+
+  .admin-promos__row-actions { grid-column: 1 / -1; }
+}

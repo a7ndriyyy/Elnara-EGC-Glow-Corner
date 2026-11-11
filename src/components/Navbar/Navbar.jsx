@@ -11,6 +11,7 @@ import { IoClose } from "react-icons/io5";
 const leftLinks = [
   { id: "salon", labelKey: "nav.salonServices", path: "/services" },
   { id: "massages", labelKey: "nav.massages", path: "/equipment" },
+  { id: "promotions", labelKey: "nav.promotions", path: "/promotions" },
 ];
 
 const rightLinks = [

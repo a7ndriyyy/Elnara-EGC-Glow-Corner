@@ -1,9 +1,10 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiCalendar, FiSettings } from 'react-icons/fi';
+import { FiCalendar, FiSettings, FiTag } from 'react-icons/fi';
 import { supabase } from '../lib/supabase';
 import './AdminPage.css';
+import AdminPromotions from './AdminPromotions';
 
 const PARIS = 'Europe/Paris';
 
@@ -891,6 +892,8 @@ export default function AdminPage() {
               <h1>
                 {section === 'settings'
                   ? 'Paramètres'
+                  : section === 'promotions'
+                    ? 'Promotions'
                   : section === 'appointments'
                     ? 'Rendez-vous'
                     : 'Planning'}
@@ -1457,6 +1460,9 @@ export default function AdminPage() {
               </div>
             </section>
           )}
+
+          {/* TZ step 9: promotions & news */}
+          {section === 'promotions' && <AdminPromotions />}
         </section>
 
         <aside className="admin-sidebar">
@@ -1492,6 +1498,14 @@ export default function AdminPage() {
               onClick={() => setSection('settings')}
             >
               <FiSettings aria-hidden="true" /> Paramètres
+            </button>
+
+            <button
+              type="button"
+              className={section === 'promotions' ? 'is-active' : ''}
+              onClick={() => setSection('promotions')}
+            >
+              <FiTag aria-hidden="true" /> Promotions
             </button>
           </nav>
 
