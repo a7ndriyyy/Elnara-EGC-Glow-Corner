@@ -1,5 +1,6 @@
 // Supabase access for promotions (TZ step 9).
-// Table + policies + storage bucket: supabase/migrations/20261111120000_promotions.sql
+// Table + policies + storage bucket were created in the Supabase project
+// (SQL kept in git history: commit 3d8e177, supabase/migrations/20261111120000_promotions.sql).
 import { supabase } from "./supabase";
 import { pricingRules } from "../data/pricingRules";
 import { livePromotions, todayInZone } from "../utils/promotions";

@@ -84,7 +84,7 @@ export default function AdminPromotions() {
       const missing = err?.code === "42P01" || err?.code === "PGRST205";
       setError(
         missing
-          ? "La table des promotions n'existe pas encore : appliquez la migration supabase/migrations/20261111120000_promotions.sql."
+          ? "La table des promotions est introuvable dans Supabase."
           : `Impossible de charger les promotions : ${err?.message || err}`,
       );
     } finally {
