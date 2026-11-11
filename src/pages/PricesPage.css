@@ -1,8 +1,8 @@
 /* Prices Page - простий та стильний */
 .prices-page {
-  background: #ffffff;
-  color: #1a1a1a;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-2);
+  color: var(--text);
+  font-family: var(--font-body);
 }
 
 .container {
@@ -15,22 +15,22 @@
 .prices-hero {
   padding: 6rem 2rem 3rem;
   text-align: center;
-  background: #fafafa;
-  border-bottom: 1px solid #eaeaea;
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--line-soft);
 }
 
 .prices-hero__title {
   font-size: 3rem;
   font-weight: 400;
   margin-bottom: 1rem;
-  font-family: 'Playfair Display', serif;
-  color: #1a1a1a;
+  font-family: var(--font-title);
+  color: var(--text);
   letter-spacing: -0.5px;
 }
 
 .prices-hero__subtitle {
   font-size: 1.2rem;
-  color: #666;
+  color: var(--text-2);
   font-weight: 300;
   max-width: 600px;
   margin: 0 auto;
@@ -39,8 +39,8 @@
 /* Категорії */
 .prices-categories {
   padding: 2rem 2rem 1rem;
-  background: #ffffff;
-  border-bottom: 1px solid #eaeaea;
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--line-soft);
 }
 
 .categories-wrapper {
@@ -53,9 +53,9 @@
 .category-btn {
   padding: 0.6rem 1.5rem;
   background: transparent;
-  border: 1px solid #e0e0e0;
-  border-radius: 50px;
-  color: #666;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-btn);
+  color: var(--text-2);
   font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -63,20 +63,20 @@
 }
 
 .category-btn:hover {
-  border-color: #c9a27e;
-  color: #c9a27e;
+  border-color: var(--gold);
+  color: var(--gold);
 }
 
 .category-btn.active {
-  background: #c9a27e;
-  border-color: #c9a27e;
+  background: var(--gold);
+  border-color: var(--gold);
   color: #ffffff;
 }
 
 /* Список цін */
 .prices-list {
   padding: 3rem 2rem 5rem;
-  background: #ffffff;
+  background: var(--bg-2);
 }
 
 .prices-grid {
@@ -90,14 +90,14 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.2rem 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--line-soft);
   transition: all 0.2s ease;
 }
 
 .price-item:hover {
   padding-left: 1rem;
   padding-right: 1rem;
-  background: #fafafa;
+  background: var(--bg-2);
   border-radius: 8px;
 }
 
@@ -109,7 +109,7 @@
   font-size: 1.1rem;
   font-weight: 400;
   margin: 0 0 0.3rem 0;
-  color: #1a1a1a;
+  color: var(--text);
 }
 
 .price-item__duration {
@@ -121,7 +121,7 @@
 .price-item__value {
   font-size: 1.4rem;
   font-weight: 400;
-  color: #1a1a1a;
+  color: var(--text);
   white-space: nowrap;
   margin-left: 2rem;
 }
@@ -140,7 +140,7 @@
   justify-content: center;
   min-height: 38px;
   padding: 0.55rem 1rem;
-  border: 1px solid #c9a27e;
+  border: 1px solid var(--gold);
   border-radius: 999px;
   color: #8e6b4e;
   font-size: 0.88rem;
@@ -150,7 +150,7 @@
   transition: background 180ms ease, color 180ms ease, transform 180ms ease;
 }
 .price-item__book:hover {
-  background: #c9a27e;
+  background: var(--gold);
   color: #fff;
   transform: translateY(-1px);
 }
@@ -166,8 +166,8 @@
 /* Інформація */
 .prices-info {
   padding: 3rem 2rem 4rem;
-  background: #fafafa;
-  border-top: 1px solid #eaeaea;
+  background: var(--bg-2);
+  border-top: 1px solid var(--line-soft);
   text-align: center;
 }
 
@@ -177,7 +177,7 @@
 }
 
 .info-note p {
-  color: #666;
+  color: var(--text-2);
   font-size: 0.95rem;
   line-height: 1.6;
   margin-bottom: 1rem;
@@ -186,18 +186,18 @@
 .info-phone {
   display: inline-block;
   font-size: 1.5rem;
-  color: #1a1a1a;
+  color: var(--text);
   text-decoration: none;
   font-weight: 400;
   margin-top: 0.5rem;
-  border-bottom: 1px solid #c9a27e;
+  border-bottom: 1px solid var(--gold);
   padding-bottom: 0.2rem;
   transition: all 0.2s ease;
 }
 
 .info-phone:hover {
-  color: #c9a27e;
-  border-bottom-color: #c9a27e;
+  color: var(--gold);
+  border-bottom-color: var(--gold);
 }
 
 /* Адаптація */

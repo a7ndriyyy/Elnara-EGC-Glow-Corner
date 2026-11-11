@@ -17,6 +17,8 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import emailjs from "@emailjs/browser";
 import "./ServicesPage.css";
+import ServiceCard from "../components/ServiceCard/ServiceCard";
+import SectionTitle from "../components/SectionTitle/SectionTitle";
 import { useLanguage } from "../i18n/LanguageContext";
 
 // Імпорт зображень (замініть на свої)
@@ -364,42 +366,20 @@ export default function ServicesPage() {
       {/* Популярні послуги */}
       <section className="popular">
         <div className="container">
-          <div className="section-header">
-            <span className="section-badge">{t("servicesPage.popular")}</span>
-            <h2 className="section-title">{t("servicesPage.popularTitle")}</h2>
-          </div>
+          <SectionTitle eyebrow={t("servicesPage.popular")} title={t("servicesPage.popularTitle")} />
 
-          <div className="popular__grid">
+          <div className="card-grid popular__grid">
             {popularServices.map((service) => (
-              <div 
-                key={service.id} 
-                className="popular-card"
-                onClick={() => goToBooking(service)}
-              >
-                <div className="popular-card__image">
-                  <img src={service.image} alt={service.name} />
-                  <span className="popular-card__badge">{t("servicesPage.popular")}</span>
-                </div>
-                <div className="popular-card__content">
-                  <h3>{service.name}</h3>
-                  <p>{service.description}</p>
-                  <div className="popular-card__footer">
-                    <div>
-                      <span className="popular-card__duration">{service.duration}</span>
-                      <span className="popular-card__price">{service.price} €</span>
-                    </div>
-                 <button
-                    className="popular-card__btn"
-                     onClick={(e) => {
-                     e.stopPropagation();
-                     goToBooking(service);
-                       }}
-                      >
-                     {t("servicesPage.book")} →
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <ServiceCard
+                key={service.id}
+                title={service.name}
+                image={service.image}
+                description={service.description}
+                duration={service.duration}
+                priceFrom={service.price}
+                badge={t("servicesPage.popular")}
+                onAction={() => goToBooking(service)}
+              />
             ))}
           </div>
         </div>
@@ -408,10 +388,7 @@ export default function ServicesPage() {
       {/* {t("servicesPage.all")} */}
       <section id="services" className="services">
         <div className="container">
-          <div className="section-header">
-            <span className="section-badge">{t("servicesPage.our")}</span>
-            <h2 className="section-title">{t("servicesPage.choose")}</h2>
-          </div>
+          <SectionTitle eyebrow={t("servicesPage.our")} title={t("servicesPage.choose")} />
 
           {/* Фільтри */}
           <div className="services__filters">
@@ -448,43 +425,17 @@ export default function ServicesPage() {
           </div>
 
           {/* Сітка послуг */}
-          <div className="services__grid">
+          <div className="card-grid card-grid--4 services__grid">
             {filteredServices.map((service) => (
-              <div
-                                key={service.id}
-                                className="service-card"
-                                onClick={() => goToBooking(service)}
-                              >
-                            <div className="service-card__image">
-                              <img src={service.image} alt={service.name} />
-                            </div>
-                      <div className="service-card__content">
-              <h3>{service.name}</h3>
-
-              <p className="service-card__name-en">{service.nameEn}</p>
-
-              <div className="service-card__details">
-                <span className="service-card__duration">
-                  {service.duration}
-                </span>
-
-                <span className="service-card__price">
-                  {service.price} €
-                </span>
-              </div>
-
-              <button
-                type="button"
-                className="popular-card__btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  goToBooking(service);
-                }}
-              >
-                {t("servicesPage.book")} →
-              </button>
-            </div>
-              </div>
+              <ServiceCard
+                key={service.id}
+                title={service.name}
+                image={service.image}
+                description={service.description}
+                duration={service.duration}
+                priceFrom={service.price}
+                onAction={() => goToBooking(service)}
+              />
             ))}
           </div>
         </div>
@@ -493,10 +444,7 @@ export default function ServicesPage() {
       {/* Як ми працюємо */}
       <section className="process">
         <div className="container">
-          <div className="section-header">
-            <span className="section-badge">{t("servicesPage.process")}</span>
-            <h2 className="section-title">{t("servicesPage.processTitle")}</h2>
-          </div>
+          <SectionTitle eyebrow={t("servicesPage.process")} title={t("servicesPage.processTitle")} />
 
           <div className="process__steps">
             <div className="process-step">

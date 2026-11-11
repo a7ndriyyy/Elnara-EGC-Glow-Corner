@@ -1,7 +1,8 @@
 .footer {
-  background: var(--bg-dark);
-  color: rgba(255,255,255,0.55);
-  padding: 18px 0 26px;
+  background: var(--bg);
+  border-top: 0.5px solid var(--line);
+  color: var(--text-2);
+  padding: 22px 0 28px;
 }
 
 .footer__inner {
@@ -31,6 +32,7 @@
 }
 
 .footer__professional:hover {
+  color: var(--gold-light);
   opacity: 1;
   text-decoration: underline;
 }

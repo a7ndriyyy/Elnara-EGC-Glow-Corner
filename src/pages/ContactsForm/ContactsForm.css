@@ -2,9 +2,9 @@
 .contactsform {
   position: relative;
   padding: 6rem 0;
-  background: #f8f4f0;
+  background: var(--bg-3);
   overflow: hidden;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
 }
 
 /* ===== ФОН ===== */
@@ -38,7 +38,7 @@
 
 .contactsform__particle {
   position: absolute;
-  background: #c9a27e;
+  background: var(--gold);
   border-radius: 50%;
   pointer-events: none;
   animation: contactsformFloat linear infinite;
@@ -76,7 +76,7 @@
   right: 5%;
   width: 300px;
   height: 300px;
-  border: 1px solid rgba(201, 162, 126, 0.1);
+  border: 1px solid rgba(var(--gold-rgb), 0.1);
   border-radius: 50%;
   animation: contactsformRotate 20s linear infinite;
 }
@@ -87,7 +87,7 @@
   left: 5%;
   width: 200px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, #c9a27e, transparent);
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
   animation: contactsformPulse 3s ease-in-out infinite;
 }
 
@@ -123,26 +123,26 @@
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 2px;
-  color: #c9a27e;
+  color: var(--gold);
   margin-bottom: 1rem;
   padding: 0.4rem 1.2rem;
-  border: 1px solid rgba(201, 162, 126, 0.3);
+  border: 1px solid rgba(var(--gold-rgb), 0.3);
   border-radius: 50px;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(29, 25, 20, 0.60);
   backdrop-filter: blur(10px);
 }
 
 .contactsform__subtitle-icon {
   font-size: 1.1rem;
-  color: #c9a27e;
+  color: var(--gold);
 }
 
 .contactsform__title {
   font-size: 3rem;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--text);
   margin: 0;
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-title);
 }
 
 /* ===== GRID ===== */
@@ -164,10 +164,10 @@
   align-items: flex-start;
   gap: 1.2rem;
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(29, 25, 20, 0.70);
   backdrop-filter: blur(10px);
   border-radius: 20px;
-  border: 1px solid rgba(201, 162, 126, 0.2);
+  border: 1px solid rgba(var(--gold-rgb), 0.2);
   transition: all 0.3s ease;
   cursor: pointer;
   position: relative;
@@ -176,8 +176,8 @@
 
 .contactsform__info-card:hover {
   transform: translateY(-5px);
-  border-color: #c9a27e;
-  box-shadow: 0 15px 30px rgba(201, 162, 126, 0.15);
+  border-color: var(--gold);
+  box-shadow: 0 15px 30px rgba(var(--gold-rgb), 0.15);
 }
 
 .contactsform__info-icon-wrapper {
@@ -187,14 +187,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(201, 162, 126, 0.1);
+  background: rgba(var(--gold-rgb), 0.1);
   border-radius: 50%;
   flex-shrink: 0;
 }
 
 .contactsform__info-icon {
   font-size: 1.4rem;
-  color: #c9a27e;
+  color: var(--gold);
   position: relative;
   z-index: 2;
 }
@@ -203,7 +203,7 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 30% 30%, #c9a27e, transparent 70%);
+  background: radial-gradient(circle at 30% 30%, var(--gold), transparent 70%);
   border-radius: 50%;
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -220,7 +220,7 @@
 .contactsform__info-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #888;
+  color: var(--text-2);
   margin: 0 0 0.3rem 0;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -228,7 +228,7 @@
 
 .contactsform__info-text {
   font-size: 1.1rem;
-  color: #1a1a1a;
+  color: var(--text);
   text-decoration: none;
   font-weight: 500;
   display: block;
@@ -237,7 +237,7 @@
 
 .contactsform__info-action {
   font-size: 0.85rem;
-  color: #c9a27e;
+  color: var(--gold);
   opacity: 0;
   transform: translateX(-10px);
   transition: all 0.3s ease;
@@ -252,16 +252,16 @@
 /* Години роботи */
 .contactsform__hours {
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(29, 25, 20, 0.60);
   backdrop-filter: blur(10px);
   border-radius: 20px;
-  border: 1px solid rgba(201, 162, 126, 0.2);
+  border: 1px solid rgba(var(--gold-rgb), 0.2);
 }
 
 .contactsform__hours-title {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--text);
   margin: 0 0 1rem 0;
 }
 
@@ -269,7 +269,7 @@
   display: flex;
   justify-content: space-between;
   padding: 0.5rem 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(var(--gold-rgb), 0.11);
 }
 
 .contactsform__hours-item:last-child {
@@ -278,27 +278,27 @@
 
 .contactsform__hours-days {
   font-weight: 500;
-  color: #4a4a4a;
+  color: var(--text-2);
 }
 
 .contactsform__hours-time {
-  color: #c9a27e;
+  color: var(--gold);
   font-weight: 500;
 }
 
 /* Соціальні мережі */
 .contactsform__socials {
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(29, 25, 20, 0.60);
   backdrop-filter: blur(10px);
   border-radius: 20px;
-  border: 1px solid rgba(201, 162, 126, 0.2);
+  border: 1px solid rgba(var(--gold-rgb), 0.2);
 }
 
 .contactsform__socials-title {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--text);
   margin: 0 0 1rem 0;
 }
 
@@ -314,9 +314,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(201, 162, 126, 0.1);
+  background: rgba(var(--gold-rgb), 0.1);
   border-radius: 50%;
-  color: #c9a27e;
+  color: var(--gold);
   transition: all 0.3s ease;
   overflow: hidden;
 }
@@ -330,7 +330,7 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  background: #c9a27e;
+  background: var(--gold);
   border-radius: 50%;
   transform: scale(0);
   transition: transform 0.3s ease;
@@ -354,12 +354,12 @@
 }
 
 .contactsform__form-container {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(29, 25, 20, 0.70);
   backdrop-filter: blur(10px);
   border-radius: 30px;
   padding: 2.5rem;
-  border: 1px solid rgba(201, 162, 126, 0.2);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(var(--gold-rgb), 0.2);
+  box-shadow: 0 20px 40px rgba(var(--gold-rgb), 0.11);
 }
 
 .contactsform__form--error {
@@ -379,14 +379,14 @@
 .contactsform__form-title {
   font-size: 1.8rem;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--text);
   margin: 0 0 0.5rem 0;
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-title);
 }
 
 .contactsform__form-subtitle {
   font-size: 0.95rem;
-  color: #666;
+  color: var(--text-2);
   margin-bottom: 2rem;
 }
 
@@ -409,13 +409,13 @@
 .contactsform__textarea {
   width: 100%;
   padding: 1rem 1.2rem;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(201, 162, 126, 0.3);
+  background: rgba(29, 25, 20, 0.90);
+  border: 1px solid rgba(var(--gold-rgb), 0.3);
   border-radius: 15px;
   font-size: 1rem;
-  color: #1a1a1a;
+  color: var(--text);
   transition: all 0.3s ease;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
 }
 
 .contactsform__textarea {
@@ -426,9 +426,9 @@
 .contactsform__input:focus,
 .contactsform__textarea:focus {
   outline: none;
-  border-color: #c9a27e;
-  box-shadow: 0 0 0 3px rgba(201, 162, 126, 0.1);
-  background: white;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(var(--gold-rgb), 0.1);
+  background: var(--bg-2);
 }
 
 .contactsform__label {
@@ -436,7 +436,7 @@
   left: 1rem;
   top: 1rem;
   padding: 0 0.25rem;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(29, 25, 20, 0.90);
   color: #999;
   font-size: 1rem;
   transition: all 0.2s ease;
@@ -451,8 +451,8 @@
   top: -0.5rem;
   left: 0.8rem;
   font-size: 0.8rem;
-  color: #c9a27e;
-  background: white;
+  color: var(--gold);
+  background: var(--bg-2);
   padding: 0 0.3rem;
 }
 
@@ -472,9 +472,9 @@
   justify-content: center;
   gap: 0.8rem;
   padding: 1.2rem 2rem;
-  background: #c9a27e;
+  background: var(--gold-grad);
   border: none;
-  border-radius: 50px;
+  border-radius: var(--radius-btn);
   color: white;
   font-size: 1rem;
   font-weight: 600;
@@ -482,13 +482,13 @@
   overflow: hidden;
   transition: all 0.3s ease;
   margin-top: 1rem;
-  border: 1px solid #c9a27e;
+  border: 1px solid var(--gold);
 }
 
 .contactsform__submit:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(201, 162, 126, 0.4);
-  background: #b8926a;
+  box-shadow: 0 10px 30px rgba(var(--gold-rgb), 0.4);
+  background: var(--gold-dark);
 }
 
 .contactsform__submit:disabled {
@@ -511,7 +511,7 @@
   left: 50%;
   width: 150%;
   height: 150%;
-  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(29, 25, 20, 0.60) 0%, transparent 70%);
   transform: translate(-50%, -50%) scale(0);
   transition: transform 0.5s ease;
   pointer-events: none;
@@ -526,7 +526,7 @@
   width: 20px;
   height: 20px;
   border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
+  border-top-color: var(--line-soft);
   border-radius: 50%;
   animation: contactsformSpin 0.8s linear infinite;
 }

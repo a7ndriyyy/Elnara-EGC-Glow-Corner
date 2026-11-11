@@ -1,6 +1,6 @@
 /* ===== BASE ===== */
 .equipment-page {
-  background: #0a0a0a;
+  background: var(--bg);
   color: #ffffff;
   overflow-x: hidden;
 }
@@ -21,7 +21,7 @@
   font-size: 2.5rem;
   font-weight: 300;
   margin-bottom: 1rem;
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-title);
 }
 
 
@@ -35,23 +35,9 @@
 }
 
 /* ===== BUTTONS ===== */
-.btn {
-  display: inline-block;
-  padding: 1rem 2rem;
-  border-radius: 50px;
-  text-decoration: none;
-  transition: 0.3s;
-  text-align: center;
-}
-
 .btn--primary {
-  background: #c9a27e;
-  color: #0a0a0a;
-}
-
-.btn--outline {
-  border: 1px solid rgba(255,255,255,0.3);
-  color: #fff;
+  background: var(--gold-grad);
+  color: var(--bg);
 }
 
 /* ===== HERO ===== */
@@ -93,7 +79,7 @@
 
 .equipment-hero__title span {
   display: block;
-  color: #c9a27e;
+  color: var(--gold);
   font-size: 2.2rem;
 }
 
@@ -106,7 +92,7 @@
 
 /* ===== MACHINE ===== */
 .machine-card {
-  background: #151515;
+  background: var(--bg-2);
   border-radius: 20px;
   overflow: hidden;
 }
@@ -132,7 +118,7 @@
 
 .machine-card__title {
   font-size: 2rem;
-  color: #c9a27e;
+  color: var(--gold);
 }
 
 .machine-card__stats {
@@ -146,7 +132,7 @@
 }
 
 .machine-stat__value {
-  color: #c9a27e;
+  color: var(--gold);
   font-size: 1.3rem;
 }
 
@@ -170,14 +156,14 @@
 }
 
 .procedure-item {
-  background: #151515;
+  background: var(--bg-2);
   padding: 2rem;
   border-radius: 20px;
 }
 
 .procedure-number {
   font-size: 2rem;
-  color: #c9a27e;
+  color: var(--gold);
 }
 
 /* ===== BENEFITS ===== */
@@ -190,7 +176,7 @@
 .benefit-item {
   text-align: center;
   padding: 2rem;
-  background: #151515;
+  background: var(--bg-2);
   border-radius: 20px;
 }
 
@@ -218,7 +204,7 @@
 } */
 
 /* .equipment-modal__content {
-  background: #151515;
+  background: var(--bg-2);
   padding: 2rem;
   border-radius: 20px;
   max-width: 500px;
@@ -318,7 +304,7 @@
 /* ===== MODAL BOX ===== */
 .equipment-modal__content {
   position: relative;
-  background: linear-gradient(145deg, #141414, #1c1c1c);
+  background: linear-gradient(145deg, var(--bg-2), var(--bg-2));
   border-radius: 24px;
   padding: 2.5rem;
   max-width: 550px;
@@ -336,7 +322,7 @@
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.05);
+  background: rgba(29, 25, 20, 0.60);
   border: 1px solid rgba(255,255,255,0.1);
   color: #fff;
   font-size: 1.4rem;
@@ -345,8 +331,8 @@
 }
 
 .equipment-modal__close:hover {
-  background: #c9a27e;
-  color: #0a0a0a;
+  background: var(--gold);
+  color: var(--bg);
   transform: rotate(90deg);
 }
 
@@ -354,8 +340,8 @@
 .equipment-modal__content h2 {
   font-size: 2rem;
   margin-bottom: 0.5rem;
-  color: #c9a27e;
-  font-family: 'Playfair Display', serif;
+  color: var(--gold);
+  font-family: var(--font-title);
 }
 
 /* ===== MODEL ===== */
@@ -364,8 +350,8 @@
   margin-bottom: 1.5rem;
   padding: 0.3rem 1rem;
   border-radius: 20px;
-  background: rgba(201, 162, 126, 0.15);
-  color: #c9a27e;
+  background: rgba(var(--gold-rgb), 0.15);
+  color: var(--gold);
   font-size: 0.9rem;
 }
 
@@ -394,7 +380,7 @@
   content: "✓";
   position: absolute;
   left: 0;
-  color: #c9a27e;
+  color: var(--gold);
   font-weight: bold;
 }
 
@@ -408,7 +394,7 @@
 
 .equipment-modal__content .btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(201,162,126,0.25);
+  box-shadow: 0 10px 25px rgba(var(--gold-rgb),0.25);
 }
 
 /* ===== ANIMATIONS ===== */

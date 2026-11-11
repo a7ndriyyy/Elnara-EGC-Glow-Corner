@@ -1,7 +1,8 @@
 import React from 'react';
-import { Link } from "react-router-dom";
 import { useEffect, useState, useRef, useMemo, useCallback } from "react";
-import { FiClock, FiArrowRight } from "react-icons/fi";
+import { FiArrowRight } from "react-icons/fi";
+import ServiceCard from "../../components/ServiceCard/ServiceCard";
+import SectionTitle from "../../components/SectionTitle/SectionTitle";
 import { MdFace, MdSpa } from "react-icons/md";
 import { GiSparkles } from "react-icons/gi";
 import { BsStars } from "react-icons/bs";
@@ -19,7 +20,6 @@ export default function Treatments() {
   const [particles, setParticles] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false); // стан для модального вікна
   const sectionRef = useRef(null);
-  const cardsRef = useRef([]);
   
   // Стан для форми
   const [formData, setFormData] = useState({
@@ -90,28 +90,6 @@ export default function Treatments() {
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [handleMouseMove]);
-
-  // Анімація появи карток
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("treatments__card--visible");
-          }
-        });
-      },
-      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
-    );
-
-    cardsRef.current = cardsRef.current.slice(0, filteredTreatments.length);
-    
-    cardsRef.current.forEach((card) => {
-      if (card) observer.observe(card);
-    });
-
-    return () => observer.disconnect();
-  }, [filteredTreatments]);
 
   // Інтенсивність світіння
   const glowIntensity = useMemo(() => {
@@ -263,19 +241,11 @@ export default function Treatments() {
 
       <div className="treatments__container">
         {/* Заголовок з ефектом */}
-        <div className="treatments__header">
-          <span className="treatments__subtitle">
-            <BsStars className="treatments__subtitle-icon" />
-            {t("treatments.treatmentsEyebrow")}
-          </span>
-          <h2 className="treatments__title">
-            <span className="treatments__title-text">{t("treatments.treatmentsTitleFirst")}</span>
-            <span className="treatments__title-highlight">{t("treatments.treatmentsTitleSecond")}</span>
-          </h2>
-          <p className="treatments__description">
-            {t("treatments.treatmentsDescription")}
-          </p>
-        </div>
+        <SectionTitle
+          eyebrow={t("treatments.treatmentsEyebrow")}
+          title={`${t("treatments.treatmentsTitleFirst")} ${t("treatments.treatmentsTitleSecond")}`}
+          subtitle={t("treatments.treatmentsDescription")}
+        />
 
         {/* Фільтри категорій */}
         <div className="treatments__filters">
@@ -295,67 +265,18 @@ export default function Treatments() {
         </div>
 
         {/* Сітка карток */}
-        <div className="treatments__grid">
-          {filteredTreatments.map((treatment, index) => (
-            <div
+        <div className="card-grid card-grid--4 treatments__grid">
+          {filteredTreatments.map((treatment) => (
+            <ServiceCard
               key={treatment.id}
-              className="treatments__card"
-              ref={(el) => (cardsRef.current[index] = el)}
-              style={{ transitionDelay: `${index * 0.1}s` }}
-            >
-              {/* Бейдж категорії */}
-              <div className="treatments__card-badge">
-                <span>
-                  {treatment.category === "Face" ? (
-                    <><MdFace /> {t("treatments.categoryFace")}</>
-                  ) : (
-                    <><MdSpa /> {t("treatments.categoryBody")}</>
-                  )}
-                </span>
-              </div>
-
-              {/* Зображення з ефектом */}
-              <div className="treatments__card-image">
-                <div className="treatments__card-overlay"></div>
-                <img 
-                  src={treatment.image} 
-                  alt={treatment.title}
-                  className="treatments__card-img"
-                  loading="lazy"
-                />
-                
-                {/* Хайлайт */}
-                <div className="treatments__card-highlight">
-                  <span className="treatments__card-highlight-text">
-                    <GiSparkles className="treatments__card-highlight-icon" />
-                    {treatment.highlight}
-                  </span>
-                </div>
-              </div>
-
-              {/* Контент */}
-              <div className="treatments__card-content">
-                <h3 className="treatments__card-title">{treatment.title}</h3>
-                <p className="treatments__card-desc">{treatment.desc}</p>
-                
-                <div className="treatments__card-details">
-                  <div className="treatments__card-detail">
-                    <FiClock className="treatments__card-icon" />
-                    <span>{treatment.time}</span>
-                  </div>
-                  <div className="treatments__card-price">{treatment.price}</div>
-                </div>
-
-                <Link to="/services" className="treatments__card-btn">
-                  <span>{t("treatments.details")}</span>
-                  <FiArrowRight className="treatments__card-btn-icon" />
-                  <span className="treatments__card-btn-glow"></span>
-                </Link>
-              </div>
-
-              {/* Декоративний елемент */}
-              <div className="treatments__card-glow"></div>
-            </div>
+              title={treatment.title}
+              image={treatment.image}
+              description={treatment.desc}
+              duration={treatment.time}
+              priceFrom={treatment.price?.replace(/[^\d]/g, "")}
+              badge={treatment.category === "Face" ? t("treatments.categoryFace") : t("treatments.categoryBody")}
+              to="/booking"
+            />
           ))}
         </div>
 
