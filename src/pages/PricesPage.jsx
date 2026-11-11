@@ -32,8 +32,6 @@ export default function PricesPage() {
     { id: 12, name: "Біоревіталізація", category: "face", price: "350", duration: "1 год" },
 
     // Догляд за тілом
-    { id: 13, name: "LPG масаж всього тіла", category: "body", price: "200", duration: "1 год" },
-    { id: 14, name: "LPG масаж живота та стегон", category: "body", price: "150", duration: "45 хв" },
     { id: 15, name: "Кріоліполіз (1 зона)", category: "body", price: "300", duration: "1 год" },
     { id: 16, name: "Антицелюлітне обгортання", category: "body", price: "80", duration: "1 год" },
     { id: 17, name: "RF-ліфтинг тіла", category: "body", price: "180", duration: "1 год" },

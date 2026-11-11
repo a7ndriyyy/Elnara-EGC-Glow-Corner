@@ -428,3 +428,19 @@
     font-size: 1.5rem;
   }
 }
+
+/* ===== APPARATUS SERVICES (TZ step 5) ===== */
+.equipment-services {
+  background: var(--bg);
+  padding: clamp(56px, 8vw, 110px) 0;
+}
+
+.equipment-services__inner {
+  width: min(1200px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+/* deep links (#vacuum-massage…) land below the fixed navbar */
+.equipment-services__item {
+  scroll-margin-top: 110px;
+}

@@ -3,18 +3,20 @@ import { useState, useRef} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 import { IoClose } from "react-icons/io5";
-import { FaUser, FaEnvelope, FaPhone, FaPaperPlane, FaCheckCircle, FaTimesCircle, FaGlobeEurope, FaMicroscope, FaUserMd, FaStar } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaPhone, FaPaperPlane, FaCheckCircle, FaTimesCircle, FaMicroscope, FaUserMd, FaStar } from "react-icons/fa";
 import "./Equipmentpage.css";
 import { useLanguage } from "../i18n/LanguageContext";
+import ServiceCard from "../components/ServiceCard/ServiceCard";
+import SectionTitle from "../components/SectionTitle/SectionTitle";
+import { apparatus } from "../data/apparatus";
+import { formatDuration, localize } from "../utils/format";
 
 // Імпорт зображень
 import equipmentHero from "../../public/Images/ImageEquipment/equipment-hero.webp";
-import machine1 from "../../public/Images/ImageEquipment/machine1.webp";
 
 export default function EquipmentPage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const navigate = useNavigate();
-  const [selectedMachine, setSelectedMachine] = useState(null);
   const [selectedService, setSelectedService] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -37,35 +39,6 @@ export default function EquipmentPage() {
     const [errors, setErrors] = useState({});
     const formRef = useRef(null);
   
-
-  // Дані про обладнання
-  const equipment = [
-    {
-      id: 1,
-      name: "LPG масажний апарат",
-      model: "Dermology Pro",
-      country: "Італія",
-      description: "Вакуумно-роликовий масаж для моделювання фігури, зменшення целюліту та ліфтингу шкіри.",
-      longDescription: "Інноваційний апарат для безопераційного ліфтингу тіла та обличчя. Стимулює кровообіг, лімфодренаж, вироблення колагену та еластину.",
-      image: machine1,
-      features: [
-        "Антицелюлітний масаж",
-        "Моделювання фігури",
-        "Ліфтинг обличчя",
-        "Зменшення об'ємів",
-        "Лімфодренажний ефект"
-      ],
-      procedures: [
-        "Антицелюлітний масаж", 
-        "Лімфодренаж", 
-        "Моделювання тіла", 
-        "Посттравматична реабілітація"
-      ]
-    }
-  ];
-
-  const mainMachine = { ...equipment[0], ...t("pageContent.equipment") };
-
 
   // Обробка відправки форми
   const handleSubmit = async (e) => {
@@ -203,101 +176,26 @@ export default function EquipmentPage() {
         </div>
       </section>
 
-      {/* Секція з обладнанням */}
-      <section id="equipment" className="equipment-featured">
-        <div className="container">
-          <div className="section-header">
-            <h2 className="section-title">{t("equipmentPage.title")}</h2>
-            <p className="section-subtitle">
-              {t("equipmentPage.subtitle")}
-            </p>
-          </div>
-
-          {/* Головна картка з апаратом */}
-          <div className="machine-card">
-            <div className="machine-card__grid">
-              {/* Ліва частина - фото */}
-              <div className="machine-card__image-wrapper">
-                <img 
-                  src={mainMachine.image} 
-                  alt={mainMachine.name} 
-                  className="machine-card__image"
+      {/* Апаратні процедури (TZ step 5) */}
+      <section id="equipment" className="equipment-services">
+        <div className="equipment-services__inner">
+          <SectionTitle
+            eyebrow={t("equipmentPage.title")}
+            title={t("equipmentPage.servicesTitle")}
+            subtitle={t("equipmentPage.servicesSubtitle")}
+          />
+          <div className="card-grid">
+            {apparatus.map((item) => (
+              <div key={item.slug} id={item.slug} className="equipment-services__item">
+                <ServiceCard
+                  title={localize(item.title, language)}
+                  image={item.image}
+                  imageAlt=""
+                  description={localize(item.description, language)}
+                  duration={formatDuration(item.duration, language)}
+                  priceFrom={item.priceFrom}
+                  to="/booking"
                 />
-                <div className="machine-card__badge">
-                  {mainMachine.model}
-                </div>
-              </div>
-              
-              {/* Права частина - інформація */}
-              <div className="machine-card__content">
-                <h3 className="machine-card__title">{mainMachine.name}</h3>
-                
-                <div className="machine-card__stats">
-                  <div className="machine-stat">
-                    <span className="machine-stat__value">{mainMachine.country}</span>
-                    <span className="machine-stat__label">{t("equipmentPage.country")}</span>
-                  </div>
-                  <div className="machine-stat">
-                    <span className="machine-stat__value"><FaCheckCircle aria-hidden="true" /></span>
-                    <span className="machine-stat__label">{t("equipmentPage.certified")}</span>
-                  </div>
-                  <div className="machine-stat">
-                    <span className="machine-stat__value">500+</span>
-                    <span className="machine-stat__label">{t("equipmentPage.procedures")}</span>
-                  </div>
-                </div>
-                
-                <p className="machine-card__description">
-                  {mainMachine.longDescription}
-                </p>
-                
-                <div className="machine-card__features">
-                  <h4>{t("equipmentPage.capabilities")}</h4>
-                  <ul>
-                    {mainMachine.features.map((feature, i) => (
-                      <li key={i}>{feature}</li>
-                    ))}
-                  </ul>
-                </div>
-                
-                <div className="machine-card__actions">
-                  <button 
-                    className="btn btn--primary"
-                    onClick={() => setSelectedMachine(mainMachine)}
-                  >
-                    {t("equipmentPage.device")}
-                  </button>
-                  <button 
-              className="btn btn--outline"
-              onClick={() => navigate("/booking")}
-            >
-              {t("equipmentPage.book")}
-            </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Процедури */}
-      <section className="equipment-procedures">
-        <div className="container">
-          <div className="section-header">
-            <h2 className="section-title">{t("equipmentPage.procedureTitle")}</h2>
-            <p className="section-subtitle">
-              {t("equipmentPage.procedureText")}
-            </p>
-          </div>
-
-          <div className="procedures-grid">
-            {mainMachine.procedures.map((procedure, index) => (
-              <div key={index} className="procedure-item">
-                <div className="procedure-number">{index + 1}</div>
-                <h3>{procedure}</h3>
-                <p>
-                  {mainMachine.procedureDescriptions[index]}
-                </p>
               </div>
             ))}
           </div>
@@ -312,11 +210,6 @@ export default function EquipmentPage() {
           </div>
 
           <div className="benefits-grid">
-            <div className="benefit-item">
-              <div className="benefit-icon"><FaGlobeEurope aria-hidden="true" /></div>
-              <h3>{t("equipmentPage.italian")}</h3>
-              <p>{t("equipmentPage.italianText")}</p>
-            </div>
             <div className="benefit-item">
               <div className="benefit-icon"><FaMicroscope aria-hidden="true" /></div>
               <h3>{t("equipmentPage.science")}</h3>
@@ -356,31 +249,6 @@ export default function EquipmentPage() {
           </div>
         </div>
       </section>
-
-      {/* Модальне вікно */}
-      {selectedMachine && (
-        <div className="equipment-modal" onClick={() => setSelectedMachine(null)}>
-          <div className="equipment-modal__content" onClick={(e) => e.stopPropagation()}>
-            <button className="equipment-modal__close" onClick={() => setSelectedMachine(null)}>×</button>
-            <h2>{selectedMachine.name}</h2>
-            <p className="equipment-modal__model">{selectedMachine.model}</p>
-            <p>{selectedMachine.longDescription}</p>
-            <h3>{t("equipmentPage.device")}</h3>
-            <ul>
-              <li>{t("equipmentPage.manufacturer")}: {selectedMachine.country}</li>
-              <li>{t("equipmentPage.technology")}: LPG Endermologie</li>
-              <li>{t("equipmentPage.programs")}: 6</li>
-              <li>{t("equipmentPage.intensity")}: 10</li>
-            </ul>
-            <button 
-              className="btn btn--outline"
-              onClick={() => navigate("/booking")}
-            >
-              {t("equipmentPage.book")}
-            </button>
-          </div>
-        </div>
-      )}
 
        {/* МОДАЛЬНЕ ВІКНО З ФОРМОЮ */}
             {isModalOpen && (

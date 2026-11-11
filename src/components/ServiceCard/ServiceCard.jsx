@@ -125,7 +125,7 @@ export default function ServiceCard({
                   </li>
                 ))}
               </ul>
-            ) : (
+            ) : (duration || priceText) && (
               <div className="svc-card__meta">
                 {duration && (
                   <span className="svc-card__duration">

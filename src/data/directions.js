@@ -10,6 +10,8 @@
 // `null` = unknown → hidden on the card. Everything marked TODO must be
 // confirmed with Elnara (TODO: уточнити в Ельнари).
 
+import { findApparatus } from "./apparatus";
+
 const img = (path) => `${import.meta.env.BASE_URL}Images/${path}`;
 
 export const directions = [
@@ -66,21 +68,9 @@ export const directions = [
         duration: null,
         priceFrom: null,
       },
-      {
-        slug: "removal",
-        title: { uk: "Видалення перманенту", en: "Permanent makeup removal", fr: "Détatouage du maquillage permanent", ru: "Удаление перманента" },
-        image: null,
-        // Apparatus service — links to the equipment page (step 5).
-        description: {
-          uk: "Апаратне видалення старого або невдалого перманенту.",
-          en: "Device-based removal of old or unwanted permanent makeup.",
-          fr: "Retrait par appareil d’un maquillage permanent ancien ou raté.",
-          ru: "Аппаратное удаление старого или неудачного перманента.",
-        },
-        duration: null,
-        priceFrom: null,
-        to: "/equipment",
-      },
+      // Removal services are apparatus services (step 5), kept separate on purpose.
+      findApparatus("laser-makeup-removal"),
+      findApparatus("tattoo-pmu-removal"),
     ],
   },
   {
@@ -311,36 +301,9 @@ export const directions = [
         duration: 60,
         priceFrom: 100,
       },
-      {
-        slug: "vacuum",
-        title: { uk: "Вакуумний масаж", en: "Vacuum massage", fr: "Massage par dépression", ru: "Вакуумный массаж" },
-        image: null,
-        // Apparatus (step 5). TODO: уточнити в Ельнари — тривалість і ціна
-        description: {
-          uk: "Апаратний вакуумний масаж для моделювання силуету.",
-          en: "Device vacuum massage to help contour the silhouette.",
-          fr: "Massage par dépression avec appareil pour remodeler la silhouette.",
-          ru: "Аппаратный вакуумный массаж для моделирования силуэта.",
-        },
-        duration: null,
-        priceFrom: null,
-        to: "/equipment",
-      },
-      {
-        slug: "pressotherapy",
-        title: { uk: "Пресотерапія", en: "Pressotherapy", fr: "Pressothérapie", ru: "Прессотерапия" },
-        image: null,
-        // Apparatus (step 5). TODO: уточнити в Ельнари — тривалість і ціна
-        description: {
-          uk: "Апаратний лімфодренаж для легкості в ногах і тонусу.",
-          en: "Device lymphatic drainage for lighter legs and better tone.",
-          fr: "Drainage lymphatique par appareil pour des jambes légères.",
-          ru: "Аппаратный лимфодренаж для лёгкости в ногах и тонуса.",
-        },
-        duration: null,
-        priceFrom: null,
-        to: "/equipment",
-      },
+      // Apparatus (step 5), shared with the equipment page.
+      findApparatus("vacuum-massage"),
+      findApparatus("pressotherapy"),
     ],
   },
   {

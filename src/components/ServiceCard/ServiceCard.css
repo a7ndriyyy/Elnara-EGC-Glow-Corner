@@ -240,6 +240,12 @@
   min-height: 44px;
 }
 
+/* no price/duration yet → keep the button at the bottom of the card */
+.svc-card__desc + .svc-card__action,
+.svc-card__title--back + .svc-card__action {
+  margin-top: auto;
+}
+
 /* ---- flip states ---- */
 .svc-card.is-flipped .svc-card__inner {
   transform: rotateY(180deg);
