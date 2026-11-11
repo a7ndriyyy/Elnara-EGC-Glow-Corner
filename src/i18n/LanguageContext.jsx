@@ -9,6 +9,7 @@ import { scheduleMessages } from "./schedule";
 import { trainingMessages } from "./training";
 import { promotionsMessages } from "./promotions";
 import { showcaseMessages } from "./showcase";
+import { adminMessages } from "./admin";
 
 const LANGUAGE_STORAGE_KEY = "elnara-language";
 const SUPPORTED_LANGUAGES = ["en", "fr", "uk", "ru"];
@@ -124,6 +125,7 @@ for (const lang of Object.keys(messages)) {
   messages[lang].schedule = scheduleMessages[lang];
   messages[lang].training = trainingMessages[lang];
   messages[lang].showcase = showcaseMessages[lang];
+  messages[lang].admin = adminMessages[lang];
   const { nav: promoNav, ...promotions } = promotionsMessages[lang];
   messages[lang].promotions = promotions;
   const { nav: extraNav, ...sections } = sectionMessages[lang];

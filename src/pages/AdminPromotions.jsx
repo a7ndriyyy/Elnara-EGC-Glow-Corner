@@ -17,9 +17,11 @@ import {
   validatePromotion,
 } from "../utils/promotions";
 import { pricingRules } from "../data/pricingRules";
+import { useLanguage } from "../i18n/LanguageContext";
+import { fill } from "../utils/format";
 import "./AdminPromotions.css";
 
-// Admin section "Promotions & nouveautés" (TZ step 9). French, like the rest of the admin.
+// Admin section "Promotions & news" (TZ step 9). Texts: admin.promo.* in src/i18n/admin.js.
 const EMPTY = {
   title: "",
   description: "",
@@ -32,26 +34,14 @@ const EMPTY = {
   image_url: null,
 };
 
-const ERRORS = {
-  required: "Champ obligatoire.",
-  tooLong: "Texte trop long.",
-  invalidType: "Type invalide.",
-  invalidPrice: "Prix invalide (nombre positif).",
-  invalidDate: "Date invalide.",
-  dateOrder: "La date de fin doit être après la date de début.",
-  invalidUrl: "Image invalide.",
-  invalidImageType: "Formats acceptés : JPG, PNG, WebP, AVIF.",
-  imageTooLarge: "Image trop lourde (5 Mo maximum).",
-};
-
-const TYPE_LABEL = { promotion: "Promotion", new: "Nouveauté" };
-
-function statusOf(p, today) {
-  if (!p.is_active) return { key: "off", label: "Désactivée" };
-  if (p.end_date && p.end_date < today) return { key: "expired", label: "Expirée" };
-  if (p.start_date && p.start_date > today) return { key: "scheduled", label: "Programmée" };
-  return isPromotionLive(p, today) ? { key: "live", label: "En ligne" } : { key: "off", label: "Hors ligne" };
+// Status of a promotion for the admin list (labels come from admin.promo.*).
+function statusKey(p, today) {
+  if (!p.is_active) return "off";
+  if (p.end_date && p.end_date < today) return "expired";
+  if (p.start_date && p.start_date > today) return "scheduled";
+  return isPromotionLive(p, today) ? "live" : "offline";
 }
+const STATUS_LABEL_KEY = { off: "statusOff", expired: "statusExpired", scheduled: "statusScheduled", live: "statusLive", offline: "statusOffline" };
 
 const toForm = (p) => ({
   ...EMPTY,
@@ -64,6 +54,10 @@ const toForm = (p) => ({
 });
 
 export default function AdminPromotions() {
+  const { t } = useLanguage();
+  const tp = useCallback((key, vars) => fill(t(`admin.promo.${key}`), vars || {}), [t]);
+  const ERRORS_TEXT = (code) => t(`admin.promo.errors.${code}`);
+  const locale = t("admin.locale");
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -84,13 +78,13 @@ export default function AdminPromotions() {
       const missing = err?.code === "42P01" || err?.code === "PGRST205";
       setError(
         missing
-          ? "La table des promotions est introuvable dans Supabase."
-          : `Impossible de charger les promotions : ${err?.message || err}`,
+          ? tp("tableMissing")
+          : tp("loadFailed", { error: err?.message || err }),
       );
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [tp]);
 
   useEffect(() => {
     load();
@@ -166,7 +160,7 @@ export default function AdminPromotions() {
       await load();
     } catch (err) {
       if (uploadedUrl) await removePromotionImage(uploadedUrl);
-      setError(ERRORS[err?.message] || `Enregistrement impossible : ${err?.message || err}`);
+      setError(t(`admin.promo.errors.${err?.message}`).startsWith("admin.") ? tp("saveFailed", { error: err?.message || err }) : ERRORS_TEXT(err?.message));
     } finally {
       setSaving(false);
     }
@@ -178,27 +172,27 @@ export default function AdminPromotions() {
       await setPromotionActive(p.id, !p.is_active);
       await load();
     } catch (err) {
-      setError(`Mise à jour impossible : ${err?.message || err}`);
+      setError(tp("updateFailed", { error: err?.message || err }));
     } finally {
       setBusyId(null);
     }
   };
 
   const remove = async (p) => {
-    if (!window.confirm(`Supprimer définitivement « ${p.title} » ? Cette action est irréversible.`)) return;
+    if (!window.confirm(tp("confirmDelete", { title: p.title }))) return;
     setBusyId(p.id);
     try {
       await deletePromotion(p);
       await load();
     } catch (err) {
-      setError(`Suppression impossible : ${err?.message || err}`);
+      setError(tp("deleteFailed", { error: err?.message || err }));
     } finally {
       setBusyId(null);
     }
   };
 
   const fieldError = (field) =>
-    formErrors[field] ? <span className="admin-promos__field-error">{ERRORS[formErrors[field]]}</span> : null;
+    formErrors[field] ? <span className="admin-promos__field-error">{ERRORS_TEXT(formErrors[field])}</span> : null;
 
   const form = editing?.form;
   const imageShown = preview || form?.image_url;
@@ -207,15 +201,12 @@ export default function AdminPromotions() {
     <section className="admin-promos" aria-labelledby="admin-promos-title">
       <div className="admin-promos__head">
         <div>
-          <h2 id="admin-promos-title">Promotions &amp; nouveautés</h2>
-          <p>
-            Les promotions actives apparaissent sur la page « Акції » et sur l’accueil (3 plus récentes).
-            Les promotions expirées disparaissent automatiquement.
-          </p>
+          <h2 id="admin-promos-title">{tp("title")}</h2>
+          <p>{tp("intro")}</p>
         </div>
         {!editing && (
           <button type="button" className="admin-promos__primary" onClick={() => openForm(null)}>
-            + Nouvelle promotion
+            {tp("new")}
           </button>
         )}
       </div>
@@ -224,48 +215,48 @@ export default function AdminPromotions() {
 
       {editing && (
         <form className="admin-promos__form" onSubmit={handleSave} noValidate>
-          <h3>{editing.id ? "Modifier la promotion" : "Nouvelle promotion"}</h3>
+          <h3>{editing.id ? tp("editTitle") : tp("newTitle")}</h3>
 
           <label>
-            Titre *
+            {tp("fieldTitle")}
             <input type="text" value={form.title} maxLength={TITLE_MAX} onChange={setField("title")} />
             <small>{form.title.length}/{TITLE_MAX}</small>
             {fieldError("title")}
           </label>
 
           <label>
-            Description
+            {tp("fieldDescription")}
             <textarea rows={4} value={form.description} maxLength={DESCRIPTION_MAX} onChange={setField("description")} />
-            <small>{form.description.length}/{DESCRIPTION_MAX} — texte simple, sans HTML.</small>
+            <small>{form.description.length}/{DESCRIPTION_MAX} — {tp("descriptionHint")}</small>
             {fieldError("description")}
           </label>
 
           <div className="admin-promos__grid">
             <label>
-              Type
+              {tp("fieldType")}
               <select value={form.type} onChange={setField("type")}>
-                <option value="promotion">Promotion (Акція)</option>
-                <option value="new">Nouveauté (Новинка)</option>
+                <option value="promotion">{tp("typePromotion")}</option>
+                <option value="new">{tp("typeNew")}</option>
               </select>
               {fieldError("type")}
             </label>
             <label>
-              Ancien prix (€)
-              <input type="text" inputMode="decimal" value={form.old_price} onChange={setField("old_price")} placeholder="ex. 120" />
+              {tp("oldPrice")}
+              <input type="text" inputMode="decimal" value={form.old_price} onChange={setField("old_price")} placeholder={tp("oldPricePh")} />
               {fieldError("old_price")}
             </label>
             <label>
-              Nouveau prix (€)
-              <input type="text" inputMode="decimal" value={form.new_price} onChange={setField("new_price")} placeholder="ex. 99" />
+              {tp("newPrice")}
+              <input type="text" inputMode="decimal" value={form.new_price} onChange={setField("new_price")} placeholder={tp("newPricePh")} />
               {fieldError("new_price")}
             </label>
             <label>
-              Début
+              {tp("start")}
               <input type="date" value={form.start_date} onChange={setField("start_date")} />
               {fieldError("start_date")}
             </label>
             <label>
-              Fin
+              {tp("end")}
               <input type="date" value={form.end_date} onChange={setField("end_date")} />
               {fieldError("end_date")}
             </label>
@@ -275,67 +266,67 @@ export default function AdminPromotions() {
             {imageShown ? (
               <img src={imageShown} alt="" />
             ) : (
-              <span className="admin-promos__noimg">Pas d’image</span>
+              <span className="admin-promos__noimg">{tp("noImage")}</span>
             )}
             <div>
               <label className="admin-promos__file">
-                {imageShown ? "Changer l’image" : "Ajouter une image"}
+                {imageShown ? tp("changeImage") : tp("addImage")}
                 <input type="file" accept="image/jpeg,image/png,image/webp,image/avif" onChange={pickFile} />
               </label>
               {imageShown && (
-                <button type="button" onClick={removeImage}>Retirer l’image</button>
+                <button type="button" onClick={removeImage}>{tp("removeImage")}</button>
               )}
-              <small>JPG, PNG, WebP ou AVIF — 5 Mo maximum.</small>
+              <small>{tp("imageHint")}</small>
               {fieldError("image_url")}
             </div>
           </div>
 
           <label className="admin-promos__check">
             <input type="checkbox" checked={form.is_active} onChange={setField("is_active")} />
-            Active (visible sur le site)
+            {tp("active")}
           </label>
 
           <div className="admin-promos__actions">
             <button type="submit" className="admin-promos__primary" disabled={saving}>
-              {saving ? "Enregistrement…" : "Enregistrer"}
+              {saving ? t("admin.saving") : tp("save")}
             </button>
-            <button type="button" onClick={closeForm} disabled={saving}>Annuler</button>
+            <button type="button" onClick={closeForm} disabled={saving}>{tp("cancel")}</button>
           </div>
         </form>
       )}
 
       {loading ? (
-        <p role="status">Chargement…</p>
+        <p role="status">{t("admin.loading")}</p>
       ) : items.length === 0 && !error ? (
-        <p className="admin-calendar__empty">Aucune promotion pour le moment.</p>
+        <p className="admin-calendar__empty">{tp("empty")}</p>
       ) : (
         <ul className="admin-promos__list">
           {items.map((p) => {
-            const status = statusOf(p, today);
+            const status = statusKey(p, today);
             return (
               <li key={p.id} className="admin-promos__item">
                 {p.image_url ? <img src={p.image_url} alt="" /> : <span className="admin-promos__noimg">—</span>}
                 <div className="admin-promos__info">
                   <div className="admin-promos__tags">
-                    <span className={`admin-promos__type admin-promos__type--${p.type}`}>{TYPE_LABEL[p.type]}</span>
-                    <span className={`admin-promos__status admin-promos__status--${status.key}`}>{status.label}</span>
+                    <span className={`admin-promos__type admin-promos__type--${p.type}`}>{p.type === "new" ? tp("typeNew") : tp("typePromotion")}</span>
+                    <span className={`admin-promos__status admin-promos__status--${status}`}>{tp(STATUS_LABEL_KEY[status])}</span>
                   </div>
                   <strong>{p.title}</strong>
                   <span className="admin-promos__meta">
-                    {p.old_price != null && <s>{formatEuro(p.old_price, "fr")}</s>}{" "}
-                    {p.new_price != null && <b>{formatEuro(p.new_price, "fr")}</b>}
+                    {p.old_price != null && <s>{formatEuro(p.old_price, locale)}</s>}{" "}
+                    {p.new_price != null && <b>{formatEuro(p.new_price, locale)}</b>}
                     {(p.start_date || p.end_date) && (
                       <> · {p.start_date || "…"} → {p.end_date || "…"}</>
                     )}
                   </span>
                 </div>
                 <div className="admin-promos__row-actions">
-                  <button type="button" onClick={() => openForm(p)} disabled={busyId === p.id || saving}>Modifier</button>
+                  <button type="button" onClick={() => openForm(p)} disabled={busyId === p.id || saving}>{tp("edit")}</button>
                   <button type="button" onClick={() => toggle(p)} disabled={busyId === p.id}>
-                    {p.is_active ? "Désactiver" : "Activer"}
+                    {p.is_active ? tp("deactivate") : tp("activate")}
                   </button>
                   <button type="button" className="admin-promos__danger" onClick={() => remove(p)} disabled={busyId === p.id}>
-                    Supprimer
+                    {tp("delete")}
                   </button>
                 </div>
               </li>
