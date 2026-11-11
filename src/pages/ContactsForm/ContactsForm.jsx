@@ -175,8 +175,8 @@ export default function ContactsForm() {
           className="contact__gradient"
           style={{
             background: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, 
-              rgba(201, 162, 126, 0.12) 0%, 
-              rgba(248, 244, 240, 0.98) 70%)`
+              rgba(201, 168, 106, 0.12) 0%, 
+              rgba(29, 25, 20, 0.98) 70%)`
           }}
         />
         <div className="contact__particles">
