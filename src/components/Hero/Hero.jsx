@@ -91,7 +91,7 @@ useEffect(() => {
 
 
   return (
-    <section className="hero">
+    <section className="hero hero--links">
       {/* Фоновий градієнт */}
       <div className="hero__background">
          <div className="hero__animated-gradient hero__orb"></div>
@@ -115,16 +115,6 @@ useEffect(() => {
       </div>
 
       <div className="hero__container">
-        {/* Заголовок з анімацією */}
-        <div className="hero__header">
-          <span className="hero__badge">Elnara Beauty</span>
-          <h1 className="hero__title">
-            {t("home.heroTitle")}
-            <span>{t("home.heroTitleSecond")}</span>
-          </h1>
-          <p className="hero__subtitle">{t("home.heroSubtitle")}</p>
-        </div>
-
         {/* Сітка карток */}
         <div className="hero__grid">
           {heroItems.map((item, index) => (
@@ -168,11 +158,6 @@ useEffect(() => {
           ))}
         </div>
 
-        {/* Скрол індикатор */}
-        <div className="hero__scroll">
-          <span>Scroll</span>
-          <div className="hero__scroll-line"></div>
-        </div>
       </div>
     </section>
   );

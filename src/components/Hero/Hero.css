@@ -588,3 +588,9 @@ animation:floatParticle linear infinite;
     height: 300px;
   }
 }
+
+/* Step 2: the master hero is now the first screen; this block only holds the navigation cards. */
+.hero.hero--links {
+  min-height: 0;
+  padding: 3rem 2rem 4rem;
+}

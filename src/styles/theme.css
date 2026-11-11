@@ -140,6 +140,11 @@ textarea {
   pointer-events: none;
 }
 
+/* Anchored sections stop below the fixed navbar when scrolled to */
+section[id] {
+  scroll-margin-top: 96px;
+}
+
 .section-alt {
   background: var(--bg-2);
 }

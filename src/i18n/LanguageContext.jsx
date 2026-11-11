@@ -1,6 +1,7 @@
 
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { uiMessages } from "./ui";
+import { heroMessages } from "./hero";
 
 const LANGUAGE_STORAGE_KEY = "elnara-language";
 const SUPPORTED_LANGUAGES = ["en", "fr", "uk", "ru"];
@@ -116,7 +117,10 @@ pageContent: {
   },
 };
 // Design-system UI strings live in ./ui.js and are exposed as `ui.*` keys.
-for (const lang of Object.keys(messages)) messages[lang].ui = uiMessages[lang];
+for (const lang of Object.keys(messages)) {
+  messages[lang].ui = uiMessages[lang];
+  messages[lang].hero = heroMessages[lang];
+}
 
 const LanguageContext = createContext(null);
 

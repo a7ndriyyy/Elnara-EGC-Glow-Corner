@@ -1,0 +1,56 @@
+// Home hero texts (TZ step 2), merged into each language as `hero.*`.
+// TODO: уточнити в Ельнари — формулювання надзаголовка та текст «про себе».
+export const heroMessages = {
+  uk: {
+    eyebrow: "Майстер перманентного макіяжу та б'юті-салон",
+    name: "Ельнара",
+    about:
+      "Понад двадцять років я допомагаю жінкам підкреслювати природну красу — від перманентного макіяжу до догляду за обличчям і тілом. Кожна процедура — з увагою до деталей і турботою про ваш комфорт.",
+    years: "років досвіду",
+    clients: "клієнтів",
+    certificates: "сертифікатів",
+    book: "Записатися",
+    services: "Послуги",
+    photoAlt: "Ельнара — майстер перманентного макіяжу",
+    stats: "Досвід у цифрах",
+  },
+  ru: {
+    eyebrow: "Мастер перманентного макияжа и бьюти-салон",
+    name: "Эльнара",
+    about:
+      "Более двадцати лет я помогаю женщинам подчёркивать естественную красоту — от перманентного макияжа до ухода за лицом и телом. Каждая процедура — с вниманием к деталям и заботой о вашем комфорте.",
+    years: "лет опыта",
+    clients: "клиентов",
+    certificates: "сертификатов",
+    book: "Записаться",
+    services: "Услуги",
+    photoAlt: "Эльнара — мастер перманентного макияжа",
+    stats: "Опыт в цифрах",
+  },
+  en: {
+    eyebrow: "Permanent makeup artist & beauty salon",
+    name: "Elnara",
+    about:
+      "For over twenty years I have helped women bring out their natural beauty — from permanent makeup to face and body care. Every treatment comes with attention to detail and care for your comfort.",
+    years: "years of experience",
+    clients: "clients",
+    certificates: "certificates",
+    book: "Book now",
+    services: "Services",
+    photoAlt: "Elnara — permanent makeup artist",
+    stats: "Experience in numbers",
+  },
+  fr: {
+    eyebrow: "Experte en maquillage permanent & institut de beauté",
+    name: "Elnara",
+    about:
+      "Depuis plus de vingt ans, j’aide les femmes à révéler leur beauté naturelle — du maquillage permanent aux soins du visage et du corps. Chaque soin est réalisé avec le souci du détail et de votre confort.",
+    years: "ans d’expérience",
+    clients: "clientes",
+    certificates: "certificats",
+    book: "Réserver",
+    services: "Prestations",
+    photoAlt: "Elnara — experte en maquillage permanent",
+    stats: "L’expérience en chiffres",
+  },
+};
