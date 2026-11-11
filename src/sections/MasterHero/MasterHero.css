@@ -63,6 +63,20 @@
   object-fit: cover;
 }
 
+/* warm vignette so the light studio background blends into the dark page */
+.mhero__frame::after {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border-radius: 999px 999px 14px 14px;
+  background:
+    linear-gradient(to top, rgba(15, 13, 11, .55), transparent 38%),
+    radial-gradient(120% 90% at 50% 35%, transparent 55%, rgba(15, 13, 11, .45) 100%),
+    linear-gradient(rgba(var(--gold-rgb), .10), rgba(var(--gold-rgb), .10));
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
 .mhero__placeholder {
   display: grid;
   place-items: center;

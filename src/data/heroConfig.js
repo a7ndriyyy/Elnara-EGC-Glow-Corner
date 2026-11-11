@@ -2,9 +2,11 @@
 // Texts for every language live in src/i18n/hero.js.
 
 export const heroConfig = {
-  // TODO: уточнити в Ельнари — шлях до фото Ельнари, напр. "/Images/elnara-hero.webp"
-  // (покласти файл у public/Images). Поки null — показується заглушка.
-  photo: null,
+  // Elnara's photo (file in public/Images). Set to null to show the monogram placeholder.
+  // BASE_URL keeps the path working under the GitHub Pages sub-folder.
+  photo: `${import.meta.env.BASE_URL}Images/elnara-hero.jpg`,
+  // Which part of the photo stays visible inside the arch (CSS object-position).
+  photoPosition: "50% 30%",
 
   counters: [
     { id: "years", value: 21, suffix: "" },

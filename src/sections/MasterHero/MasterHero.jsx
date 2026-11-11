@@ -12,7 +12,7 @@ import "./MasterHero.css";
  */
 export default function MasterHero() {
   const { t } = useLanguage();
-  const { photo, counters, countDuration, servicesSectionId } = heroConfig;
+  const { photo, photoPosition, counters, countDuration, servicesSectionId } = heroConfig;
   const name = t("hero.name");
 
   const scrollToServices = () => {
@@ -36,7 +36,10 @@ export default function MasterHero() {
                 className="mhero__photo"
                 src={photo}
                 alt={t("hero.photoAlt")}
-                fetchpriority="high"
+                style={photoPosition ? { objectPosition: photoPosition } : undefined}
+                width="1196"
+                height="1327"
+                fetchPriority="high"
               />
             ) : (
               // TODO: уточнити в Ельнари — фото (src/data/heroConfig.js → photo)
