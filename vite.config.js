@@ -8,5 +8,5 @@ export default defineConfig({
       jsxRuntime: 'automatic',
     }),
   ],
-  base: '/',
+  base: '/Elnara-EGC-Glow-Corner/',
 })
