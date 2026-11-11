@@ -1,6 +1,23 @@
 /* Prices Page - простий та стильний */
+
+/* Light palette for the price list (owner's request): the design tokens are
+   redefined for this page only, so every rule below — and the HoursNotice
+   block inside — turns light while the rest of the site stays dark.
+   Golds are darkened so text on white keeps readable contrast. */
 .prices-page {
-  background: var(--bg-2);
+  --bg: #faf7f2;
+  --bg-2: #ffffff;
+  --bg-3: #f3ece1;
+  --text: #1d1914;
+  --text-2: #5f5244;
+  --gold: #87663a;
+  --gold-light: #7a5c2e;
+  --gold-dark: #6b4f26;
+  --gold-rgb: 135, 102, 58;
+  --line: rgba(135, 102, 58, 0.35);
+  --line-soft: rgba(135, 102, 58, 0.18);
+  color-scheme: light;
+  background: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
 }
@@ -114,7 +131,7 @@
 
 .price-item__duration {
   font-size: 0.9rem;
-  color: #999;
+  color: var(--text-2);
   font-weight: 300;
 }
 
