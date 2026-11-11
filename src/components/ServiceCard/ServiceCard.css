@@ -293,7 +293,7 @@
 }
 
 .svc-card.is-locked .svc-card__img {
-  filter: grayscale(.7) brightness(.32);
+  filter: grayscale(1) brightness(.32);
 }
 
 .svc-card__lock {

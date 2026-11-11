@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 import { FiLock } from "react-icons/fi";
 import { useLanguage } from "../i18n/LanguageContext";
@@ -10,8 +10,37 @@ import "./TrainingLockedPage.css";
  * The notify form goes through the same EmailJS template as the site's
  * consultation forms (fields: name, email, phone, message).
  */
+/**
+ * Two chains crossing at the padlock and running at the page's diagonal angle,
+ * so on any screen shape they form an X over the whole page. Geometry is
+ * written straight to CSS variables (no re-render) and kept in sync on resize.
+ */
+function useChainGeometry(sectionRef, lockRef) {
+  useEffect(() => {
+    const section = sectionRef.current;
+    const lock = lockRef.current;
+    if (!section || !lock || typeof ResizeObserver === "undefined") return undefined;
+    const update = () => {
+      const page = section.getBoundingClientRect();
+      const pad = lock.getBoundingClientRect();
+      const angle = (Math.atan2(page.height, page.width) * 180) / Math.PI;
+      section.style.setProperty("--chain-x", `${pad.left - page.left + pad.width / 2}px`);
+      section.style.setProperty("--chain-y", `${pad.top - page.top + pad.height / 2}px`);
+      section.style.setProperty("--chain-angle", `${angle}deg`);
+      section.style.setProperty("--chain-length", `${Math.hypot(page.width, page.height) * 2}px`);
+    };
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(section);
+    return () => ro.disconnect();
+  }, [sectionRef, lockRef]);
+}
+
 export default function TrainingLockedPage() {
   const { t } = useLanguage();
+  const sectionRef = useRef(null);
+  const lockRef = useRef(null);
+  useChainGeometry(sectionRef, lockRef);
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
   const [state, setState] = useState({ status: "idle", message: "" });
 
@@ -49,9 +78,13 @@ export default function TrainingLockedPage() {
   };
 
   return (
-    <section className="training-locked" aria-labelledby="training-locked-title">
+    <section className="training-locked" aria-labelledby="training-locked-title" ref={sectionRef}>
+      <div className="training-locked__chains" aria-hidden="true">
+        <span className="training-locked__chain training-locked__chain--a" />
+        <span className="training-locked__chain training-locked__chain--b" />
+      </div>
       <div className="training-locked__inner">
-        <div className="training-locked__lock" aria-hidden="true">
+        <div className="training-locked__lock" aria-hidden="true" ref={lockRef}>
           <FiLock />
         </div>
 
