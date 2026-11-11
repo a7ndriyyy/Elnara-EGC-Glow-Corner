@@ -284,6 +284,15 @@
   cursor: default;
 }
 
+/* locked but clickable (opens its "in development" page) */
+.svc-card.is-locked.is-linked {
+  cursor: pointer;
+}
+
+.svc-card.is-locked.is-linked:hover .svc-card__front {
+  border-color: var(--gold);
+}
+
 .svc-card.is-locked .svc-card__img {
   filter: grayscale(.7) brightness(.32);
 }

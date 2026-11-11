@@ -30,6 +30,7 @@ export default function Directions() {
                 imageAlt=""
                 locked
                 lockedText={t("directions.inDevelopment")}
+                to={direction.to}
               />
             ) : (
               <ServiceCard
@@ -39,7 +40,7 @@ export default function Directions() {
                 imageAlt=""
                 description={localize(direction.intro, language)}
                 subdirections={direction.subdirections.map((sub) => localize(sub.title, language))}
-                to={`/directions/${direction.slug}`}
+                to={direction.to ?? `/directions/${direction.slug}`}
                 actionLabel={t("ui.more")}
               />
             );

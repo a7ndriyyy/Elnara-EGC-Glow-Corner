@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiClock, FiRotateCw, FiLock } from "react-icons/fi";
 import { useLanguage } from "../../i18n/LanguageContext";
 import "./ServiceCard.css";
@@ -45,11 +45,19 @@ export default function ServiceCard({
       ? t("ui.priceFrom").replace("{price}", priceFrom)
       : null);
 
+  const navigate = useNavigate();
+  // A locked card with a link (e.g. Training → "in development" page) opens it instead of flipping.
+  const lockedLink = locked && to;
+
   const toggle = useCallback(() => {
     if (!locked) setFlipped((value) => !value);
   }, [locked]);
 
   const handleClick = (event) => {
+    if (lockedLink) {
+      navigate(to);
+      return;
+    }
     // The CTA handles its own click; anything else on the card flips it.
     if (event.target.closest(".svc-card__action")) return;
     // Pointer devices already flip on hover, a click would make it "stick".
@@ -61,7 +69,8 @@ export default function ServiceCard({
     if (event.target !== event.currentTarget) return;
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      toggle();
+      if (lockedLink) navigate(to);
+      else toggle();
     }
   };
 
@@ -78,9 +87,9 @@ export default function ServiceCard({
 
   return (
     <article
-      className={`svc-card${flipped ? " is-flipped" : ""}${locked ? " is-locked" : ""} ${className}`.trim()}
+      className={`svc-card${flipped ? " is-flipped" : ""}${locked ? " is-locked" : ""}${lockedLink ? " is-linked" : ""} ${className}`.trim()}
       tabIndex={0}
-      role="button"
+      role={lockedLink ? "link" : "button"}
       aria-pressed={locked ? undefined : flipped}
       aria-label={locked ? `${title} — ${lockedText || t("ui.soon")}` : `${title}. ${flipped ? t("ui.flipBack") : t("ui.flip")}`}
       onClick={handleClick}

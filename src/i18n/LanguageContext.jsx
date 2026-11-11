@@ -6,6 +6,7 @@ import { sectionMessages } from "./sections";
 import { directionsMessages } from "./directions";
 import { salonMessages } from "./salon";
 import { scheduleMessages } from "./schedule";
+import { trainingMessages } from "./training";
 
 const LANGUAGE_STORAGE_KEY = "elnara-language";
 const SUPPORTED_LANGUAGES = ["en", "fr", "uk", "ru"];
@@ -119,6 +120,7 @@ for (const lang of Object.keys(messages)) {
   messages[lang].directions = directionsMessages[lang];
   messages[lang].salon = salonMessages[lang];
   messages[lang].schedule = scheduleMessages[lang];
+  messages[lang].training = trainingMessages[lang];
   const { nav: extraNav, ...sections } = sectionMessages[lang];
   messages[lang].nav = { ...messages[lang].nav, ...extraNav };
   Object.assign(messages[lang], sections);

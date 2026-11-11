@@ -11,6 +11,8 @@ import EquipmentPage from "./pages/EquipmentPage";
 import PricesPage from "./pages/PricesPage";
 import MasterPage from "./pages/MasterPage";
 import DirectionPage from "./pages/DirectionPage";
+import TrainingLockedPage from "./pages/TrainingLockedPage";
+import { features } from "./data/features";
 import BookingPage from "./pages/BookingPage";
 import AdminLogin from "./pages/AdminLogin";
 import AdminPage from "./pages/AdminPage";
@@ -57,7 +59,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
-          <Route path="about" element={<AboutPage />} />
+          {/* TZ step 8: training stays in the menu; its content is behind a flag */}
+          <Route path="about" element={features.trainingEnabled ? <AboutPage /> : <TrainingLockedPage />} />
           <Route path="services" element={<ServicesPage />} />
           <Route path="equipment" element={<EquipmentPage />} />
           <Route path="prices" element={<PricesPage />} />

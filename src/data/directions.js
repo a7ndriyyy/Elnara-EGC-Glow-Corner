@@ -11,6 +11,7 @@
 // confirmed with Elnara (TODO: уточнити в Ельнари).
 
 import { findApparatus } from "./apparatus";
+import { features } from "./features";
 import { makeupTypes, massageProcedures } from "./salonServices";
 
 const img = (path) => `${import.meta.env.BASE_URL}Images/${path}`;
@@ -203,9 +204,14 @@ export const directions = [
     slug: "training",
     title: { uk: "Навчання", en: "Training", fr: "Formation", ru: "Обучение" },
     image: img("ImagesStudy/Makeup-Course.webp"),
-    intro: { uk: "", en: "", fr: "", ru: "" },
-    // Locked until training launches (step 8 adds the full "in development" page).
-    locked: true,
+    intro: {
+      uk: "Курси макіяжу та перманенту від Ельнари.",
+      en: "Makeup and permanent makeup courses by Elnara.",
+      fr: "Formations en maquillage et maquillage permanent par Elnara.",
+      ru: "Курсы макияжа и перманента от Эльнары.",
+    },
+    // TZ step 8: locked ("in development") while features.trainingEnabled is false.
+    locked: !features.trainingEnabled,
     to: "/about",
     subdirections: [],
   },

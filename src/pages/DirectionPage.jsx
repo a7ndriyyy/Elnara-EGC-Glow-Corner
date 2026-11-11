@@ -15,8 +15,8 @@ export default function DirectionPage() {
   const { t, language } = useLanguage();
   const direction = findDirection(slug);
 
-  // Locked directions (training) have their own page.
-  if (direction?.locked) return <Navigate to={direction.to || "/"} replace />;
+  // Directions with their own page (training) redirect there, locked or not.
+  if (direction?.to) return <Navigate to={direction.to} replace />;
 
   const backLink = (
     <Link to="/" state={{ scrollTo: "directions" }} className="direction-page__back">
