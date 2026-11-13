@@ -1,9 +1,10 @@
 import React, { useRef } from "react";
 import { FaStar, FaRegStar, FaQuoteRight } from "react-icons/fa";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import { reviewsData } from "../../data/reviews";
+import { reviews } from "../../data/reviews";
+import { priceItem } from "../../data/priceList";
 import { useLanguage } from "../../i18n/LanguageContext";
-import { fill } from "../../utils/format";
+import { fill, formatMonth, localize } from "../../utils/format";
 
 /**
  * TZ 10.2 — review cards in a horizontal slider: native swipe/scroll on touch
@@ -11,9 +12,8 @@ import { fill } from "../../utils/format";
  * an optional photo of the work (`photo` in src/data/reviews.js).
  */
 export default function ReviewsSlider() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const track = useRef(null);
-  const reviews = reviewsData.reviews || [];
   if (reviews.length === 0) return null;
 
   const scroll = (dir) => {
@@ -50,10 +50,16 @@ export default function ReviewsSlider() {
               )}
             </div>
             <FaQuoteRight className="review-card__quote" aria-hidden="true" />
-            <blockquote className="review-card__text">{review.text}</blockquote>
+            <blockquote className="review-card__text">
+              {localize(review.text, language)}
+            </blockquote>
             <footer className="review-card__footer">
               <strong>{review.name}</strong>
-              <span>{[review.service, review.date].filter(Boolean).join(" · ")}</span>
+              <span>
+                {[localize(priceItem(review.serviceId)?.name, language), formatMonth(review.date, language)]
+                  .filter(Boolean)
+                  .join(" · ")}
+              </span>
             </footer>
           </li>
         ))}

@@ -27,6 +27,16 @@ export function fill(text, vars = {}) {
   return String(text).replace(/\{(\w+)\}/g, (match, key) => (key in vars ? String(vars[key]) : match));
 }
 
+const LOCALES = { uk: "uk-UA", ru: "ru-RU", en: "en-GB", fr: "fr-FR" };
+
+/** "2026-10" → "жовтень 2026 р." (uk) / "October 2026" (en). Returns "" for bad input. */
+export function formatMonth(yearMonth, lang = "uk") {
+  const match = /^(\d{4})-(\d{2})$/.exec(String(yearMonth ?? ""));
+  if (!match) return "";
+  const date = new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, 1));
+  return new Intl.DateTimeFormat(LOCALES[lang] || LOCALES.en, { month: "long", year: "numeric", timeZone: "UTC" }).format(date);
+}
+
 /** Picks the current language from a { uk, en, fr, ru } object (falls back to uk, then en). */
 export function localize(value, lang = "uk") {
   if (value == null || typeof value !== "object") return value ?? "";

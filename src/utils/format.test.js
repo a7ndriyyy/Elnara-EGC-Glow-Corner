@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { fill, formatDuration, localize } from "./format.js";
+import { fill, formatDuration, formatMonth, localize } from "./format.js";
 
 test("fill replaces known placeholders only", () => {
   assert.equal(fill("{start} – {end}", { start: "09:00", end: "18:00" }), "09:00 – 18:00");
@@ -31,4 +31,11 @@ test("localize falls back to uk, then en", () => {
   assert.equal(localize({ uk: "Брови", fr: "Sourcils" }, "fr"), "Sourcils");
   assert.equal(localize("plain", "fr"), "plain");
   assert.equal(localize(null, "fr"), "");
+});
+
+test("formatMonth shows the month in the chosen language", () => {
+  assert.match(formatMonth("2026-10", "en"), /October 2026/);
+  assert.match(formatMonth("2026-10", "fr"), /octobre 2026/);
+  assert.equal(formatMonth("October", "en"), "");
+  assert.equal(formatMonth(undefined, "uk"), "");
 });
