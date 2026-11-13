@@ -63,6 +63,7 @@ export const reviews = [
     rating: 5,
     serviceId: "lash-lift",
     date: "2026-07",
+    photo: img("ImagesServices/lamination.webp"),
     text: {
       uk: "Ламінування вій — вау-ефект без туші. Тримається вже кілька тижнів, вранці збираюся вдвічі швидше.",
       en: "Lash lift gives a wow effect without mascara. It has lasted for weeks and I get ready twice as fast in the morning.",

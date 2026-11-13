@@ -9,7 +9,7 @@ import "./MasterHero.css";
  * First screen of the home page (TZ step 2): on the left her title, signature
  * name, a short intro, three animated counters and the two main actions; on
  * the right a large cut-out photo of Elnara with her brushes on a soft gold
- * glow, with a few floating shapes.
+ * glow.
  */
 export default function MasterHero() {
   const { t } = useLanguage();
@@ -64,9 +64,6 @@ export default function MasterHero() {
         </div>
         <div className="mhero__media">
           <span className="mhero__glow" aria-hidden="true" />
-          <span className="mhero__shape mhero__shape--dot" aria-hidden="true" />
-          <span className="mhero__shape mhero__shape--dot-sm" aria-hidden="true" />
-          <span className="mhero__shape mhero__shape--tri" aria-hidden="true" />
           {photo ? (
             <img
               className="mhero__photo"
