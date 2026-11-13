@@ -4,9 +4,11 @@
 export const heroConfig = {
   // Elnara's photo (file in public/Images). Set to null to show the monogram placeholder.
   // BASE_URL keeps the path working under the GitHub Pages sub-folder.
-  photo: `${import.meta.env.BASE_URL}Images/elnara-hero.jpg`,
-  // Which part of the photo stays visible inside the arch (CSS object-position).
-  photoPosition: "50% 30%",
+  photo: `${import.meta.env.BASE_URL}Images/Master/elnara-brushes-flying.jpg`,
+  // Which part of the photo stays visible inside the circle (CSS object-position).
+  photoPosition: "50% 19%",
+  // Small photo in the floating "WULOP France 2026" card (null hides the card).
+  eventPhoto: `${import.meta.env.BASE_URL}Images/Master/elnara-wulop.jpg`,
 
   counters: [
     { id: "years", value: 21, suffix: "" },

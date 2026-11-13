@@ -8,9 +8,12 @@ import { fill, localize } from "../../utils/format";
 /** Wrap an index into [0, length). */
 const wrap = (i, length) => ((i % length) + length) % length;
 const SWIPE_PX = 50;
+const ROWS = 4;
+const MIN_PER_ROW = 8;
 
 /**
- * TZ 10.1 — masonry gallery with category chips and a lightbox
+ * TZ 10.1 — gallery: "All" shows 4 rows drifting left / right (pause on
+ * hover, caption on hover); a category shows a masonry grid. Lightbox
  * (arrows, keyboard ←/→/Esc, swipe on touch screens). Lazy-loaded webp.
  */
 export default function Gallery() {
@@ -30,6 +33,20 @@ export default function Gallery() {
     () => (filter === "all" ? galleryItems : galleryItems.filter((item) => item.category === filter)),
     [filter],
   );
+
+  // "All" view: works dealt into ROWS rows; short rows are repeated so each
+  // half of the loop is wider than the screen. `unique` = real items per row.
+  const rows = useMemo(() => {
+    const dealt = Array.from({ length: ROWS }, () => []);
+    galleryItems.forEach((item, index) => dealt[index % ROWS].push({ item, index }));
+    return dealt
+      .filter((row) => row.length > 0)
+      .map((row) => {
+        let filled = row;
+        while (filled.length < MIN_PER_ROW) filled = filled.concat(row);
+        return Object.assign(filled, { unique: row.length });
+      });
+  }, []);
 
   const open = (index, event) => {
     triggerRef.current = event.currentTarget;
@@ -69,6 +86,36 @@ export default function Gallery() {
   const current = openIndex !== null ? items[openIndex] : null;
   const altOf = (item) => localize(item.alt, language);
 
+  // One gallery tile: thumbnail (photo or video frame), before/after badge and
+  // a caption that shows on hover / focus. `hidden` tiles are the decorative
+  // copies of the moving rows (not focusable).
+  const tile = (item, index, hidden) => (
+    <button
+      type="button"
+      className="gallery__open"
+      aria-label={fill(t("showcase.open"), { alt: altOf(item) })}
+      tabIndex={hidden ? -1 : undefined}
+      onClick={(event) => open(index, event)}
+    >
+      {item.video ? (
+        <>
+          {/* #t=0.1 makes the browser paint the first frame as a poster */}
+          <video src={`${item.video}#t=0.1`} muted playsInline preload="metadata" aria-hidden="true" tabIndex={-1} />
+          <span className="gallery__play" aria-hidden="true"><FiPlay /></span>
+        </>
+      ) : (
+        <img src={item.after || item.src} alt="" loading="lazy" decoding="async" />
+      )}
+      {(item.before || item.beforeAfter) && (
+        <span className="gallery__tag">{t("showcase.before")} / {t("showcase.after")}</span>
+      )}
+      <span className="gallery__caption" aria-hidden="true">
+        <small>{t(`showcase.categories.${item.category}`)}</small>
+        {altOf(item)}
+      </span>
+    </button>
+  );
+
   return (
     <div className="showcase__part" id="gallery">
       <h3 className="showcase__heading">{t("showcase.galleryTitle")}</h3>
@@ -89,31 +136,37 @@ export default function Gallery() {
         </div>
       )}
 
-      <ul className="gallery">
-        {items.map((item, index) => (
-          <li key={item.id} className="gallery__item">
-            <button
-              type="button"
-              className="gallery__open"
-              aria-label={fill(t("showcase.open"), { alt: altOf(item) })}
-              onClick={(event) => open(index, event)}
+      {filter === "all" ? (
+        // All works: rows that drift left / right; hovering a row pauses it.
+        <div className="gallery-rows">
+          {rows.map((row, r) => (
+            <div
+              key={r}
+              className={`gallery-row${r % 2 ? " gallery-row--reverse" : ""}`}
+              style={{ "--gallery-duration": `${row.length * 7}s` }}
             >
-              {item.video ? (
-                <>
-                  {/* #t=0.1 makes the browser paint the first frame as a poster */}
-                  <video src={`${item.video}#t=0.1`} muted playsInline preload="metadata" aria-hidden="true" tabIndex={-1} />
-                  <span className="gallery__play" aria-hidden="true"><FiPlay /></span>
-                </>
-              ) : (
-                <img src={item.after || item.src} alt="" loading="lazy" decoding="async" />
-              )}
-              {(item.before || item.beforeAfter) && (
-                <span className="gallery__tag">{t("showcase.before")} / {t("showcase.after")}</span>
-              )}
-            </button>
-          </li>
-        ))}
-      </ul>
+              <ul className="gallery-row__track">
+                {/* the row is rendered twice so the loop is seamless; the copy is hidden from screen readers */}
+                {[0, 1].map((copy) =>
+                  row.map(({ item, index }, i) => (
+                    <li key={`${copy}-${i}`} className="gallery-row__item" aria-hidden={copy === 1 || i >= row.unique ? true : undefined}>
+                      {tile(item, index, copy === 1 || i >= row.unique)}
+                    </li>
+                  )),
+                )}
+              </ul>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <ul className="gallery">
+          {items.map((item, index) => (
+            <li key={item.id} className="gallery__item">
+              {tile(item, index, false)}
+            </li>
+          ))}
+        </ul>
+      )}
 
       {/* Portal to <body>: escapes the page stacking contexts so the navbar and
           floating booking button cannot cover the lightbox. */}

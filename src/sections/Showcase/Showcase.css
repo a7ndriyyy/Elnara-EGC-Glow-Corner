@@ -143,6 +143,99 @@
   .gallery__item { margin-bottom: 10px; }
 }
 
+/* ---------- caption on hover ---------- */
+.gallery__caption {
+  position: absolute;
+  inset: auto 0 0 0;
+  display: grid;
+  gap: 2px;
+  padding: 28px 14px 12px;
+  background: linear-gradient(to top, rgba(10, 9, 7, .88), rgba(10, 9, 7, .55) 60%, transparent);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.35;
+  text-align: left;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .35s var(--ease-soft), transform .35s var(--ease-soft);
+  pointer-events: none;
+}
+.gallery__caption small {
+  color: var(--gold-light);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+}
+.gallery__open:hover .gallery__caption,
+.gallery__open:focus-visible .gallery__caption { opacity: 1; transform: none; }
+/* the badge moves up so it never sits under the caption */
+.gallery__open:hover .gallery__tag,
+.gallery__open:focus-visible .gallery__tag { opacity: 0; }
+.gallery__tag { transition: opacity .25s ease; }
+
+/* ---------- "All": rows drifting left / right ---------- */
+.gallery-rows {
+  display: grid;
+  gap: 14px;
+  /* soft fade at both edges */
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+
+.gallery-row {
+  --gallery-h: clamp(150px, 19vw, 230px);
+  overflow: hidden;
+}
+
+.gallery-row__track {
+  display: flex;
+  gap: 14px;
+  width: max-content;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  animation: gallery-drift var(--gallery-duration, 60s) linear infinite;
+}
+.gallery-row--reverse .gallery-row__track { animation-direction: reverse; }
+
+/* hovering (or tabbing into) a row stops it so the photo can be looked at */
+.gallery-row:hover .gallery-row__track,
+.gallery-row:focus-within .gallery-row__track { animation-play-state: paused; }
+
+/* -50% minus half a gap = exactly one copy of the row */
+@keyframes gallery-drift {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(-50% - 7px)); }
+}
+
+.gallery-row__item { flex: none; }
+
+.gallery-row__item .gallery__open {
+  height: var(--gallery-h);
+  width: auto;
+}
+.gallery-row__item .gallery__open img,
+.gallery-row__item .gallery__open video {
+  height: 100%;
+  width: auto;
+  max-width: none;
+  aspect-ratio: auto;
+}
+.gallery-row__item .gallery__open:hover img,
+.gallery-row__item .gallery__open:hover video { transform: scale(1.06); }
+.gallery-row__item .gallery__play { width: 46px; height: 46px; font-size: 18px; }
+
+@media (max-width: 600px) {
+  .gallery-rows, .gallery-row__track { gap: 10px; }
+  .gallery-row { --gallery-h: 130px; }
+  .gallery__caption { font-size: 12px; padding: 22px 10px 9px; }
+  @keyframes gallery-drift {
+    from { transform: translateX(0); }
+    to { transform: translateX(calc(-50% - 5px)); }
+  }
+}
+
 /* ---------- lightbox ---------- */
 .lightbox {
   position: fixed;
@@ -460,4 +553,8 @@
 @media (prefers-reduced-motion: reduce) {
   .lightbox, .faq__body { animation: none; }
   .gallery__open img, .gallery__open video, .faq__icon { transition: none; }
+  /* rows stop drifting and can be scrolled by hand instead */
+  .gallery-row { overflow-x: auto; }
+  .gallery-row__track { animation: none; }
+  .gallery__caption { transition: none; }
 }
