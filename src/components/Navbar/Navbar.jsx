@@ -10,14 +10,12 @@ import { IoClose } from "react-icons/io5";
 // them plus "Booking" (on desktop booking is the floating gold button).
 const leftLinks = [
   { id: "salon", labelKey: "nav.salonServices", path: "/services" },
-  { id: "massages", labelKey: "nav.massages", path: "/equipment" },
   { id: "promotions", labelKey: "nav.promotions", path: "/promotions" },
 ];
 
 const rightLinks = [
   { id: "study", labelKey: "nav.study", path: "/about" },
   { id: "prices", labelKey: "nav.prices", path: "/prices" },
-  { id: "master", labelKey: "nav.master", path: "/master" },
 ];
 
 const navLinks = [

@@ -1,14 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FiCalendar, FiTag, FiUser, FiArrowUpRight } from "react-icons/fi";
+import { FiCalendar, FiTag, FiGift, FiArrowUpRight } from "react-icons/fi";
 import { useLanguage } from "../../i18n/LanguageContext";
 import "./QuickLinks.css";
 
-// TZ step 3: three large menu tiles right under the hero.
+// Three large menu tiles right under the hero: booking, prices, promotions.
 const tiles = [
   { id: "booking", to: "/booking", icon: FiCalendar },
   { id: "prices", to: "/prices", icon: FiTag },
-  { id: "master", to: "/master", icon: FiUser },
+  { id: "promotions", to: "/promotions", icon: FiGift },
 ];
 
 export default function QuickLinks() {

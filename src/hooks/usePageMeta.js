@@ -7,10 +7,8 @@ import { localize } from "../utils/format";
 // Translation key for each route's page name (shown as "<name> — Elnara").
 const ROUTE_TITLES = {
   "/services": "nav.salonServices",
-  "/equipment": "nav.massages",
   "/about": "nav.study",
   "/prices": "nav.prices",
-  "/master": "nav.master",
   "/promotions": "promotions.title",
   "/booking": "booking.title",
 };

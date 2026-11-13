@@ -21,6 +21,7 @@ import ServiceCard from "../components/ServiceCard/ServiceCard";
 import SectionTitle from "../components/SectionTitle/SectionTitle";
 import HoursNotice from "../components/HoursNotice/HoursNotice";
 import { makeupTypes, massageProcedures } from "../data/salonServices";
+import { apparatus } from "../data/apparatus";
 import { bookingLink, findDirection } from "../data/directions";
 import { formatDuration, localize } from "../utils/format";
 import { useLanguage } from "../i18n/LanguageContext";
@@ -71,6 +72,8 @@ export default function ServicesPage() {
     { id: "makeup", items: makeupTypes, title: t("salon.makeupTitle"), subtitle: t("salon.makeupSubtitle"), filter: t("salon.filterMakeup") },
     { id: "brows", items: findDirection("brows")?.subdirections ?? [], title: t("salon.browsTitle"), subtitle: t("salon.browsSubtitle"), filter: t("salon.filterBrows") },
     { id: "massage", items: massageProcedures, title: t("salon.massageTitle"), subtitle: t("salon.massageSubtitle"), filter: t("salon.filterMassage") },
+    // Device treatments (formerly the separate "Massages & treatments" page).
+    { id: "apparatus", items: apparatus, title: t("equipmentPage.servicesTitle"), subtitle: t("equipmentPage.servicesSubtitle"), filter: t("salon.filterApparatus") },
   ];
   const visibleGroups = activeFilter === "all" ? groups : groups.filter((g) => g.id === activeFilter);
   const popularServices = makeupTypes.filter((s) => s.popular);
