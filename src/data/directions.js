@@ -10,9 +10,19 @@
 import { findApparatus } from "./apparatus";
 import { features } from "./features";
 import { priceItem } from "./priceList";
-import { browAndLashServices, makeupTypes, massageProcedures, permanentServices } from "./salonServices";
+import { browAndLashServices, makeupTypes, massageProcedures, permanentServices, pmuRemoverServices, tattooRemovalServices } from "./salonServices";
 
 const img = (path) => `${import.meta.env.BASE_URL}Images/${path}`;
+// On the Permanent page both removal lists sit together, so their items get a
+// short prefix ("Ремувер: Консультація" vs "Лазер: Консультація").
+const prefixed = (items, prefix) =>
+  items.map((item) => ({
+    ...item,
+    name: Object.fromEntries(Object.entries(item.name).map(([lang, text]) => [lang, `${prefix[lang]}: ${text}`])),
+  }));
+const REMOVER = { uk: "Ремувер", en: "Remover", fr: "Remover", ru: "Ремувер" };
+const LASER = { uk: "Лазер", en: "Laser", fr: "Laser", ru: "Лазер" };
+
 const pick = (ids) => ids.map((id) => browAndLashServices.find((s) => s.slug === id) || { ...priceItem(id), slug: id, bookingId: id });
 
 export const directions = [
@@ -34,9 +44,9 @@ export const directions = [
     },
     subdirections: [
       ...permanentServices,
-      // Removal services are device treatments (step 5), kept separate on purpose.
-      findApparatus("laser-makeup-removal"),
-      findApparatus("tattoo-pmu-removal"),
+      // Removal (Elnara's price list, 13.11.2026): remover first, then laser.
+      ...prefixed(pmuRemoverServices, REMOVER),
+      ...prefixed(tattooRemovalServices, LASER),
     ],
   },
   {
@@ -72,7 +82,7 @@ export const directions = [
   {
     slug: "lamination",
     title: { uk: "Ламінування", en: "Lamination", fr: "Rehaussement", ru: "Ламинирование" },
-    image: null, // TODO: уточнити в Ельнари — фото
+    image: img("ImagesServices/lamination.webp"),
     intro: {
       uk: "Ламінування брів і вій — доглянутий вигляд без щоденного макіяжу.",
       en: "Brow and lash lamination — a groomed look without daily makeup.",

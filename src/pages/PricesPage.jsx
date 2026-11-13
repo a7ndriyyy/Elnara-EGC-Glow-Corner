@@ -84,6 +84,7 @@ export default function PricesPage() {
                   );
                 })}
               </div>
+              {category.note && <p className="price-group__note">{localize(category.note, language)}</p>}
             </div>
           ))}
         </div>

@@ -20,6 +20,7 @@ const categoryLabels = {
   "Тіло та масаж": "booking.categoryBody",
   "Брови та вії": "booking.categoryBrows",
   Комплекси: "booking.categoryPackages",
+  Видалення: "booking.categoryRemoval",
 };
 
 const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;

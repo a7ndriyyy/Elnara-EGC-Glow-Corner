@@ -11,7 +11,7 @@ export const priceListMessages = {
     materials: "Професійні матеріали та індивідуальний підхід.",
     addonNote: "додається до послуги",
     book: "Записатися",
-    booking: { categoryPermanent: "Перманентний макіяж", categoryPackages: "Комплексні пропозиції" },
+    booking: { categoryPermanent: "Перманентний макіяж", categoryPackages: "Комплексні пропозиції", categoryRemoval: "Видалення тату та перманенту" },
   },
   ru: {
     from: "от {price}",
@@ -23,7 +23,7 @@ export const priceListMessages = {
     materials: "Профессиональные материалы и индивидуальный подход.",
     addonNote: "добавляется к услуге",
     book: "Записаться",
-    booking: { categoryPermanent: "Перманентный макияж", categoryPackages: "Комплексные предложения" },
+    booking: { categoryPermanent: "Перманентный макияж", categoryPackages: "Комплексные предложения", categoryRemoval: "Удаление тату и перманента" },
   },
   en: {
     from: "from {price}",
@@ -35,7 +35,7 @@ export const priceListMessages = {
     materials: "Professional products and a personalised approach.",
     addonNote: "added to a service",
     book: "Book now",
-    booking: { categoryPermanent: "Permanent makeup", categoryPackages: "Beauty packages" },
+    booking: { categoryPermanent: "Permanent makeup", categoryPackages: "Beauty packages", categoryRemoval: "Tattoo & permanent makeup removal" },
   },
   fr: {
     from: "à partir de {price}",
@@ -47,6 +47,6 @@ export const priceListMessages = {
     materials: "Produits professionnels et approche personnalisée.",
     addonNote: "en supplément d’une prestation",
     book: "Réserver",
-    booking: { categoryPermanent: "Maquillage permanent", categoryPackages: "Forfaits beauté" },
+    booking: { categoryPermanent: "Maquillage permanent", categoryPackages: "Forfaits beauté", categoryRemoval: "Détatouage et retrait du permanent" },
   },
 };

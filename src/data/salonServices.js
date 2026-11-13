@@ -60,10 +60,21 @@ export const makeupTypes = priceItems("makeup").map((item) =>
 );
 
 /** Brows & lashes (price-list categories "brows" + "lashes"). */
-export const browAndLashServices = priceItems("brows", "lashes").map((item) => withExtras(item.id));
+export const browAndLashServices = priceItems("brows", "lashes").map((item) =>
+  withExtras(item.id, item.id === "brow-lift" ? { image: img("ImagesServices/lamination.webp") } : {}),
+);
 
 /** Beauty packages (price-list category "packages"). */
 export const beautyPackages = priceItems("packages").map((item) => withExtras(item.id));
+
+/** Laser tattoo removal (price-list category "tattoo-laser"). */
+export const tattooRemovalServices = priceItems("tattoo-laser").map((item) => withExtras(item.id));
+
+/** Permanent makeup removal with remover (price-list category "pmu-remover"). */
+export const pmuRemoverServices = priceItems("pmu-remover").map((item) => withExtras(item.id));
+
+/** Laser carbon peel (price-list category "carbon-peel"). */
+export const carbonPeelServices = priceItems("carbon-peel").map((item) => withExtras(item.id));
 
 /** Permanent makeup + touch-ups (price-list categories "permanent" + "retouch"). */
 export const permanentServices = priceItems("permanent", "retouch").map((item) => withExtras(item.id));

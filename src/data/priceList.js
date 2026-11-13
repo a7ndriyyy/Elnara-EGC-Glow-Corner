@@ -126,6 +126,59 @@ export const priceCategories = [
         name: { uk: "Perfect Look — оформлення брів + вечірній макіяж", fr: "Perfect Look — mise en forme des sourcils + maquillage de soirée", en: "Perfect Look — brow shaping + evening makeup", ru: "Perfect Look — оформление бровей + вечерний макияж" } },
     ],
   },
+  // ---- Sent 13.11.2026 (categories 7–9). `note` is shown under the category. ----
+  {
+    id: "tattoo-laser",
+    title: { uk: "Лазерне видалення татуювань", fr: "Détatouage au laser", en: "Laser tattoo removal", ru: "Лазерное удаление татуировок" },
+    note: {
+      uk: "Ціни вказані за один сеанс. Остаточна вартість залежить від площі, кольору, щільності та глибини пігменту. Для видалення татуювання може знадобитися декілька сеансів. Повне видалення не гарантується.",
+      fr: "Prix par séance. Le tarif final dépend de la surface, de la couleur, de la densité et de la profondeur du pigment. Plusieurs séances peuvent être nécessaires. Le retrait complet n’est pas garanti.",
+      en: "Prices are per session. The final cost depends on the size, colour, density and depth of the pigment. Several sessions may be needed. Complete removal is not guaranteed.",
+      ru: "Цены указаны за один сеанс. Итоговая стоимость зависит от площади, цвета, плотности и глубины пигмента. Для удаления татуировки может понадобиться несколько сеансов. Полное удаление не гарантируется.",
+    },
+    items: [
+      { id: "tattoo-consultation", price: 20, duration: 20,
+        name: { uk: "Консультація", fr: "Consultation", en: "Consultation", ru: "Консультация" } },
+      { id: "tattoo-xs", price: 100, duration: 20,
+        name: { uk: "Дуже маленьке тату (до 5 см²)", fr: "Très petit tatouage (jusqu’à 5 cm²)", en: "Very small tattoo (up to 5 cm²)", ru: "Очень маленькая татуировка (до 5 см²)" } },
+      { id: "tattoo-s", price: 120, priceKind: "from", duration: 30,
+        name: { uk: "Маленьке тату (5–15 см²)", fr: "Petit tatouage (5–15 cm²)", en: "Small tattoo (5–15 cm²)", ru: "Маленькая татуировка (5–15 см²)" } },
+      { id: "tattoo-m", price: 180, priceKind: "from", duration: [30, 40],
+        name: { uk: "Середнє тату (16–50 см²)", fr: "Tatouage moyen (16–50 cm²)", en: "Medium tattoo (16–50 cm²)", ru: "Средняя татуировка (16–50 см²)" } },
+      { id: "tattoo-l", price: 230, priceKind: "from", duration: 45,
+        name: { uk: "Велике тату (51–100 см²)", fr: "Grand tatouage (51–100 cm²)", en: "Large tattoo (51–100 cm²)", ru: "Большая татуировка (51–100 см²)" } },
+    ],
+  },
+  {
+    id: "pmu-remover",
+    title: { uk: "Видалення перманентного макіяжу ремувером", fr: "Détatouage du maquillage permanent au remover", en: "Permanent makeup removal with remover", ru: "Удаление перманентного макияжа ремувером" },
+    items: [
+      { id: "remover-consultation", price: 20, duration: 20,
+        name: { uk: "Консультація", fr: "Consultation préalable", en: "Consultation", ru: "Консультация" } },
+      { id: "remover-first", price: 100, duration: [30, 60],
+        name: { uk: "Перша процедура", fr: "Première séance", en: "First session", ru: "Первая процедура" } },
+      { id: "remover-next", price: 80, duration: [30, 60],
+        name: { uk: "Повторна процедура", fr: "Séance suivante", en: "Follow-up session", ru: "Повторная процедура" } },
+    ],
+  },
+  {
+    id: "carbon-peel",
+    title: { uk: "Карбоновий пілінг", fr: "Peeling au carbone (Hollywood Peel)", en: "Carbon peel (Hollywood Peel)", ru: "Карбоновый пилинг" },
+    note: {
+      uk: "Лазерний карбоновий пілінг (Hollywood Peel) — процедура з використанням карбонової маски та лазера, спрямована на покращення зовнішнього вигляду й текстури шкіри. Кількість процедур визначається індивідуально після консультації.",
+      fr: "Le peeling au carbone au laser (Hollywood Peel) associe un masque au carbone et un laser pour améliorer l’aspect et la texture de la peau. Le nombre de séances est défini individuellement après consultation.",
+      en: "Laser carbon peel (Hollywood Peel) uses a carbon mask and a laser to improve the look and texture of the skin. The number of sessions is set individually after a consultation.",
+      ru: "Лазерный карбоновый пилинг (Hollywood Peel) — процедура с карбоновой маской и лазером для улучшения внешнего вида и текстуры кожи. Количество процедур определяется индивидуально после консультации.",
+    },
+    items: [
+      { id: "carbon-face", price: 120, duration: 45,
+        name: { uk: "Карбоновий пілінг обличчя", fr: "Peeling au carbone du visage", en: "Carbon peel — face", ru: "Карбоновый пилинг лица" } },
+      { id: "carbon-face-neck", price: 150, duration: 60,
+        name: { uk: "Карбоновий пілінг обличчя та шиї", fr: "Peeling au carbone visage et cou", en: "Carbon peel — face & neck", ru: "Карбоновый пилинг лица и шеи" } },
+      { id: "carbon-face-neck-decollete", price: 180, duration: 75,
+        name: { uk: "Карбоновий пілінг обличчя, шиї та декольте", fr: "Peeling au carbone visage, cou et décolleté", en: "Carbon peel — face, neck & décolleté", ru: "Карбоновый пилинг лица, шеи и декольте" } },
+    ],
+  },
 ];
 
 const byId = new Map(priceCategories.flatMap((c) => c.items.map((item) => [item.id, { ...item, category: c.id }])));

@@ -1,9 +1,9 @@
-// Apparatus (device) services — TZ step 5. Shown on the equipment page and
-// reused by the related directions in src/data/directions.js.
+// Device treatments without an entry in Elnara's price list yet (vacuum
+// massage, pressotherapy). Carbon peel and the removal services moved to
+// src/data/priceList.js when she sent their prices (13.11.2026).
 // Same shape as a direction's sub-direction. Text fields are { uk, en, fr, ru }.
 //
-// TODO: уточнити в Ельнари — описи, тривалість (duration, хв), ціни (priceFrom, €), фото.
-// Items 4 and 5 are deliberately separate services.
+// TODO: уточнити в Ельнари — чи робить ці процедури; описи, тривалість, ціни, фото.
 
 export const apparatus = [
   {
@@ -33,50 +33,9 @@ export const apparatus = [
     duration: null,
     priceFrom: null,
   },
-  {
-    slug: "carbon-peel",
-    title: { uk: "Карбоновий пілінг", en: "Carbon peel", fr: "Peeling au carbone", ru: "Карбоновый пилинг" },
-    image: null,
-    description: {
-      uk: "Лазерний пілінг з карбоновою маскою: очищення пор, рівний тон і сяйво шкіри.",
-      en: "Laser peel with a carbon mask: clearer pores, an even tone and glowing skin.",
-      fr: "Peeling laser avec masque au carbone : pores nets, teint unifié et peau lumineuse.",
-      ru: "Лазерный пилинг с карбоновой маской: чистые поры, ровный тон и сияние кожи.",
-    },
-    duration: null,
-    priceFrom: null,
-  },
-  {
-    slug: "laser-makeup-removal",
-    title: { uk: "Лазерне видалення макіяжу", en: "Laser makeup removal", fr: "Détatouage laser du maquillage", ru: "Лазерное удаление макияжа" },
-    image: null,
-    description: {
-      uk: "Видалення пігменту лазерним апаратом — делікатно та поступово.",
-      en: "Pigment removal with a laser device — gentle and gradual.",
-      fr: "Retrait des pigments par laser — en douceur et progressivement.",
-      ru: "Удаление пигмента лазерным аппаратом — деликатно и постепенно.",
-    },
-    duration: null,
-    priceFrom: null,
-  },
-  {
-    slug: "tattoo-pmu-removal",
-    title: {
-      uk: "Видалення татуювань і перманентного макіяжу",
-      en: "Tattoo & permanent makeup removal",
-      fr: "Retrait de tatouages et de maquillage permanent",
-      ru: "Удаление татуировок и перманентного макияжа",
-    },
-    image: null,
-    description: {
-      uk: "Видалення татуювань і старого або невдалого перманенту.",
-      en: "Removal of tattoos and old or unwanted permanent makeup.",
-      fr: "Retrait des tatouages et d’un maquillage permanent ancien ou raté.",
-      ru: "Удаление татуировок и старого или неудачного перманента.",
-    },
-    duration: null,
-    priceFrom: null,
-  },
+
+
+
 ];
 
 export const findApparatus = (slug) => apparatus.find((item) => item.slug === slug) ?? null;

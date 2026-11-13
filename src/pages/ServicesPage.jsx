@@ -20,7 +20,7 @@ import "./ServicesPage.css";
 import ServiceCard from "../components/ServiceCard/ServiceCard";
 import SectionTitle from "../components/SectionTitle/SectionTitle";
 import HoursNotice from "../components/HoursNotice/HoursNotice";
-import { beautyPackages, browAndLashServices, makeupTypes, massageProcedures, permanentServices } from "../data/salonServices";
+import { beautyPackages, browAndLashServices, carbonPeelServices, makeupTypes, massageProcedures, permanentServices, pmuRemoverServices, tattooRemovalServices } from "../data/salonServices";
 import { priceCategories } from "../data/priceList";
 import { apparatus } from "../data/apparatus";
 import { bookingLink } from "../data/directions";
@@ -72,14 +72,18 @@ export default function ServicesPage() {
   // Service groups — shared with the "Макіяж" / "Масаж" / "Бровист" directions.
   // Group titles for price-list groups come from Elnara's price list categories.
   const categoryTitle = (id) => localize(priceCategories.find((c) => c.id === id)?.title, language);
+  const categoryNote = (id) => localize(priceCategories.find((c) => c.id === id)?.note, language) || undefined;
   const groups = [
     { id: "permanent", items: permanentServices, title: categoryTitle("permanent"), filter: t("salon.filterPermanent") },
     { id: "makeup", items: makeupTypes, title: categoryTitle("makeup"), subtitle: t("salon.makeupSubtitle"), filter: t("salon.filterMakeup") },
     { id: "brows", items: browAndLashServices, title: t("salon.browsLashesTitle"), subtitle: t("salon.browsSubtitle"), filter: t("salon.filterBrowsLashes") },
     { id: "packages", items: beautyPackages, title: categoryTitle("packages"), filter: t("salon.filterPackages") },
+    { id: "carbon", items: carbonPeelServices, title: categoryTitle("carbon-peel"), subtitle: categoryNote("carbon-peel"), filter: t("salon.filterCarbon") },
+    { id: "tattoo", items: tattooRemovalServices, title: categoryTitle("tattoo-laser"), subtitle: categoryNote("tattoo-laser"), filter: t("salon.filterTattoo") },
+    { id: "remover", items: pmuRemoverServices, title: categoryTitle("pmu-remover"), filter: t("salon.filterRemover") },
     { id: "massage", items: massageProcedures, title: t("salon.massageTitle"), subtitle: t("salon.massageSubtitle"), filter: t("salon.filterMassage") },
     // Device treatments (formerly the separate "Massages & treatments" page).
-    { id: "apparatus", items: apparatus, title: t("equipmentPage.servicesTitle"), subtitle: t("equipmentPage.servicesSubtitle"), filter: t("salon.filterApparatus") },
+    { id: "apparatus", items: apparatus, title: t("equipmentPage.servicesTitle"), filter: t("salon.filterApparatus") },
   ];
   const visibleGroups = activeFilter === "all" ? groups : groups.filter((g) => g.id === activeFilter);
   const popularServices = makeupTypes.filter((s) => s.popular);

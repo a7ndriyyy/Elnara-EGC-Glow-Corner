@@ -1,4 +1,4 @@
--- Elnara's price list (12.11.2026) for the online booking system.
+-- Elnara's price list (12–13.11.2026) for the online booking system.
 -- GENERATED from src/data/priceList.js — edit that file, not this one.
 -- Run once in Supabase → SQL Editor. Safe to re-run (upsert by id).
 --
@@ -47,7 +47,18 @@ values
   ('pack-brow-beauty', 'Комплекси', 'Brow Beauty — форма + фарбування', 35, 40, true),
   ('pack-brow-premium', 'Комплекси', 'Brow Premium — ламінування + форма + фарбування', 50, 75, true),
   ('pack-full-beauty', 'Комплекси', 'Full Beauty — ламінування брів і вій + форма + фарбування', 75, 105, true),
-  ('pack-perfect-look', 'Комплекси', 'Perfect Look — оформлення брів + вечірній макіяж', 120, 120, true)
+  ('pack-perfect-look', 'Комплекси', 'Perfect Look — оформлення брів + вечірній макіяж', 120, 120, true),
+  ('tattoo-consultation', 'Видалення', 'Видалення тату: Консультація', 20, 20, true),
+  ('tattoo-xs', 'Видалення', 'Видалення тату: Дуже маленьке тату (до 5 см²)', 100, 20, true),
+  ('tattoo-s', 'Видалення', 'Видалення тату: Маленьке тату (5–15 см²)', 120, 30, true),
+  ('tattoo-m', 'Видалення', 'Видалення тату: Середнє тату (16–50 см²)', 180, 40, true),
+  ('tattoo-l', 'Видалення', 'Видалення тату: Велике тату (51–100 см²)', 230, 45, true),
+  ('remover-consultation', 'Видалення', 'Ремувер: Консультація', 20, 20, true),
+  ('remover-first', 'Видалення', 'Ремувер: Перша процедура', 100, 60, true),
+  ('remover-next', 'Видалення', 'Ремувер: Повторна процедура', 80, 60, true),
+  ('carbon-face', 'Обличчя', 'Карбоновий пілінг обличчя', 120, 45, true),
+  ('carbon-face-neck', 'Обличчя', 'Карбоновий пілінг обличчя та шиї', 150, 60, true),
+  ('carbon-face-neck-decollete', 'Обличчя', 'Карбоновий пілінг обличчя, шиї та декольте', 180, 75, true)
 on conflict (id) do update set
   category = excluded.category,
   name = excluded.name,
@@ -61,4 +72,4 @@ commit;
 
 -- Optional — ONLY if Elnara confirms she offers nothing else (massages, facials…):
 -- update public.services set is_active = false
--- where id not in ('powder-brows', 'lip-blush', 'lipstick-lips', 'dark-lips-neutralization', 'lash-line-upper', 'lash-line-lower', 'lash-line-both', 'eyeliner-classic', 'eyeliner-ombre', 'beauty-mark', 'freckles', 'retouch-6-12', 'retouch-12-18', 'pmu-cover', 'brow-shaping', 'brow-architecture', 'brow-tint', 'brow-shaping-coloring', 'brow-lift', 'lash-tint', 'lash-lift', 'lash-lift-tint-botox', 'brow-lash-lift', 'brow-lash-full', 'day-makeup', 'evening-makeup', 'photoshoot-makeup', 'graduation-makeup', 'bridal-makeup', 'bridal-trial', 'self-makeup-lesson', 'pack-brow-beauty', 'pack-brow-premium', 'pack-full-beauty', 'pack-perfect-look');
+-- where id not in ('powder-brows', 'lip-blush', 'lipstick-lips', 'dark-lips-neutralization', 'lash-line-upper', 'lash-line-lower', 'lash-line-both', 'eyeliner-classic', 'eyeliner-ombre', 'beauty-mark', 'freckles', 'retouch-6-12', 'retouch-12-18', 'pmu-cover', 'brow-shaping', 'brow-architecture', 'brow-tint', 'brow-shaping-coloring', 'brow-lift', 'lash-tint', 'lash-lift', 'lash-lift-tint-botox', 'brow-lash-lift', 'brow-lash-full', 'day-makeup', 'evening-makeup', 'photoshoot-makeup', 'graduation-makeup', 'bridal-makeup', 'bridal-trial', 'self-makeup-lesson', 'pack-brow-beauty', 'pack-brow-premium', 'pack-full-beauty', 'pack-perfect-look', 'tattoo-consultation', 'tattoo-xs', 'tattoo-s', 'tattoo-m', 'tattoo-l', 'remover-consultation', 'remover-first', 'remover-next', 'carbon-face', 'carbon-face-neck', 'carbon-face-neck-decollete');
