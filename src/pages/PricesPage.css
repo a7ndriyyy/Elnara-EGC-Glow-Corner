@@ -130,10 +130,49 @@
 }
 
 .price-item__duration {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
   font-size: 0.9rem;
   color: var(--text-2);
-  font-weight: 300;
+  font-weight: 400;
 }
+
+.price-item__duration svg { color: var(--gold); }
+
+/* "Touch-up included" / "added to a service" */
+.price-item__note {
+  color: var(--gold);
+  font-weight: 500;
+}
+
+/* Elnara's price list: one block per category */
+.price-group + .price-group { margin-top: 48px; }
+
+.price-group__title {
+  margin: 0 0 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-title);
+  font-size: clamp(22px, 2.6vw, 30px);
+  font-weight: 500;
+  letter-spacing: 2px;
+  color: var(--gold-light);
+}
+
+.prices-hero__meta {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin: 14px 0 0;
+  font-size: 0.95rem;
+  color: var(--text-2);
+}
+
+.prices-hero__meta svg { color: var(--gold); }
 
 .price-item__value {
   font-size: 1.4rem;

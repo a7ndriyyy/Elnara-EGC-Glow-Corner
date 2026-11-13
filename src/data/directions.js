@@ -1,20 +1,19 @@
-// Main directions → sub-directions (TZ step 4). Single source of truth for the
-// home "Main directions" section and the /directions/:slug pages.
+// Main directions → sub-directions (TZ step 4). Single place for the home
+// "Main directions" section and the /directions/:slug pages.
 //
-// Shape: { slug, title, image, intro, locked?, subdirections: [
-//   { slug, title, image, description, duration (minutes), priceFrom (€),
-//     bookingId? (pre-selects the service on /booking), to? (custom link) } ] }
+// Sub-directions come from Elnara's price list (./priceList.js, via
+// ./salonServices.js) and from the device treatments (./apparatus.js), so
+// prices and durations are defined once.
+// `cardList` is the short summary shown on the back of the home-page card.
 // Text fields are { uk, en, fr, ru }.
-//
-// Prices/durations copied from the existing price list (src/pages/PricesPage.jsx).
-// `null` = unknown → hidden on the card. Everything marked TODO must be
-// confirmed with Elnara (TODO: уточнити в Ельнари).
 
 import { findApparatus } from "./apparatus";
 import { features } from "./features";
-import { makeupTypes, massageProcedures } from "./salonServices";
+import { priceItem } from "./priceList";
+import { browAndLashServices, makeupTypes, massageProcedures, permanentServices } from "./salonServices";
 
 const img = (path) => `${import.meta.env.BASE_URL}Images/${path}`;
+const pick = (ids) => ids.map((id) => browAndLashServices.find((s) => s.slug === id) || { ...priceItem(id), slug: id, bookingId: id });
 
 export const directions = [
   {
@@ -27,50 +26,15 @@ export const directions = [
       fr: "Maquillage permanent des sourcils, des lèvres et des yeux — un résultat naturel qui dure des années.",
       ru: "Перманентный макияж бровей, губ и глаз — естественный результат, который держится годами.",
     },
+    cardList: {
+      uk: ["Пудрові брови", "Губи", "Міжвійка та стрілки", "Мушка, веснянки", "Корекція перманенту", "Видалення пігменту"],
+      en: ["Powder brows", "Lips", "Lash line & eyeliner", "Beauty mark, freckles", "Touch-ups", "Pigment removal"],
+      fr: ["Sourcils poudrés", "Lèvres", "Ras de cils & eye-liner", "Grain de beauté, taches de rousseur", "Retouches", "Retrait du pigment"],
+      ru: ["Пудровые брови", "Губы", "Межресничка и стрелки", "Мушка, веснушки", "Коррекция перманента", "Удаление пигмента"],
+    },
     subdirections: [
-      {
-        slug: "brows",
-        title: { uk: "Брови", en: "Brows", fr: "Sourcils", ru: "Брови" },
-        image: null,
-        // TODO: уточнити в Ельнари — опис, тривалість, ціна
-        description: {
-          uk: "Пудрові або волоскові брови з урахуванням форми обличчя.",
-          en: "Powder or hair-stroke brows shaped to your face.",
-          fr: "Sourcils poudrés ou poil à poil adaptés à votre visage.",
-          ru: "Пудровые или волосковые брови с учётом формы лица.",
-        },
-        duration: null,
-        priceFrom: null,
-      },
-      {
-        slug: "lips",
-        title: { uk: "Губи", en: "Lips", fr: "Lèvres", ru: "Губы" },
-        image: null,
-        // TODO: уточнити в Ельнари — опис, тривалість, ціна
-        description: {
-          uk: "Акварельні губи: колір, чіткий контур і ефект об'єму.",
-          en: "Watercolour lips: colour, a defined contour and a fuller look.",
-          fr: "Lèvres aquarelle : couleur, contour net et effet volume.",
-          ru: "Акварельные губы: цвет, чёткий контур и эффект объёма.",
-        },
-        duration: null,
-        priceFrom: null,
-      },
-      {
-        slug: "eyeliner",
-        title: { uk: "Міжвійка / стрілка", en: "Lash line / eyeliner", fr: "Ras de cils / eye-liner", ru: "Межресничка / стрелка" },
-        image: null,
-        // TODO: уточнити в Ельнари — опис, тривалість, ціна
-        description: {
-          uk: "Міжвійковий простір або стрілка для виразного погляду.",
-          en: "Lash-line enhancement or eyeliner for a more defined look.",
-          fr: "Ras de cils ou eye-liner pour un regard plus intense.",
-          ru: "Межресничное пространство или стрелка для выразительного взгляда.",
-        },
-        duration: null,
-        priceFrom: null,
-      },
-      // Removal services are apparatus services (step 5), kept separate on purpose.
+      ...permanentServices,
+      // Removal services are device treatments (step 5), kept separate on purpose.
       findApparatus("laser-makeup-removal"),
       findApparatus("tattoo-pmu-removal"),
     ],
@@ -85,7 +49,12 @@ export const directions = [
       fr: "Un maquillage professionnel pour chaque occasion — du quotidien au mariage.",
       ru: "Профессиональный макияж для любого события — от повседневного образа до свадьбы.",
     },
-    // Makeup types are defined once in ./salonServices.js (step 6).
+    cardList: {
+      uk: ["Денний і вечірній", "Весільний і пробний", "Для фотосесії", "Для випускного", "Урок самомакіяжу"],
+      en: ["Day & evening", "Bridal & trial", "Photoshoot", "Graduation", "Self-makeup lesson"],
+      fr: ["Jour & soirée", "Mariée & essai", "Shooting photo", "Remise de diplôme", "Cours d’auto-maquillage"],
+      ru: ["Дневной и вечерний", "Свадебный и пробный", "Для фотосессии", "На выпускной", "Урок макияжа для себя"],
+    },
     subdirections: makeupTypes,
   },
   {
@@ -98,50 +67,7 @@ export const directions = [
       fr: "Épilation, teinture et architecture des sourcils — la forme idéale pour vous.",
       ru: "Коррекция, окрашивание и архитектура бровей — идеальная форма именно для вас.",
     },
-    subdirections: [
-      {
-        slug: "correction",
-        title: { uk: "Корекція", en: "Shaping", fr: "Épilation", ru: "Коррекция" },
-        image: null,
-        description: {
-          uk: "Корекція форми брів пінцетом або воском.",
-          en: "Brow shaping with tweezers or wax.",
-          fr: "Mise en forme des sourcils à la pince ou à la cire.",
-          ru: "Коррекция формы бровей пинцетом или воском.",
-        },
-        duration: 20,
-        priceFrom: 25,
-        bookingId: "brow-shaping-coloring",
-      },
-      {
-        slug: "tinting",
-        title: { uk: "Фарбування", en: "Tinting", fr: "Teinture", ru: "Окрашивание" },
-        image: null,
-        description: {
-          uk: "Фарбування брів фарбою або хною.",
-          en: "Brow tinting with dye or henna.",
-          fr: "Teinture des sourcils à la coloration ou au henné.",
-          ru: "Окрашивание бровей краской или хной.",
-        },
-        duration: 15,
-        priceFrom: 20,
-        bookingId: "brow-shaping-coloring",
-      },
-      {
-        slug: "architecture",
-        title: { uk: "Архітектура брів", en: "Brow architecture", fr: "Architecture des sourcils", ru: "Архитектура бровей" },
-        image: null,
-        // TODO: уточнити в Ельнари — опис, тривалість, ціна
-        description: {
-          uk: "Моделювання форми брів за пропорціями обличчя з корекцією та фарбуванням.",
-          en: "Brow design based on your facial proportions, with shaping and tinting.",
-          fr: "Création de la forme selon les proportions du visage, avec épilation et teinture.",
-          ru: "Моделирование формы бровей по пропорциям лица с коррекцией и окрашиванием.",
-        },
-        duration: null,
-        priceFrom: null,
-      },
-    ],
+    subdirections: pick(["brow-shaping", "brow-architecture", "brow-tint", "brow-shaping-coloring"]),
   },
   {
     slug: "lamination",
@@ -153,34 +79,13 @@ export const directions = [
       fr: "Rehaussement des sourcils et des cils — un regard soigné sans maquillage quotidien.",
       ru: "Ламинирование бровей и ресниц — ухоженный вид без ежедневного макияжа.",
     },
-    subdirections: [
-      {
-        slug: "brows",
-        title: { uk: "Брови", en: "Brows", fr: "Sourcils", ru: "Брови" },
-        image: null,
-        description: {
-          uk: "Ламінування фіксує форму брів і робить їх візуально густішими.",
-          en: "Lamination sets the brow shape and makes brows look fuller.",
-          fr: "Le rehaussement fixe la forme et donne des sourcils plus fournis.",
-          ru: "Ламинирование фиксирует форму бровей и делает их визуально гуще.",
-        },
-        duration: 60,
-        priceFrom: 60,
-      },
-      {
-        slug: "lashes",
-        title: { uk: "Вії", en: "Lashes", fr: "Cils", ru: "Ресницы" },
-        image: null,
-        description: {
-          uk: "Підкручені, доглянуті вії на кілька тижнів.",
-          en: "Curled, nourished lashes for several weeks.",
-          fr: "Des cils recourbés et nourris pendant plusieurs semaines.",
-          ru: "Подкрученные ухоженные ресницы на несколько недель.",
-        },
-        duration: 60,
-        priceFrom: 55,
-      },
-    ],
+    cardList: {
+      uk: ["Ламінування брів", "Ламінування вій", "Ламінування + ботокс", "Комплекси брів і вій", "Фарбування вій"],
+      en: ["Brow lift", "Lash lift", "Lash lift + Botox care", "Brow & lash packages", "Lash tinting"],
+      fr: ["Brow Lift", "Lash Lift", "Rehaussement + soin Botox", "Forfaits sourcils & cils", "Teinture des cils"],
+      ru: ["Ламинирование бровей", "Ламинирование ресниц", "Ламинирование + ботокс", "Комплексы бровей и ресниц", "Окрашивание ресниц"],
+    },
+    subdirections: pick(["brow-lift", "lash-lift", "lash-lift-tint-botox", "brow-lash-lift", "brow-lash-full", "lash-tint"]),
   },
   {
     slug: "massage",
@@ -192,10 +97,9 @@ export const directions = [
       fr: "Massages manuels et soins du corps par appareil — récupération, légèreté et tonus.",
       ru: "Ручные массажи и аппаратные процедуры для тела — восстановление, лёгкость и тонус.",
     },
-    // Massage procedures (./salonServices.js, step 6) + apparatus (./apparatus.js, step 5).
+    // Massage procedures (./salonServices.js) + apparatus (./apparatus.js, step 5).
     subdirections: [
       ...massageProcedures,
-      // Apparatus (step 5), shared with the equipment page.
       findApparatus("vacuum-massage"),
       findApparatus("pressotherapy"),
     ],
@@ -219,6 +123,6 @@ export const directions = [
 
 export const findDirection = (slug) => directions.find((d) => d.slug === slug) ?? null;
 
-/** Booking link for a sub-direction: pre-selects the service when it exists in the booking system. */
+/** Booking link for a service: pre-selects it when it exists in the booking system. */
 export const bookingLink = (sub) =>
   sub.bookingId ? `/booking?service=${encodeURIComponent(sub.bookingId)}` : "/booking";

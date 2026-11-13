@@ -5,7 +5,8 @@ import ServiceCard from "../components/ServiceCard/ServiceCard";
 import SectionTitle from "../components/SectionTitle/SectionTitle";
 import HoursNotice from "../components/HoursNotice/HoursNotice";
 import { bookingLink, findDirection } from "../data/directions";
-import { formatDuration, localize } from "../utils/format";
+import { localize } from "../utils/format";
+import { toCardProps } from "../utils/pricing";
 import { useLanguage } from "../i18n/LanguageContext";
 import "../sections/Directions/Directions.css";
 
@@ -50,12 +51,9 @@ export default function DirectionPage() {
           {direction.subdirections.map((sub) => (
             <ServiceCard
               key={sub.slug}
-              title={localize(sub.title, language)}
+              {...toCardProps(sub, language, t)}
               image={sub.image}
               imageAlt=""
-              description={localize(sub.description, language)}
-              duration={formatDuration(sub.duration, language)}
-              priceFrom={sub.priceFrom}
               to={sub.to || bookingLink(sub)}
               actionLabel={sub.to ? t("ui.more") : t("ui.book")}
               headingLevel={2}

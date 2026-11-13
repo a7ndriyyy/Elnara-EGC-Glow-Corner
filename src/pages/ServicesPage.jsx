@@ -20,10 +20,12 @@ import "./ServicesPage.css";
 import ServiceCard from "../components/ServiceCard/ServiceCard";
 import SectionTitle from "../components/SectionTitle/SectionTitle";
 import HoursNotice from "../components/HoursNotice/HoursNotice";
-import { makeupTypes, massageProcedures } from "../data/salonServices";
+import { beautyPackages, browAndLashServices, makeupTypes, massageProcedures, permanentServices } from "../data/salonServices";
+import { priceCategories } from "../data/priceList";
 import { apparatus } from "../data/apparatus";
-import { bookingLink, findDirection } from "../data/directions";
-import { formatDuration, localize } from "../utils/format";
+import { bookingLink } from "../data/directions";
+import { localize } from "../utils/format";
+import { toCardProps } from "../utils/pricing";
 import { useLanguage } from "../i18n/LanguageContext";
 
 // Імпорт зображень (замініть на свої)
@@ -68,9 +70,13 @@ export default function ServicesPage() {
   const formRef = useRef(null);
 
   // Service groups — shared with the "Макіяж" / "Масаж" / "Бровист" directions.
+  // Group titles for price-list groups come from Elnara's price list categories.
+  const categoryTitle = (id) => localize(priceCategories.find((c) => c.id === id)?.title, language);
   const groups = [
-    { id: "makeup", items: makeupTypes, title: t("salon.makeupTitle"), subtitle: t("salon.makeupSubtitle"), filter: t("salon.filterMakeup") },
-    { id: "brows", items: findDirection("brows")?.subdirections ?? [], title: t("salon.browsTitle"), subtitle: t("salon.browsSubtitle"), filter: t("salon.filterBrows") },
+    { id: "permanent", items: permanentServices, title: categoryTitle("permanent"), filter: t("salon.filterPermanent") },
+    { id: "makeup", items: makeupTypes, title: categoryTitle("makeup"), subtitle: t("salon.makeupSubtitle"), filter: t("salon.filterMakeup") },
+    { id: "brows", items: browAndLashServices, title: t("salon.browsLashesTitle"), subtitle: t("salon.browsSubtitle"), filter: t("salon.filterBrowsLashes") },
+    { id: "packages", items: beautyPackages, title: categoryTitle("packages"), filter: t("salon.filterPackages") },
     { id: "massage", items: massageProcedures, title: t("salon.massageTitle"), subtitle: t("salon.massageSubtitle"), filter: t("salon.filterMassage") },
     // Device treatments (formerly the separate "Massages & treatments" page).
     { id: "apparatus", items: apparatus, title: t("equipmentPage.servicesTitle"), subtitle: t("equipmentPage.servicesSubtitle"), filter: t("salon.filterApparatus") },
@@ -81,12 +87,9 @@ export default function ServicesPage() {
   const renderCard = (service, extra = {}) => (
     <ServiceCard
       key={service.slug}
-      title={localize(service.title, language)}
+      {...toCardProps(service, language, t)}
       image={service.image}
       imageAlt=""
-      description={localize(service.description, language)}
-      duration={formatDuration(service.duration, language)}
-      priceFrom={service.priceFrom}
       onAction={() => goToBooking(service)}
       {...extra}
     />

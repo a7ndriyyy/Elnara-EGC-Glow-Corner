@@ -39,7 +39,11 @@ export default function Directions() {
                 image={direction.image}
                 imageAlt=""
                 description={localize(direction.intro, language)}
-                subdirections={direction.subdirections.map((sub) => localize(sub.title, language))}
+                subdirections={
+                  direction.cardList
+                    ? localize(direction.cardList, language)
+                    : direction.subdirections.map((sub) => localize(sub.name ?? sub.title, language))
+                }
                 to={direction.to ?? `/directions/${direction.slug}`}
                 actionLabel={t("ui.more")}
               />

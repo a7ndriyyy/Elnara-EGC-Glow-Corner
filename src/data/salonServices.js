@@ -1,18 +1,16 @@
-// Beauty-salon services (TZ step 6): makeup types and massage procedures.
-// Shown on the salon services page (/services) and reused by the "Макіяж" and
-// "Масаж" directions in src/data/directions.js — defined once, here.
-//
-// Shape matches a sub-direction: { slug, title, image, description,
-// duration (minutes), priceFrom (€), bookingId?, popular? }. Text: { uk, en, fr, ru }.
-// Prices/durations come from the existing price list; `null` = unknown (hidden).
+// Beauty-salon services shown on /services and in the directions.
+// Names, prices and durations come from Elnara's price list (./priceList.js);
+// this file only adds photos and short descriptions.
+import { priceItem, priceItems } from "./priceList";
 
 const img = (path) => `${import.meta.env.BASE_URL}Images/${path}`;
 
-// TODO: уточнити в Ельнари — підтвердити список типів макіяжу.
-export const makeupTypes = [
-  {
-    slug: "day",
-    title: { uk: "Денний", en: "Day makeup", fr: "Maquillage de jour", ru: "Дневной" },
+/** Price-list item + extra card fields (image, description, popular…). */
+const withExtras = (id, extras = {}) => ({ ...priceItem(id), slug: id, bookingId: id, ...extras });
+
+// Photos/descriptions for makeup items that have them; the rest show the gold initial.
+const makeupExtras = {
+  "day-makeup": {
     image: img("ImagesServices/makeup-day.webp"),
     description: {
       uk: "Свіжий натуральний образ для роботи, зустрічей і щоденного життя.",
@@ -20,71 +18,59 @@ export const makeupTypes = [
       fr: "Un look frais et naturel pour le travail, les rendez-vous et le quotidien.",
       ru: "Свежий натуральный образ для работы, встреч и повседневной жизни.",
     },
-    duration: 60,
-    priceFrom: 120,
-    bookingId: "day-makeup",
   },
-  {
-    slug: "evening",
-    title: { uk: "Вечірній", en: "Evening makeup", fr: "Maquillage de soirée", ru: "Вечерний" },
+  "evening-makeup": {
     image: img("ImagesServices/makeup-evening.webp"),
+    popular: true,
     description: {
       uk: "Виразний стійкий макіяж для вечірок і свят.",
       en: "Expressive long-lasting makeup for parties and celebrations.",
       fr: "Un maquillage intense et tenace pour les soirées et les fêtes.",
       ru: "Выразительный стойкий макияж для вечеринок и праздников.",
     },
-    duration: 90,
-    priceFrom: 180,
-    bookingId: "evening-makeup",
-    popular: true,
   },
-  {
-    slug: "bridal",
-    title: { uk: "Весільний", en: "Bridal makeup", fr: "Maquillage de mariée", ru: "Свадебный" },
-    image: img("ImagesServices/makeup-brida.webp"),
-    description: {
-      uk: "Ніжний образ, що тримається весь день. Пробний макіяж включено.",
-      en: "A soft look that lasts all day. Trial makeup included.",
-      fr: "Un look tout en douceur qui tient toute la journée. Essai inclus.",
-      ru: "Нежный образ, который держится весь день. Пробный макияж включён.",
-    },
-    duration: 120,
-    priceFrom: 250,
-    bookingId: "bridal-makeup",
-    popular: true,
-  },
-  {
-    slug: "smokey",
-    title: { uk: "Smokey Eyes", en: "Smokey Eyes", fr: "Smokey Eyes", ru: "Smokey Eyes" },
-    image: img("ImagesServices/makeup-smokey.webp"),
-    description: {
-      uk: "Класичний і сучасний смокі айс у будь-якій кольоровій гамі.",
-      en: "Classic and modern smokey eyes in any color palette.",
-      fr: "Un smoky eyes classique ou moderne dans toutes les palettes de couleurs.",
-      ru: "Классический и современный smoky eyes в любой цветовой гамме.",
-    },
-    duration: 90,
-    priceFrom: 160,
-    bookingId: "smokey-eyes",
-  },
-  {
-    slug: "photoshoot",
-    title: { uk: "Для фотосесії", en: "Photoshoot makeup", fr: "Maquillage photo", ru: "Для фотосессии" },
+  "photoshoot-makeup": {
     image: img("ImagesServices/makeup-editorial.webp"),
-    // TODO: уточнити в Ельнари — тривалість і ціна
     description: {
       uk: "Макіяж, який гарно виглядає в кадрі та під студійним світлом.",
       en: "Makeup that looks great on camera and under studio lights.",
       fr: "Un maquillage qui rend parfaitement en photo et sous les projecteurs.",
       ru: "Макияж, который отлично смотрится в кадре и под студийным светом.",
     },
-    duration: null,
-    priceFrom: null,
   },
-];
+  "graduation-makeup": { image: img("ImagesServices/makeup-natural.webp") },
+  "bridal-makeup": {
+    image: img("ImagesServices/makeup-brida.webp"),
+    popular: true,
+    description: {
+      uk: "Ніжний образ, що тримається весь день.",
+      en: "A soft look that lasts all day.",
+      fr: "Un look tout en douceur qui tient toute la journée.",
+      ru: "Нежный образ, который держится весь день.",
+    },
+  },
+  "bridal-trial": { image: img("ImagesServices/makeup-smokey.webp") },
+  "self-makeup-lesson": { image: img("ImagesServices/makeup-tools.webp") },
+  "lifting-makeup": { image: img("ImagesServices/makeup-products.webp") },
+};
 
-// TODO: уточнити в Ельнари — підтвердити список масажних процедур і фото.
+/** Professional makeup — every item of the "makeup" price-list category. */
+export const makeupTypes = priceItems("makeup").map((item) =>
+  withExtras(item.id, { ...(makeupExtras[item.id] || {}), bookingId: item.bookable === false ? undefined : item.id }),
+);
+
+/** Brows & lashes (price-list categories "brows" + "lashes"). */
+export const browAndLashServices = priceItems("brows", "lashes").map((item) => withExtras(item.id));
+
+/** Beauty packages (price-list category "packages"). */
+export const beautyPackages = priceItems("packages").map((item) => withExtras(item.id));
+
+/** Permanent makeup + touch-ups (price-list categories "permanent" + "retouch"). */
+export const permanentServices = priceItems("permanent", "retouch").map((item) => withExtras(item.id));
+
+// Massage procedures are NOT in Elnara's price list (12.11.2026): no price or
+// duration is shown until she confirms them.
+// TODO: уточнити в Ельнари — чи робить масажі, ціни та тривалість.
 export const massageProcedures = [
   {
     slug: "classic-back",
@@ -96,8 +82,8 @@ export const massageProcedures = [
       fr: "Soulage les tensions et la fatigue du dos.",
       ru: "Снимает напряжение и усталость мышц спины.",
     },
-    duration: 45,
-    priceFrom: 70,
+    duration: null,
+    priceFrom: null,
   },
   {
     slug: "full-body",
@@ -109,8 +95,8 @@ export const massageProcedures = [
       fr: "Détente profonde et récupération de tout le corps.",
       ru: "Глубокое расслабление и восстановление всего тела.",
     },
-    duration: 90,
-    priceFrom: 120,
+    duration: null,
+    priceFrom: null,
   },
   {
     slug: "anti-cellulite",
@@ -122,8 +108,8 @@ export const massageProcedures = [
       fr: "Améliore la tonicité de la peau et atténue la cellulite.",
       ru: "Улучшает тонус кожи и уменьшает проявления целлюлита.",
     },
-    duration: 60,
-    priceFrom: 90,
+    duration: null,
+    priceFrom: null,
   },
   {
     slug: "lymphatic",
@@ -135,8 +121,8 @@ export const massageProcedures = [
       fr: "Réduit les gonflements et procure une sensation de légèreté.",
       ru: "Уменьшает отёки и дарит ощущение лёгкости.",
     },
-    duration: 60,
-    priceFrom: 100,
+    duration: null,
+    priceFrom: null,
   },
   {
     slug: "face-neck",
@@ -148,7 +134,7 @@ export const massageProcedures = [
       fr: "Détend les muscles du visage et ravive le teint.",
       ru: "Расслабляет мышцы лица, улучшает тонус и цвет кожи.",
     },
-    duration: 40,
-    priceFrom: 60,
+    duration: null,
+    priceFrom: null,
   },
 ];

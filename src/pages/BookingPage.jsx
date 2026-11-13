@@ -11,11 +11,15 @@ import { fill } from "../utils/format";
 import HoursNotice from "../components/HoursNotice/HoursNotice";
 import "./BookingPage.css";
 
+// Keys are the `category` values stored in the Supabase `services` table
+// (see docs/sql/price-list-2026-11.sql); the order is the order in the select.
 const categoryLabels = {
+  "Перманентний макіяж": "booking.categoryPermanent",
   Макіяж: "booking.categoryMakeup",
   Обличчя: "booking.categoryFace",
   "Тіло та масаж": "booking.categoryBody",
   "Брови та вії": "booking.categoryBrows",
+  Комплекси: "booking.categoryPackages",
 };
 
 const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;

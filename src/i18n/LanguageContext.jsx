@@ -10,6 +10,7 @@ import { trainingMessages } from "./training";
 import { promotionsMessages } from "./promotions";
 import { showcaseMessages } from "./showcase";
 import { adminMessages } from "./admin";
+import { priceListMessages } from "./priceList";
 
 const LANGUAGE_STORAGE_KEY = "elnara-language";
 const SUPPORTED_LANGUAGES = ["en", "fr", "uk", "ru"];
@@ -126,6 +127,9 @@ for (const lang of Object.keys(messages)) {
   messages[lang].training = trainingMessages[lang];
   messages[lang].showcase = showcaseMessages[lang];
   messages[lang].admin = adminMessages[lang];
+  const { booking: bookingExtra, ...priceList } = priceListMessages[lang];
+  messages[lang].priceList = priceList;
+  messages[lang].booking = { ...messages[lang].booking, ...bookingExtra };
   const { nav: promoNav, ...promotions } = promotionsMessages[lang];
   messages[lang].promotions = promotions;
   const { nav: extraNav, ...sections } = sectionMessages[lang];
