@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FiMapPin } from "react-icons/fi";
 import Counter from "../../components/Counter/Counter";
 import { heroConfig } from "../../data/heroConfig";
 import { useLanguage } from "../../i18n/LanguageContext";
@@ -9,12 +8,12 @@ import "./MasterHero.css";
 /**
  * First screen of the home page (TZ step 2): on the left her title, signature
  * name, a short intro, three animated counters and the two main actions; on
- * the right Elnara's photo in a gold circle with floating shapes, a
- * "WULOP France 2026" card and a location chip.
+ * the right a large cut-out photo of Elnara with her brushes on a soft gold
+ * glow, with a few floating shapes.
  */
 export default function MasterHero() {
   const { t } = useLanguage();
-  const { photo, photoPosition, eventPhoto, counters, countDuration, servicesSectionId } = heroConfig;
+  const { photo, counters, countDuration, servicesSectionId } = heroConfig;
   const name = t("hero.name");
 
   const scrollToServices = () => {
@@ -64,41 +63,25 @@ export default function MasterHero() {
           </div>
         </div>
         <div className="mhero__media">
-          <span className="mhero__disc" aria-hidden="true" />
+          <span className="mhero__glow" aria-hidden="true" />
           <span className="mhero__shape mhero__shape--dot" aria-hidden="true" />
           <span className="mhero__shape mhero__shape--dot-sm" aria-hidden="true" />
           <span className="mhero__shape mhero__shape--tri" aria-hidden="true" />
-          <div className="mhero__frame">
-            {photo ? (
-              <img
-                className="mhero__photo"
-                src={photo}
-                alt={t("hero.photoAlt")}
-                style={photoPosition ? { objectPosition: photoPosition } : undefined}
-                width="853"
-                height="1280"
-                fetchPriority="high"
-              />
-            ) : (
-              // TODO: уточнити в Ельнари — фото (src/data/heroConfig.js → photo)
-              <div className="mhero__placeholder" aria-hidden="true">
-                <span className="mhero__monogram">{name.charAt(0)}</span>
-              </div>
-            )}
-          </div>
-
-          {eventPhoto && (
-            <div className="mhero__card mhero__card--event">
-              <img src={eventPhoto} alt="" width="44" height="44" />
-              <span>
-                <strong>{t("hero.eventTitle")}</strong>
-                <small>{t("hero.eventText")}</small>
-              </span>
+          {photo ? (
+            <img
+              className="mhero__photo"
+              src={photo}
+              alt={t("hero.photoAlt")}
+              width="655"
+              height="1094"
+              fetchPriority="high"
+            />
+          ) : (
+            // TODO: уточнити в Ельнари — фото (src/data/heroConfig.js → photo)
+            <div className="mhero__placeholder" aria-hidden="true">
+              <span className="mhero__monogram">{name.charAt(0)}</span>
             </div>
           )}
-          <div className="mhero__card mhero__card--place">
-            <FiMapPin aria-hidden="true" /> {t("hero.place")}
-          </div>
         </div>
       </div>
     </section>
