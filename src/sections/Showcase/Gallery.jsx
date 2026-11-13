@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { FiChevronLeft, FiChevronRight, FiX } from "react-icons/fi";
+import { FiChevronLeft, FiChevronRight, FiPlay, FiX } from "react-icons/fi";
 import { galleryCategories, galleryItems } from "../../data/gallery";
 import { useLanguage } from "../../i18n/LanguageContext";
 import { fill, localize } from "../../utils/format";
@@ -98,7 +98,15 @@ export default function Gallery() {
               aria-label={fill(t("showcase.open"), { alt: altOf(item) })}
               onClick={(event) => open(index, event)}
             >
-              <img src={item.after || item.src} alt="" loading="lazy" decoding="async" />
+              {item.video ? (
+                <>
+                  {/* #t=0.1 makes the browser paint the first frame as a poster */}
+                  <video src={`${item.video}#t=0.1`} muted playsInline preload="metadata" aria-hidden="true" tabIndex={-1} />
+                  <span className="gallery__play" aria-hidden="true"><FiPlay /></span>
+                </>
+              ) : (
+                <img src={item.after || item.src} alt="" loading="lazy" decoding="async" />
+              )}
               {item.before && (
                 <span className="gallery__tag">{t("showcase.before")} / {t("showcase.after")}</span>
               )}
@@ -140,6 +148,18 @@ export default function Gallery() {
                   <span className="lightbox__label">{t("showcase.after")}</span>
                 </div>
               </div>
+            ) : current.video ? (
+              <video
+                key={current.id}
+                className="lightbox__video"
+                src={current.video}
+                controls
+                autoPlay
+                loop
+                muted
+                playsInline
+                aria-label={altOf(current)}
+              />
             ) : (
               <img src={current.src} alt={altOf(current)} />
             )}

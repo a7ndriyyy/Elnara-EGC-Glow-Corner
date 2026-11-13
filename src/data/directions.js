@@ -29,7 +29,7 @@ export const directions = [
   {
     slug: "permanent",
     title: { uk: "Перманент", en: "Permanent makeup", fr: "Maquillage permanent", ru: "Перманент" },
-    image: null, // TODO: уточнити в Ельнари — фото
+    image: img("Works/brows-powder-2.webp"),
     intro: {
       uk: "Перманентний макіяж брів, губ і очей — природний результат, який тримається роками.",
       en: "Permanent makeup for brows, lips and eyes — a natural result that lasts for years.",
@@ -70,7 +70,7 @@ export const directions = [
   {
     slug: "brows",
     title: { uk: "Бровист", en: "Brow artistry", fr: "Sourcils", ru: "Бровист" },
-    image: null, // TODO: уточнити в Ельнари — фото
+    image: img("Works/brows-portrait.webp"),
     intro: {
       uk: "Корекція, фарбування та архітектура брів — ідеальна форма саме для вас.",
       en: "Shaping, tinting and brow architecture — the right shape for your face.",

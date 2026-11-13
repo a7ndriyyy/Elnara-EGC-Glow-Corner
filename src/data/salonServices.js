@@ -40,7 +40,7 @@ const makeupExtras = {
   },
   "graduation-makeup": { image: img("ImagesServices/makeup-natural.webp") },
   "bridal-makeup": {
-    image: img("ImagesServices/makeup-brida.webp"),
+    image: img("Works/makeup-bridal.webp"),
     popular: true,
     description: {
       uk: "Ніжний образ, що тримається весь день.",
@@ -77,7 +77,16 @@ export const pmuRemoverServices = priceItems("pmu-remover").map((item) => withEx
 export const carbonPeelServices = priceItems("carbon-peel").map((item) => withExtras(item.id));
 
 /** Permanent makeup + touch-ups (price-list categories "permanent" + "retouch"). */
-export const permanentServices = priceItems("permanent", "retouch").map((item) => withExtras(item.id));
+// Elnara's own work photos (13.11.2026) on the matching permanent-makeup cards.
+const permanentImages = {
+  "powder-brows": img("Works/brows-powder-1.webp"),
+  "lip-blush": img("Works/lips-watercolor.webp"),
+  "lipstick-lips": img("Works/lips-lipstick-brows.webp"),
+  "eyeliner-ombre": img("Works/eyeliner-shaded.webp"),
+};
+export const permanentServices = priceItems("permanent", "retouch").map((item) =>
+  withExtras(item.id, permanentImages[item.id] ? { image: permanentImages[item.id] } : {}),
+);
 
 // Massage procedures are NOT in Elnara's price list (12.11.2026): no price or
 // duration is shown until she confirms them.
