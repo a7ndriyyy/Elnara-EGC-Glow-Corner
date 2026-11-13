@@ -1,0 +1,149 @@
+/* Working hours & surcharges — TZ step 7.1 */
+.hours-notice {
+  display: flex;
+  gap: 18px;
+  width: min(760px, calc(100% - 32px));
+  margin: 40px auto;
+  padding: 22px 24px;
+  border: 0.5px solid var(--gold);
+  border-radius: var(--radius-btn);
+  background:
+    radial-gradient(80% 120% at 0% 0%, rgba(var(--gold-rgb), .08), transparent 60%),
+    var(--bg-2);
+  color: var(--text);
+  text-align: left;
+}
+
+.hours-notice__icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 0.5px solid var(--gold);
+  border-radius: 50%;
+  color: var(--gold);
+  font-size: 18px;
+}
+
+.hours-notice__body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* compact: smaller than a section heading */
+.hours-notice__title {
+  margin: 0;
+  font-family: var(--font-title);
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  color: var(--gold-light);
+}
+
+.hours-notice__hours {
+  margin: 0;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text);
+}
+
+.hours-notice__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.hours-notice__list li {
+  position: relative;
+  padding-left: 16px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-2);
+}
+
+.hours-notice__list li::before {
+  content: "";
+  position: absolute;
+  left: 1px;
+  top: .6em;
+  width: 5px;
+  height: 5px;
+  background: var(--gold);
+  transform: rotate(45deg);
+}
+
+.hours-notice__note {
+  margin: 4px 0 0;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--gold);
+}
+
+/* inside the booking card: full width, tighter spacing */
+.hours-notice--in-card {
+  width: 100%;
+  margin: 18px 0;
+}
+
+/* live hints in the booking form (TZ 7.2) */
+.booking-rate-hints {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 14px 16px;
+  display: grid;
+  gap: 8px;
+  border: 0.5px solid var(--gold);
+  border-left-width: 3px;
+  border-radius: var(--radius-btn);
+  background: rgba(var(--gold-rgb), .08);
+}
+
+.booking-rate-hints li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.booking-rate-hints svg {
+  flex: 0 0 auto;
+  margin-top: 3px;
+  color: var(--gold);
+}
+
+/* scoped under .booking-card so it outranks the card's generic label/input rules */
+.booking-card .booking-home-visit {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0 4px;
+  cursor: pointer;
+  font-size: 15px;
+  color: var(--text);
+}
+
+.booking-card .booking-home-visit input {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  accent-color: var(--gold);
+  cursor: pointer;
+}
+
+@media (max-width: 520px) {
+  .hours-notice {
+    flex-direction: column;
+    gap: 12px;
+    padding: 18px;
+  }
+}

@@ -1,0 +1,218 @@
+/* "Training — in development" — TZ step 8.
+   Black & white by request: the gold tokens are swapped for greys on this page
+   only, so every rule below renders monochrome. */
+.training-locked {
+  --gold: #bdbdbd;
+  --gold-light: #f2f2f2;
+  --gold-dark: #6e6e6e;
+  --gold-rgb: 200, 200, 200;
+  --gold-grad: linear-gradient(135deg, #7a7a7a, #f5f5f5 50%, #bdbdbd);
+  --bg: #0b0b0b;
+  --bg-2: #161616;
+  --bg-3: #222222;
+  --text: #ededed;
+  --text-2: #a9a9a9;
+  --line: rgba(220, 220, 220, 0.3);
+  --line-soft: rgba(220, 220, 220, 0.15);
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  min-height: calc(100svh - 100px);
+  padding: clamp(48px, 8vw, 96px) 0;
+  background:
+    radial-gradient(45% 40% at 50% 28%, rgba(255, 255, 255, .08), transparent 70%),
+    var(--bg);
+}
+
+/* keep text crisp where it crosses the chains */
+.training-locked__eyebrow,
+.training-locked__title,
+.training-locked__text {
+  text-shadow: 0 0 14px #000, 0 0 4px #000;
+}
+
+/* ---- crossed chains ---- */
+.training-locked__chains {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.training-locked__chain {
+  position: absolute;
+  left: var(--chain-x, 50%);
+  top: var(--chain-y, 30%);
+  width: var(--chain-length, 300vmax);
+  height: 34px;
+  /* one oval link facing us + one link seen edge-on, repeated along the line */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='68' height='34' viewBox='0 0 68 34'%3E%3Cdefs%3E%3ClinearGradient id='m' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23f4f4f4'/%3E%3Cstop offset='.45' stop-color='%23a8a8a8'/%3E%3Cstop offset='1' stop-color='%23555'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='42' y='13.5' width='30' height='7' rx='3.5' fill='url(%23m)'/%3E%3Crect x='-4' y='13.5' width='30' height='7' rx='3.5' fill='url(%23m)'/%3E%3Cellipse cx='34' cy='17' rx='15' ry='10' fill='none' stroke='url(%23m)' stroke-width='5'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: 68px 34px;
+  background-position: center;
+  opacity: .55;
+  transform-origin: 0 50%;
+}
+
+/* start at the lock, centre the chain on it, then tilt to the page diagonals */
+.training-locked__chain--a { transform: translate(-50%, -50%) rotate(var(--chain-angle, 30deg)); transform-origin: center; }
+.training-locked__chain--b { transform: translate(-50%, -50%) rotate(calc(-1 * var(--chain-angle, 30deg))); transform-origin: center; }
+
+.training-locked__inner {
+  position: relative;
+  z-index: 1;
+  width: min(620px, calc(100% - 32px));
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.training-locked__lock {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(110px, 18vw, 150px);
+  aspect-ratio: 1;
+  margin-bottom: 10px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  font-size: clamp(46px, 7vw, 62px);
+  color: var(--gold-light);
+  /* solid, so the chains look like they pass behind the padlock */
+  background: radial-gradient(circle, #3a3a3a, #121212 72%);
+  box-shadow: 0 0 0 6px var(--bg), 0 0 60px rgba(255, 255, 255, .18);
+}
+
+/* second thin ring */
+.training-locked__lock::after {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  border: 0.5px solid var(--line);
+  border-radius: 50%;
+}
+
+.training-locked__eyebrow {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.training-locked__title {
+  margin: 0;
+  font-family: var(--font-title);
+  font-weight: 300;
+  font-size: clamp(30px, 5vw, 52px);
+  line-height: 1.1;
+  letter-spacing: 3px;
+}
+
+.training-locked__divider {
+  position: relative;
+  display: block;
+  width: 160px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold) 30%, var(--gold) 70%, transparent);
+}
+
+.training-locked__divider span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  background: var(--bg);
+  border: 1px solid var(--gold);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.training-locked__text {
+  margin: 0;
+  max-width: 46ch;
+  color: var(--text-2);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.training-locked__form {
+  width: 100%;
+  margin-top: 12px;
+  padding: 24px;
+  display: grid;
+  gap: 14px;
+  text-align: left;
+  border: 0.5px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--bg-2);
+}
+
+.training-locked__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.training-locked__form label {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-2);
+}
+
+.training-locked__form input {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 14px;
+  border: 0.5px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+}
+
+.training-locked__form input:focus-visible {
+  outline: 1px solid var(--gold);
+  outline-offset: 1px;
+  border-color: var(--gold);
+}
+
+.training-locked__hint {
+  margin: -4px 0 0;
+  font-size: 13px;
+  color: var(--text-2);
+}
+
+.training-locked__form .btn {
+  width: 100%;
+}
+
+.training-locked__status {
+  margin: 0;
+  font-size: 14px;
+}
+
+.training-locked__status--error { color: #e8a39a; }
+
+.training-locked__status--ok {
+  margin-top: 12px;
+  padding: 16px 20px;
+  border: 0.5px solid var(--gold);
+  border-radius: var(--radius-btn);
+  color: var(--gold-light);
+  background: rgba(var(--gold-rgb), .08);
+}
+
+@media (max-width: 520px) {
+  .training-locked__row { grid-template-columns: 1fr; }
+  .training-locked__form { padding: 18px; }
+}

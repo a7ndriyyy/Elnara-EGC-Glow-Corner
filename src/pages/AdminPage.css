@@ -1,4 +1,33 @@
 
+/* The admin area keeps its original light palette. The public site's dark
+   theme (src/styles/theme.css) aliases these legacy variables to light-on-dark
+   colors, so they are restored here, scoped to the admin pages only. */
+.admin-page,
+.admin-login {
+  --bg-dark: #1f1e1c;
+  --bg-cream: #f4f1eb;
+  --text-dark: #1b1a18;
+  --text-light: #f7f4ef;
+  --muted: rgba(255, 255, 255, 0.65);
+  --muted-dark: rgba(0, 0, 0, 0.55);
+  --card: #ffffff;
+  --radius: 18px;
+  color-scheme: light;
+  background: var(--bg-cream);
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.admin-page h1,
+.admin-page h2,
+.admin-page h3,
+.admin-page h4,
+.admin-login h1 {
+  color: var(--text-dark);
+  font-family: inherit;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
 .admin-page,
 .admin-login {
   width: 100%;

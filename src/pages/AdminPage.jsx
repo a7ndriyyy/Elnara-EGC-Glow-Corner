@@ -1,9 +1,12 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiCalendar, FiSettings } from 'react-icons/fi';
+import { FiCalendar, FiSettings, FiTag } from 'react-icons/fi';
 import { supabase } from '../lib/supabase';
 import './AdminPage.css';
+import AdminPromotions from './AdminPromotions';
+import { useLanguage } from '../i18n/LanguageContext';
+import { fill } from '../utils/format';
 
 const PARIS = 'Europe/Paris';
 
@@ -34,15 +37,15 @@ function startOfWeek(key) {
   return addDays(key, -(day === 0 ? 6 : day - 1));
 }
 
-function formatDay(key, options = {}) {
-  return new Intl.DateTimeFormat('fr-FR', {
+function formatDay(key, options = {}, locale = 'fr-FR') {
+  return new Intl.DateTimeFormat(locale, {
     timeZone: PARIS,
     ...options,
   }).format(dateFromKey(key));
 }
 
-function formatTime(value) {
-  return new Intl.DateTimeFormat('fr-FR', {
+function formatTime(value, locale = 'fr-FR') {
+  return new Intl.DateTimeFormat(locale, {
     timeZone: PARIS,
     hour: '2-digit',
     minute: '2-digit',
@@ -51,7 +54,7 @@ function formatTime(value) {
 
 function parisDateTimeToISO(value) {
   if (!value) {
-    throw new Error('Veuillez renseigner la date et l’heure.');
+    throw new Error('admin:dateTimeRequired');
   }
 
   const [datePart, timePart] = value.split('T');
@@ -110,9 +113,7 @@ function parisDateTimeToISO(value) {
     Number(check.hour) !== hour ||
     Number(check.minute) !== minute
   ) {
-    throw new Error(
-      "Cette heure n'existe pas à Paris en raison du changement d'heure."
-    );
+    throw new Error('admin:dstGap');
   }
 
   return result.toISOString();
@@ -135,13 +136,6 @@ function currentParisDateTimeLocal() {
 
   return `${values.year}-${values.month}-${values.day}T${values.hour}:${values.minute}`;
 }
-
-const statusLabels = {
-  pending: 'En attente',
-  confirmed: 'Confirmé',
-  cancelled: 'Annulé',
-  completed: 'Terminé',
-};
 
 const WEEKDAYS = [
   { weekday: 1, label: 'Lundi', short: 'Lun' },
@@ -173,6 +167,30 @@ function localDateTime(date, time) {
 
 export default function AdminPage() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
+  // Admin texts follow the site language (src/i18n/admin.js).
+  const ta = useCallback((key, vars) => fill(t(`admin.${key}`), vars || {}), [t]);
+  const locale = ta('locale');
+  const fmtDay = (key, options = {}) => formatDay(key, options, locale);
+  const fmtTime = (value) => formatTime(value, locale);
+  const weekdayName = useCallback((weekday) => ta(`weekdays.${weekday}`), [ta]);
+  const errText = useCallback((err, fallbackKey) => {
+    const message = err?.message || '';
+    if (message.startsWith('admin:')) {
+      const [code, weekday] = message.slice(6).split('|');
+      return ta(`err.${code}`, weekday !== undefined ? { day: weekdayName(weekday) } : {});
+    }
+    return message || ta(`err.${fallbackKey}`);
+  }, [ta, weekdayName]);
+  const statusLabel = (status) => {
+    const label = t(`admin.status.${status}`);
+    return label.startsWith('admin.') ? status : label;
+  };
+  const paymentLabel = (value) => {
+    if (!value) return '—';
+    const label = t(`admin.paymentStatus.${value}`);
+    return label.startsWith('admin.') ? value : label;
+  };
 
   const [appointments, setAppointments] = useState([]);
   const [services, setServices] = useState([]);
@@ -219,7 +237,8 @@ export default function AdminPage() {
         error: userError,
       } = await supabase.auth.getUser();
 
-      if (userError) throw userError;
+      // No session at all is the normal logged-out case: go to the login page.
+      if (userError && userError.name !== 'AuthSessionMissingError') throw userError;
 
       if (!user) {
         navigate('/admin-login', { replace: true });
@@ -261,11 +280,11 @@ export default function AdminPage() {
         setServices(servicesData ?? []);
       }
     } catch (err) {
-      setError(err.message || 'Impossible de charger les rendez-vous.');
+      setError(errText(err, 'loadAppointments'));
     } finally {
       setLoading(false);
     }
-  }, [navigate]);
+  }, [navigate, errText]);
 
   const loadBusinessHours = useCallback(async () => {
     setHoursLoading(true);
@@ -277,7 +296,8 @@ export default function AdminPage() {
         error: userError,
       } = await supabase.auth.getUser();
 
-      if (userError) throw userError;
+      // No session at all is the normal logged-out case: go to the login page.
+      if (userError && userError.name !== 'AuthSessionMissingError') throw userError;
 
       if (!user) {
         navigate('/admin-login', { replace: true });
@@ -320,11 +340,11 @@ export default function AdminPage() {
         })
       );
     } catch (err) {
-      setError(err.message || 'Impossible de charger les horaires.');
+      setError(errText(err, 'loadHours'));
     } finally {
       setHoursLoading(false);
     }
-  }, [navigate]);
+  }, [navigate, errText]);
 
   const loadBlockedPeriods = useCallback(async () => {
     setBlocksLoading(true);
@@ -339,11 +359,11 @@ export default function AdminPage() {
 
       setBlockedPeriods(data ?? []);
     } catch (err) {
-      setError(err.message || 'Impossible de charger les indisponibilités.');
+      setError(errText(err, 'loadBlocks'));
     } finally {
       setBlocksLoading(false);
     }
-  }, []);
+  }, [errText]);
 
   // Effects are declared after the callbacks they use.
   useEffect(() => {
@@ -372,9 +392,7 @@ export default function AdminPage() {
     try {
       for (const day of businessHours) {
         if (!day.is_closed && day.opens_at >= day.closes_at) {
-          throw new Error(
-            `Les horaires de ${day.label} sont invalides : la fermeture doit être après l'ouverture.`
-          );
+          throw new Error(`admin:invalidHours|${day.weekday}`);
         }
       }
 
@@ -392,13 +410,13 @@ export default function AdminPage() {
         if (updateError) throw updateError;
 
         if (!data?.length) {
-          throw new Error(`Aucun horaire trouvé pour ${day.label}.`);
+          throw new Error(`admin:hoursNotFound|${day.weekday}`);
         }
       }
 
       await loadBusinessHours();
     } catch (err) {
-      setError(err.message || 'Impossible d’enregistrer les horaires.');
+      setError(errText(err, 'saveHours'));
     } finally {
       setHoursSaving(false);
     }
@@ -424,7 +442,7 @@ export default function AdminPage() {
     const endValue = blockForm.ends_at;
 
     if (!startValue || !endValue) {
-      throw new Error('Veuillez renseigner le début et la fin.');
+      throw new Error('admin:startEndRequired');
     }
 
     // One continuous interval on one specific date/time.
@@ -433,7 +451,7 @@ export default function AdminPage() {
       const endsAt = parisDateTimeToISO(endValue);
 
       if (new Date(endsAt) <= new Date(startsAt)) {
-        throw new Error('La fin doit être après le début.');
+        throw new Error('admin:endAfterStart');
       }
 
       return [{ starts_at: startsAt, ends_at: endsAt }];
@@ -448,13 +466,11 @@ export default function AdminPage() {
     const endTime = endValue.slice(11, 16);
 
     if (endDate < startDate) {
-      throw new Error('La date de fin doit être après la date de début.');
+      throw new Error('admin:endDateAfterStart');
     }
 
     if (endTime <= startTime) {
-      throw new Error(
-        'Pour une pause répétée, l’heure de fin doit être après l’heure de début le même jour.'
-      );
+      throw new Error('admin:endTimeAfterStart');
     }
 
     const selectedWeekdays =
@@ -463,7 +479,7 @@ export default function AdminPage() {
         : blockDays;
 
     if (selectedWeekdays.length === 0) {
-      throw new Error('Veuillez sélectionner au moins un jour.');
+      throw new Error('admin:selectDay');
     }
 
     const candidates = [];
@@ -473,7 +489,7 @@ export default function AdminPage() {
     const lastAllowedDate = addDays(startDate, 366);
 
     if (endDate > lastAllowedDate) {
-      throw new Error('La période ne peut pas dépasser 366 jours.');
+      throw new Error('admin:maxRange');
     }
 
     while (currentDate <= endDate) {
@@ -495,9 +511,7 @@ export default function AdminPage() {
     }
 
     if (candidates.length === 0) {
-      throw new Error(
-        'Aucune date ne correspond aux jours sélectionnés dans cette période.'
-      );
+      throw new Error('admin:noMatchingDates');
     }
 
     return candidates;
@@ -513,9 +527,7 @@ export default function AdminPage() {
       const now = Date.now();
 
       if (candidates.some((item) => new Date(item.starts_at).getTime() <= now)) {
-        throw new Error(
-          'Toutes les périodes bloquées doivent commencer dans le futur.'
-        );
+        throw new Error('admin:mustBeFuture');
       }
 
       const earliestStart = candidates.reduce(
@@ -579,7 +591,7 @@ export default function AdminPage() {
           .slice(0, 5)
           .map(
             (item) =>
-              `${formatDay(item.date, {
+              `${fmtDay(item.date, {
                 day: 'numeric',
                 month: 'short',
               })}${item.name ? ` (${item.name})` : ''}`
@@ -587,7 +599,7 @@ export default function AdminPage() {
           .join(', ');
 
         throw new Error(
-          `Aucun blocage n’a été créé : un ou plusieurs rendez-vous actifs se trouvent sur cette période. Conflits : ${preview}${uniqueConflicts.length > 5 ? ', …' : ''}.`
+          ta('err.blockConflicts', { list: `${preview}${uniqueConflicts.length > 5 ? ', …' : ''}` })
         );
       }
 
@@ -610,7 +622,7 @@ export default function AdminPage() {
 
       await loadBlockedPeriods();
     } catch (err) {
-      setError(err.message || 'Impossible de créer cette indisponibilité.');
+      setError(errText(err, 'createBlock'));
     } finally {
       setBlockSaving(false);
     }
@@ -618,7 +630,7 @@ export default function AdminPage() {
 
   async function deleteBlockedPeriod(id) {
     const confirmed = window.confirm(
-      'Supprimer cette indisponibilité ? Les clients pourront de nouveau demander un rendez-vous sur cette période.'
+      ta('confirmDeleteBlock')
     );
 
     if (!confirmed) return;
@@ -636,7 +648,7 @@ export default function AdminPage() {
 
       await loadBlockedPeriods();
     } catch (err) {
-      setError(err.message || 'Impossible de supprimer cette indisponibilité.');
+      setError(errText(err, 'deleteBlock'));
     } finally {
       setBlockDeletingId(null);
     }
@@ -646,7 +658,7 @@ export default function AdminPage() {
     return (
       services.find((service) => service.id === serviceId)?.name ||
       serviceId ||
-      'Prestation inconnue'
+      ta('unknownService')
     );
   }
 
@@ -664,7 +676,7 @@ export default function AdminPage() {
 
       await loadAppointments();
     } catch (err) {
-      setError(err.message || 'Impossible de modifier le rendez-vous.');
+      setError(errText(err, 'updateAppointment'));
     } finally {
       setUpdatingId(null);
     }
@@ -708,15 +720,13 @@ export default function AdminPage() {
 
       if (proposalError) throw proposalError;
       if (!data || !data.length) {
-        throw new Error('La proposition n’a pas pu être créée.');
+        throw new Error('admin:proposalFailed');
       }
 
       setRescheduleLink(`${window.location.origin}/#/reschedule?token=${token}`);
       await loadAppointments();
     } catch (err) {
-      setRescheduleError(
-        err.message || 'Impossible de proposer ce nouvel horaire.'
-      );
+      setRescheduleError(errText(err, 'proposeFailed'));
     } finally {
       setRescheduleBusy(false);
     }
@@ -727,9 +737,7 @@ export default function AdminPage() {
     try {
       await navigator.clipboard.writeText(rescheduleLink);
     } catch {
-      setRescheduleError(
-        'Copie automatique impossible. Sélectionnez et copiez le lien affiché.'
-      );
+      setRescheduleError(ta('err.copyFailed'));
     }
   }
 
@@ -803,25 +811,25 @@ export default function AdminPage() {
         <div className="admin-appointment__top">
           <h3>{appointment.customer_name}</h3>
           <span className={`status status--${appointment.status}`}>
-            {statusLabels[appointment.status] || appointment.status}
+            {statusLabel(appointment.status)}
           </span>
         </div>
 
         <p>
-          <strong>Horaire :</strong> {formatTime(appointment.starts_at)} –{' '}
-          {formatTime(appointment.ends_at)}
+          <strong>{ta('time')}:</strong> {fmtTime(appointment.starts_at)} –{' '}
+          {fmtTime(appointment.ends_at)}
         </p>
         <p>
-          <strong>Prestation :</strong> {getServiceName(appointment.service_id)}
+          <strong>{ta('service')}:</strong> {getServiceName(appointment.service_id)}
         </p>
         <p>
-          <strong>Téléphone :</strong> {appointment.customer_phone || '—'}
+          <strong>{ta('phone')}:</strong> {appointment.customer_phone || '—'}
         </p>
         <p>
-          <strong>Email :</strong> {appointment.customer_email || '—'}
+          <strong>{ta('email')}:</strong> {appointment.customer_email || '—'}
         </p>
         <p>
-          <strong>Paiement :</strong> {appointment.payment_status || '—'}
+          <strong>{ta('payment')}:</strong> {paymentLabel(appointment.payment_status)}
         </p>
 
         <div className="admin-appointment__actions">
@@ -835,7 +843,7 @@ export default function AdminPage() {
               appointment.status === 'completed'
             }
           >
-            {updatingId === appointment.id ? 'Modification…' : 'Confirmer'}
+            {updatingId === appointment.id ? ta('updating') : ta('confirm')}
           </button>
 
           {['pending', 'confirmed'].includes(appointment.status) && (
@@ -844,7 +852,7 @@ export default function AdminPage() {
               onClick={() => openReschedule(appointment)}
               disabled={updatingId === appointment.id}
             >
-              Proposer un autre horaire
+              {ta('proposeOther')}
             </button>
           )}
 
@@ -857,7 +865,7 @@ export default function AdminPage() {
               appointment.status === 'completed'
             }
           >
-            Annuler
+            {ta('cancel')}
           </button>
         </div>
       </article>
@@ -866,17 +874,17 @@ export default function AdminPage() {
 
   const periodTitle =
     period === 'day'
-      ? formatDay(selectedDate, { dateStyle: 'full' })
+      ? fmtDay(selectedDate, { dateStyle: 'full' })
       : period === 'week'
-        ? `${formatDay(weekKeys[0], {
+        ? `${fmtDay(weekKeys[0], {
             day: 'numeric',
             month: 'short',
-          })} – ${formatDay(weekKeys[6], {
+          })} – ${fmtDay(weekKeys[6], {
             day: 'numeric',
             month: 'short',
             year: 'numeric',
           })}`
-        : formatDay(`${selectedDate.slice(0, 7)}-15`, {
+        : fmtDay(`${selectedDate.slice(0, 7)}-15`, {
             month: 'long',
             year: 'numeric',
           });
@@ -887,15 +895,11 @@ export default function AdminPage() {
         <section className="admin-dashboard__content">
           <header className="admin-page__header">
             <div>
-              <p className="admin-eyebrow">ESPACE PROFESSIONNEL</p>
+              <p className="admin-eyebrow">{ta('eyebrow')}</p>
               <h1>
-                {section === 'settings'
-                  ? 'Paramètres'
-                  : section === 'appointments'
-                    ? 'Rendez-vous'
-                    : 'Planning'}
+                {ta(section === 'settings' ? 'settings' : section === 'promotions' ? 'promotions' : section === 'appointments' ? 'appointments' : 'planning')}
               </h1>
-              <p>Gérez votre activité et vos rendez-vous.</p>
+              <p>{ta('subtitle')}</p>
             </div>
 
             <button
@@ -903,7 +907,7 @@ export default function AdminPage() {
               onClick={loadAppointments}
               disabled={loading}
             >
-              {loading ? 'Chargement…' : 'Actualiser'}
+              {loading ? ta('loading') : ta('refresh')}
             </button>
           </header>
 
@@ -920,7 +924,7 @@ export default function AdminPage() {
                   <button
                     type="button"
                     onClick={() => movePeriod(-1)}
-                    aria-label="Période précédente"
+                    aria-label={ta('prevPeriod')}
                   >
                     ‹
                   </button>
@@ -928,12 +932,12 @@ export default function AdminPage() {
                     type="button"
                     onClick={() => setSelectedDate(dateKey(new Date()))}
                   >
-                    Aujourd’hui
+                    {ta('today')}
                   </button>
                   <button
                     type="button"
                     onClick={() => movePeriod(1)}
-                    aria-label="Période suivante"
+                    aria-label={ta('nextPeriod')}
                   >
                     ›
                   </button>
@@ -947,21 +951,21 @@ export default function AdminPage() {
                     type="button"
                     onClick={() => changePeriod('day')}
                   >
-                    Jour
+                    {ta('day')}
                   </button>
                   <button
                     className={period === 'week' ? 'is-active' : ''}
                     type="button"
                     onClick={() => changePeriod('week')}
                   >
-                    Semaine
+                    {ta('week')}
                   </button>
                   <button
                     className={period === 'month' ? 'is-active' : ''}
                     type="button"
                     onClick={() => changePeriod('month')}
                   >
-                    Mois
+                    {ta('month')}
                   </button>
                 </div>
               </div>
@@ -973,27 +977,27 @@ export default function AdminPage() {
                   value={filter}
                   onChange={(event) => setFilter(event.target.value)}
                 >
-                  <option value="all">Tous les statuts</option>
-                  <option value="pending">En attente</option>
-                  <option value="confirmed">Confirmés</option>
-                  <option value="cancelled">Annulés</option>
-                  <option value="completed">Terminés</option>
+                  <option value="all">{ta('filter.all')}</option>
+                  <option value="pending">{ta('filter.pending')}</option>
+                  <option value="confirmed">{ta('filter.confirmed')}</option>
+                  <option value="cancelled">{ta('filter.cancelled')}</option>
+                  <option value="completed">{ta('filter.completed')}</option>
                 </select>
-                <span>{filteredAppointments.length} rendez-vous au total</span>
+                <span>{ta('appointmentsTotal', { n: filteredAppointments.length })}</span>
               </div>
 
               {loading ? (
-                <p>Chargement du planning…</p>
+                <p>{ta('loadingPlanning')}</p>
               ) : period === 'day' ? (
                 <div className="admin-calendar__day">
-                  <h2>{formatDay(selectedDate, { dateStyle: 'full' })}</h2>
+                  <h2>{fmtDay(selectedDate, { dateStyle: 'full' })}</h2>
                   {selectedDayAppointments.length ? (
                     <div className="admin-page__list">
                       {selectedDayAppointments.map(renderAppointment)}
                     </div>
                   ) : (
                     <p className="admin-calendar__empty">
-                      Aucun rendez-vous pour cette journée.
+                      {ta('noAppointmentsDay')}
                     </p>
                   )}
                 </div>
@@ -1017,8 +1021,8 @@ export default function AdminPage() {
                             setPeriod('day');
                           }}
                         >
-                          <span>{formatDay(key, { weekday: 'short' })}</span>
-                          <strong>{formatDay(key, { day: 'numeric' })}</strong>
+                          <span>{fmtDay(key, { weekday: 'short' })}</span>
+                          <strong>{fmtDay(key, { day: 'numeric' })}</strong>
                         </button>
 
                         {dayAppointments.length ? (
@@ -1032,7 +1036,7 @@ export default function AdminPage() {
                                 setPeriod('day');
                               }}
                             >
-                              <strong>{formatTime(appointment.starts_at)}</strong>
+                              <strong>{fmtTime(appointment.starts_at)}</strong>
                               <span>{appointment.customer_name}</span>
                               <small>
                                 {getServiceName(appointment.service_id)}
@@ -1049,7 +1053,7 @@ export default function AdminPage() {
               ) : (
                 <div className="admin-calendar__month">
                   <div className="admin-calendar__weekdays">
-                    {['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'].map(
+                    {t('admin.weekdaysShort').map(
                       (day) => (
                         <span key={day}>{day}</span>
                       )
@@ -1076,14 +1080,14 @@ export default function AdminPage() {
                             setPeriod('day');
                           }}
                         >
-                          <strong>{formatDay(key, { day: 'numeric' })}</strong>
+                          <strong>{fmtDay(key, { day: 'numeric' })}</strong>
 
                           {dayAppointments.slice(0, 2).map((appointment) => (
                             <span
                               className={`admin-calendar__month-event status-border--${appointment.status}`}
                               key={appointment.id}
                             >
-                              {formatTime(appointment.starts_at)}{' '}
+                              {fmtTime(appointment.starts_at)}{' '}
                               {appointment.customer_name}
                             </span>
                           ))}
@@ -1109,23 +1113,23 @@ export default function AdminPage() {
                   value={filter}
                   onChange={(event) => setFilter(event.target.value)}
                 >
-                  <option value="all">Tous les statuts</option>
-                  <option value="pending">En attente</option>
-                  <option value="confirmed">Confirmés</option>
-                  <option value="cancelled">Annulés</option>
-                  <option value="completed">Terminés</option>
+                  <option value="all">{ta('filter.all')}</option>
+                  <option value="pending">{ta('filter.pending')}</option>
+                  <option value="confirmed">{ta('filter.confirmed')}</option>
+                  <option value="cancelled">{ta('filter.cancelled')}</option>
+                  <option value="completed">{ta('filter.completed')}</option>
                 </select>
-                <span>{filteredAppointments.length} rendez-vous</span>
+                <span>{ta('appointmentsCount', { n: filteredAppointments.length })}</span>
               </div>
 
               {loading ? (
-                <p>Chargement…</p>
+                <p>{ta('loading')}</p>
               ) : filteredAppointments.length ? (
                 <div className="admin-page__list">
                   {filteredAppointments.map((appointment) => (
                     <div key={appointment.id}>
                       <p className="admin-appointment__date">
-                        {formatDay(dateKey(appointment.starts_at), {
+                        {fmtDay(dateKey(appointment.starts_at), {
                           dateStyle: 'full',
                         })}
                       </p>
@@ -1135,7 +1139,7 @@ export default function AdminPage() {
                 </div>
               ) : (
                 <p className="admin-calendar__empty">
-                  Aucun rendez-vous trouvé.
+                  {ta('noAppointmentsFound')}
                 </p>
               )}
             </>
@@ -1143,21 +1147,18 @@ export default function AdminPage() {
 
           {section === 'settings' && (
             <section className="admin-settings">
-              <h2>Horaires de travail</h2>
-              <p>
-                Configurez les jours et les heures pendant lesquels les clients
-                peuvent demander un rendez-vous.
-              </p>
+              <h2>{ta('hoursTitle')}</h2>
+              <p>{ta('hoursIntro')}</p>
 
               {hoursLoading ? (
-                <p>Chargement des horaires…</p>
+                <p>{ta('loadingHours')}</p>
               ) : (
                 <>
                   <div className="business-hours-list">
                     {businessHours.map((day) => (
                       <div className="business-hours-row" key={day.weekday}>
                         <div className="business-hours-day">
-                          <strong>{day.label}</strong>
+                          <strong>{weekdayName(day.weekday)}</strong>
 
                           <label>
                             <input
@@ -1171,16 +1172,16 @@ export default function AdminPage() {
                                 )
                               }
                             />
-                            Jour travaillé
+                            {ta('workingDay')}
                           </label>
                         </div>
 
                         {day.is_closed ? (
-                          <span className="business-hours-closed">Fermé</span>
+                          <span className="business-hours-closed">{ta('closed')}</span>
                         ) : (
                           <div className="business-hours-times">
                             <label>
-                              Ouverture
+                              {ta('opens')}
                               <input
                                 type="time"
                                 value={day.opens_at}
@@ -1195,7 +1196,7 @@ export default function AdminPage() {
                             </label>
 
                             <label>
-                              Fermeture
+                              {ta('closes')}
                               <input
                                 type="time"
                                 value={day.closes_at}
@@ -1220,21 +1221,18 @@ export default function AdminPage() {
                     disabled={hoursSaving || hoursLoading}
                   >
                     {hoursSaving
-                      ? 'Enregistrement…'
-                      : 'Enregistrer les horaires'}
+                      ? ta('saving')
+                      : ta('saveHours')}
                   </button>
                 </>
               )}
 
               <div className="admin-settings__blocks">
-                <h2>Pauses et indisponibilités</h2>
-                <p>
-                  Bloquez une pause ponctuelle ou répétez-la sur plusieurs jours.
-                  Les créneaux concernés ne seront plus proposés aux clients.
-                </p>
+                <h2>{ta('blocksTitle')}</h2>
+                <p>{ta('blocksIntro')}</p>
 
                 <div className="blocked-period-mode">
-                  <span>Type d’indisponibilité</span>
+                  <span>{ta('blockType')}</span>
 
                   <div className="blocked-period-mode__options">
                     <button
@@ -1243,7 +1241,7 @@ export default function AdminPage() {
                       onClick={() => setBlockMode('single')}
                       aria-pressed={blockMode === 'single'}
                     >
-                      Une seule période
+                      {ta('modeSingle')}
                     </button>
 
                     <button
@@ -1252,7 +1250,7 @@ export default function AdminPage() {
                       onClick={() => setBlockMode('selected')}
                       aria-pressed={blockMode === 'selected'}
                     >
-                      Jours sélectionnés
+                      {ta('modeSelected')}
                     </button>
 
                     <button
@@ -1261,7 +1259,7 @@ export default function AdminPage() {
                       onClick={() => setBlockMode('all')}
                       aria-pressed={blockMode === 'all'}
                     >
-                      Tous les jours
+                      {ta('modeAll')}
                     </button>
                   </div>
                 </div>
@@ -1273,7 +1271,7 @@ export default function AdminPage() {
                   {blockMode === 'single' ? (
                     <>
                       <label>
-                        Début
+                        {ta('start')}
                         <input
                           type="datetime-local"
                           required
@@ -1285,7 +1283,7 @@ export default function AdminPage() {
                       </label>
 
                       <label>
-                        Fin
+                        {ta('end')}
                         <input
                           type="datetime-local"
                           required
@@ -1300,7 +1298,7 @@ export default function AdminPage() {
                   ) : (
                     <>
                       <label>
-                        Date de début
+                        {ta('startDate')}
                         <input
                           type="date"
                           required
@@ -1318,7 +1316,7 @@ export default function AdminPage() {
                       </label>
 
                       <label>
-                        Date de fin incluse
+                        {ta('endDateIncl')}
                         <input
                           type="date"
                           required
@@ -1337,7 +1335,7 @@ export default function AdminPage() {
                       </label>
 
                       <label>
-                        Heure de début
+                        {ta('startTime')}
                         <input
                           type="time"
                           required
@@ -1352,7 +1350,7 @@ export default function AdminPage() {
                       </label>
 
                       <label>
-                        Heure de fin
+                        {ta('endTime')}
                         <input
                           type="time"
                           required
@@ -1370,7 +1368,7 @@ export default function AdminPage() {
 
                   {blockMode === 'selected' && (
                     <fieldset className="blocked-period-days">
-                      <legend>Appliquer aux jours suivants</legend>
+                      <legend>{ta('applyDays')}</legend>
 
                       <div className="blocked-period-days__options">
                         {WEEKDAYS.map((day) => (
@@ -1380,7 +1378,7 @@ export default function AdminPage() {
                               checked={blockDays.includes(day.weekday)}
                               onChange={() => toggleBlockDay(day.weekday)}
                             />
-                            {day.label}
+                            {weekdayName(day.weekday)}
                           </label>
                         ))}
                       </div>
@@ -1389,17 +1387,16 @@ export default function AdminPage() {
 
                   {blockMode === 'all' && (
                     <p className="blocked-period-help">
-                      La pause sera appliquée chaque jour de la période, du
-                      lundi au dimanche.
+                      {ta('allDaysHelp')}
                     </p>
                   )}
 
                   <label>
-                    Motif (facultatif)
+                    {ta('reason')}
                     <input
                       type="text"
                       maxLength={200}
-                      placeholder="Pause déjeuner, absence…"
+                      placeholder={ta('reasonPlaceholder')}
                       value={blockForm.reason}
                       onChange={(event) =>
                         updateBlockForm('reason', event.target.value)
@@ -1409,20 +1406,20 @@ export default function AdminPage() {
 
                   <button type="submit" disabled={blockSaving}>
                     {blockSaving
-                      ? 'Vérification et enregistrement…'
+                      ? ta('blockSaving')
                       : blockMode === 'single'
-                        ? 'Bloquer cette période'
-                        : 'Créer les indisponibilités'}
+                        ? ta('blockOne')
+                        : ta('blockMany')}
                   </button>
                 </form>
 
-                <h3>Indisponibilités enregistrées</h3>
+                <h3>{ta('savedBlocks')}</h3>
 
                 {blocksLoading ? (
-                  <p>Chargement des indisponibilités…</p>
+                  <p>{ta('loadingBlocks')}</p>
                 ) : blockedPeriods.length === 0 ? (
                   <p className="admin-calendar__empty">
-                    Aucune indisponibilité enregistrée.
+                    {ta('noBlocks')}
                   </p>
                 ) : (
                   <div className="blocked-period-list">
@@ -1430,13 +1427,13 @@ export default function AdminPage() {
                       <article className="blocked-period-item" key={block.id}>
                         <div>
                           <strong>
-                            {formatDay(dateKey(block.starts_at), {
+                            {fmtDay(dateKey(block.starts_at), {
                               dateStyle: 'medium',
                             })}
                           </strong>
                           <p>
-                            {formatTime(block.starts_at)} –{' '}
-                            {formatTime(block.ends_at)}
+                            {fmtTime(block.starts_at)} –{' '}
+                            {fmtTime(block.ends_at)}
                           </p>
                           {block.reason && <p>{block.reason}</p>}
                         </div>
@@ -1447,8 +1444,8 @@ export default function AdminPage() {
                           disabled={blockDeletingId === block.id}
                         >
                           {blockDeletingId === block.id
-                            ? 'Suppression…'
-                            : 'Supprimer'}
+                            ? ta('deleting')
+                            : ta('delete')}
                         </button>
                       </article>
                     ))}
@@ -1457,6 +1454,9 @@ export default function AdminPage() {
               </div>
             </section>
           )}
+
+          {/* TZ step 9: promotions & news */}
+          {section === 'promotions' && <AdminPromotions />}
         </section>
 
         <aside className="admin-sidebar">
@@ -1464,18 +1464,18 @@ export default function AdminPage() {
             <span className="admin-sidebar__brand-name">
               ELNARA<span>.</span>
             </span>
-            <span>Espace professionnel</span>
+            <span>{ta('brandSub')}</span>
           </div>
 
-          <p className="admin-sidebar__label">GESTION</p>
+          <p className="admin-sidebar__label">{ta('manage')}</p>
 
-          <nav className="admin-sidebar__nav" aria-label="Menu professionnel">
+          <nav className="admin-sidebar__nav" aria-label={ta('menuLabel')}>
             <button
               type="button"
               className={section === 'planning' ? 'is-active' : ''}
               onClick={() => setSection('planning')}
             >
-              <span aria-hidden="true">▦</span> Planning
+              <span aria-hidden="true">▦</span> {ta('planning')}
             </button>
 
             <button
@@ -1483,7 +1483,7 @@ export default function AdminPage() {
               className={section === 'appointments' ? 'is-active' : ''}
               onClick={() => setSection('appointments')}
             >
-              <FiCalendar aria-hidden="true" /> Rendez-vous
+              <FiCalendar aria-hidden="true" /> {ta('appointments')}
             </button>
 
             <button
@@ -1491,7 +1491,15 @@ export default function AdminPage() {
               className={section === 'settings' ? 'is-active' : ''}
               onClick={() => setSection('settings')}
             >
-              <FiSettings aria-hidden="true" /> Paramètres
+              <FiSettings aria-hidden="true" /> {ta('settings')}
+            </button>
+
+            <button
+              type="button"
+              className={section === 'promotions' ? 'is-active' : ''}
+              onClick={() => setSection('promotions')}
+            >
+              <FiTag aria-hidden="true" /> {ta('promotions')}
             </button>
           </nav>
 
@@ -1500,7 +1508,7 @@ export default function AdminPage() {
               <span className="admin-sidebar__avatar">E</span>
               <span>
                 <strong>ELNARA</strong>
-                <small>Professionnel</small>
+                <small>{ta('profile')}</small>
               </span>
             </div>
 
@@ -1509,7 +1517,7 @@ export default function AdminPage() {
               className="admin-sidebar__logout"
               onClick={signOut}
             >
-              Déconnexion ↗
+              {ta('logout')} ↗
             </button>
           </div>
         </aside>
@@ -1526,24 +1534,23 @@ export default function AdminPage() {
             <button
               type="button"
               className="reschedule-admin-modal__close"
-              aria-label="Fermer"
+              aria-label={ta('close')}
               onClick={() => setRescheduleTarget(null)}
             >
               ×
             </button>
-            <p className="admin-eyebrow">MODIFICATION DU RENDEZ-VOUS</p>
+            <p className="admin-eyebrow">{ta('rescheduleEyebrow')}</p>
             <h2 id="reschedule-admin-title">
-              Proposer un autre horaire à {rescheduleTarget.customer_name}
+              {ta('rescheduleTitle', { name: rescheduleTarget.customer_name })}
             </h2>
             <p>
-              L’horaire proposé est réservé pendant 24 heures. Le rendez-vous
-              actuel reste inchangé tant que le client n’accepte pas.
+              {ta('rescheduleIntro')}
             </p>
 
             {!rescheduleLink ? (
               <form onSubmit={createRescheduleProposal}>
                 <label>
-                  Nouvelle date et heure (heure de Paris)
+                  {ta('newDateTime')}
                   <input
                     type="datetime-local"
                     required
@@ -1557,21 +1564,20 @@ export default function AdminPage() {
                 )}
                 <div className="reschedule-admin-modal__actions">
                   <button type="submit" disabled={rescheduleBusy}>
-                    {rescheduleBusy ? 'Création…' : 'Créer la proposition'}
+                    {rescheduleBusy ? ta('creating') : ta('createProposal')}
                   </button>
                   <button type="button" onClick={() => setRescheduleTarget(null)}>
-                    Fermer
+                    {ta('close')}
                   </button>
                 </div>
               </form>
             ) : (
               <div className="reschedule-admin-modal__success">
                 <p role="status">
-                  Proposition créée. Elle expire dans 24 heures. Envoyez ce lien
-                  au client par le canal de votre choix.
+                  {ta('proposalCreated')}
                 </p>
                 <label>
-                  Lien sécurisé pour le client
+                  {ta('secureLink')}
                   <input readOnly value={rescheduleLink} onFocus={(event) => event.target.select()} />
                 </label>
                 {rescheduleError && (
@@ -1579,10 +1585,10 @@ export default function AdminPage() {
                 )}
                 <div className="reschedule-admin-modal__actions">
                   <button type="button" onClick={copyRescheduleLink}>
-                    Copier le lien
+                    {ta('copyLink')}
                   </button>
                   <button type="button" onClick={() => setRescheduleTarget(null)}>
-                    Terminé
+                    {ta('done')}
                   </button>
                 </div>
               </div>

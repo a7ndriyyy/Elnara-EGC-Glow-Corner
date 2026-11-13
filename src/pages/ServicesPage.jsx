@@ -17,42 +17,32 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import emailjs from "@emailjs/browser";
 import "./ServicesPage.css";
+import ServiceCard from "../components/ServiceCard/ServiceCard";
+import SectionTitle from "../components/SectionTitle/SectionTitle";
+import HoursNotice from "../components/HoursNotice/HoursNotice";
+import { beautyPackages, browAndLashServices, carbonPeelServices, makeupTypes, massageProcedures, permanentServices, pmuRemoverServices, tattooRemovalServices } from "../data/salonServices";
+import { priceCategories } from "../data/priceList";
+import { apparatus } from "../data/apparatus";
+import { bookingLink } from "../data/directions";
+import { localize } from "../utils/format";
+import { toCardProps } from "../utils/pricing";
 import { useLanguage } from "../i18n/LanguageContext";
 
 // Імпорт зображень (замініть на свої)
-import makeupBridal from "../../public/Images/ImagesServices/makeup-brida.webp";
-import makeupEvening from "../../public/Images/ImagesServices/makeup-evening.webp";
-import makeupDay from "../../public/Images/ImagesServices/makeup-day.webp";
-import makeupSmokey from "../../public/Images/ImagesServices/makeup-smokey.webp";
 import servicesHero from "../../public/Images/ImagesServices/services-hero.webp";
 
 export default function ServicesPage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [selectedService, setSelectedService] = useState(null);
   const [activeFilter, setActiveFilter] = useState("all");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const navigate = useNavigate();
 
-  const goToBooking = (service) => {
-  const bookingServiceIds = {
-    1: "bridal-makeup",
-    2: "evening-makeup",
-    3: "day-makeup",
-    4: "smokey-eyes",
-    5: "brow-shaping-coloring",
-  };
+  const goToBooking = (service) => navigate(service ? bookingLink(service) : "/booking");
 
-  const bookingServiceId = service
-    ? bookingServiceIds[service.id]
-    : null;
-
-  navigate(
-    bookingServiceId
-      ? `/booking?service=${bookingServiceId}`
-      : "/booking"
-  );
-};
+  const scrollToServices = () =>
+    document.getElementById("services")?.scrollIntoView({ behavior: "smooth", block: "start" });
 
    useEffect(() => {
     AOS.init({
@@ -79,119 +69,35 @@ export default function ServicesPage() {
   const [errors, setErrors] = useState({});
   const formRef = useRef(null);
 
-  // Дані про послуги
-  const services = [
-    {
-      id: 1,
-      name: "Весільний макіяж",
-      nameEn: "Bridal Makeup",
-      category: "bridal",
-      price: "250",
-      duration: "2 години",
-      description: "Ідеальний весільний образ, який протримається весь день. Використовуємо професійну косметику преміум-класу.",
-      longDescription: "Створюємо ніжний та романтичний образ, який підкреслить вашу природну красу. Пробний макіяж включено у вартість. Використовуємо виключно водостійку косметику преміальних брендів.",
-      image: makeupBridal,
-      features: [
-        "Пробний макіяж за 1-2 тижні",
-        "Водостійка косметика",
-        "Стійкість 12+ годин",
-        "Накладні вії в подарунок",
-        "Фіксація образу"
-      ],
-      brands: ["Dior", "Chanel", "Tom Ford", "Charlotte Tilbury"],
-      popular: true
-    },
-    {
-      id: 2,
-      name: "Вечірній макіяж",
-      nameEn: "Evening Makeup",
-      category: "evening",
-      price: "180",
-      duration: "1.5 години",
-      description: "Яскравий та виразний макіяж для особливих подій, вечірок та святкувань.",
-      longDescription: "Від чуттєвого смокі айс до сяючих образів з акцентом на очах або губах. Створимо образ, який привертає увагу і тримається всю ніч.",
-      image: makeupEvening,
-      features: [
-        "Індивідуальний підбір кольорів",
-        "Стійкість 8+ годин",
-        "Скульптурування обличчя",
-        "Накладні вії включено",
-        "Корекція брів"
-      ],
-      brands: ["MAC", "Huda Beauty", "Anastasia", "Fenty Beauty"],
-      popular: true
-    },
-    {
-      id: 3,
-      name: "Денний макіяж",
-      nameEn: "Day Makeup",
-      category: "day",
-      price: "120",
-      duration: "1 година",
-      description: "Натуральний та свіжий макіяж для щоденного виходу, ділових зустрічей та побачень.",
-      longDescription: "Макіяж в стилі 'nude' та 'no-makeup makeup'. Підкреслюємо природну красу, вирівнюємо тон, додаємо свіжості. Ідеально для офісу та повсякденного життя.",
-      image: makeupDay,
-      features: [
-        "Ідеальний тон шкіри",
-        "Натуральне сяйво",
-        "Догляд перед макіяжем",
-        "SPF захист",
-        "Фіксація брів"
-      ],
-      brands: ["Chanel", "Laura Mercier", "Kosas", "RMS Beauty"],
-      popular: false
-    },
-    {
-      id: 4,
-      name: "Smokey Eyes",
-      nameEn: "Smokey Eyes",
-      category: "evening",
-      price: "160",
-      duration: "1.5 години",
-      description: "Класичний та сучасний смокі айс в будь-якій кольоровій гамі.",
-      longDescription: "Інтенсивний погляд з ефектом димки. Виконуємо як класичний чорно-сірий, так і кольорові варіанти (синій, зелений, винний, графітовий).",
-      image: makeupSmokey,
-      features: [
-        "Ідеальна розтушовка",
-        "Будь-яка кольорова гама",
-        "Корекція форми очей",
-        "Накладні вії",
-        "Стійкість 8+ годин"
-      ],
-      brands: ["Urban Decay", "Natasha Denona", "Pat McGrath"],
-      popular: false
-    },
-    {
-      id: 5,
-      name: "Корекція та фарбування брів",
-      nameEn: "Brows Shaping",
-      category: "brows",
-      price: "80",
-      duration: "45 хвилин",
-      description: "Професійна корекція, фарбування та ламінування брів.",
-      longDescription: "Створюємо ідеальну форму брів, яка підходить саме вам. Фарбування хною або фарбою, ламінування, ботокс для брів.",
-      image: makeupDay,
-      features: [
-        "Корекція пінцетом/воском",
-        "Фарбування хною/фарбою",
-        "Ламінування брів",
-        "Ботокс для брів",
-        "Догляд після процедури"
-      ],
-      brands: ["Levissime", "Adonia", "Concept"],
-      popular: false
-    }
+  // Service groups — shared with the "Макіяж" / "Масаж" / "Бровист" directions.
+  // Group titles for price-list groups come from Elnara's price list categories.
+  const categoryTitle = (id) => localize(priceCategories.find((c) => c.id === id)?.title, language);
+  const categoryNote = (id) => localize(priceCategories.find((c) => c.id === id)?.note, language) || undefined;
+  const groups = [
+    { id: "permanent", items: permanentServices, title: categoryTitle("permanent"), filter: t("salon.filterPermanent") },
+    { id: "makeup", items: makeupTypes, title: categoryTitle("makeup"), subtitle: t("salon.makeupSubtitle"), filter: t("salon.filterMakeup") },
+    { id: "brows", items: browAndLashServices, title: t("salon.browsLashesTitle"), subtitle: t("salon.browsSubtitle"), filter: t("salon.filterBrowsLashes") },
+    { id: "packages", items: beautyPackages, title: categoryTitle("packages"), filter: t("salon.filterPackages") },
+    { id: "carbon", items: carbonPeelServices, title: categoryTitle("carbon-peel"), subtitle: categoryNote("carbon-peel"), filter: t("salon.filterCarbon") },
+    { id: "tattoo", items: tattooRemovalServices, title: categoryTitle("tattoo-laser"), subtitle: categoryNote("tattoo-laser"), filter: t("salon.filterTattoo") },
+    { id: "remover", items: pmuRemoverServices, title: categoryTitle("pmu-remover"), filter: t("salon.filterRemover") },
+    { id: "massage", items: massageProcedures, title: t("salon.massageTitle"), subtitle: t("salon.massageSubtitle"), filter: t("salon.filterMassage") },
+    // Device treatments (formerly the separate "Massages & treatments" page).
+    { id: "apparatus", items: apparatus, title: t("equipmentPage.servicesTitle"), filter: t("salon.filterApparatus") },
   ];
+  const visibleGroups = activeFilter === "all" ? groups : groups.filter((g) => g.id === activeFilter);
+  const popularServices = makeupTypes.filter((s) => s.popular);
 
-  const translatedServices = t("pageContent.serviceCards");
-  services.forEach((service, index) => Object.assign(service, translatedServices[index] || {}));
-
-  // Фільтрація послуг
-  const filteredServices = activeFilter === "all" 
-    ? services 
-    : services.filter(s => s.category === activeFilter);
-
-  const popularServices = services.filter(s => s.popular);
+  const renderCard = (service, extra = {}) => (
+    <ServiceCard
+      key={service.slug}
+      {...toCardProps(service, language, t)}
+      image={service.image}
+      imageAlt=""
+      onAction={() => goToBooking(service)}
+      {...extra}
+    />
+  );
 
   // Валідація форми
   const validateForm = () => {
@@ -317,9 +223,9 @@ export default function ServicesPage() {
             {t("servicesPage.heroText")}
           </p>
           <div className="services-hero__buttons">
-            <a href="#services" className="btn btn--primary">
+            <button type="button" className="btn btn--primary" onClick={scrollToServices}>
               {t("servicesPage.all")}
-            </a>
+            </button>
             <button 
               className="btn btn--outline"
               onClick={() => goToBooking()}
@@ -331,8 +237,10 @@ export default function ServicesPage() {
       </section>
 
       {/* Чому ми */}
-      <section className="features">
+      <section className="features" aria-labelledby="services-features-title">
         <div className="container">
+          {/* Hidden heading keeps the h1 → h2 → h3 outline valid for screen readers */}
+          <h2 id="services-features-title" className="sr-only">{t("home.whyChoose")}</h2>
           <div className="features__grid">
             <div className="feature-card" data-aos="fade-up">
               <div className="feature-card__icon"><FaPaintBrush aria-hidden="true" /></div>
@@ -364,43 +272,10 @@ export default function ServicesPage() {
       {/* Популярні послуги */}
       <section className="popular">
         <div className="container">
-          <div className="section-header">
-            <span className="section-badge">{t("servicesPage.popular")}</span>
-            <h2 className="section-title">{t("servicesPage.popularTitle")}</h2>
-          </div>
+          <SectionTitle eyebrow={t("servicesPage.popular")} title={t("servicesPage.popularTitle")} />
 
-          <div className="popular__grid">
-            {popularServices.map((service) => (
-              <div 
-                key={service.id} 
-                className="popular-card"
-                onClick={() => goToBooking(service)}
-              >
-                <div className="popular-card__image">
-                  <img src={service.image} alt={service.name} />
-                  <span className="popular-card__badge">{t("servicesPage.popular")}</span>
-                </div>
-                <div className="popular-card__content">
-                  <h3>{service.name}</h3>
-                  <p>{service.description}</p>
-                  <div className="popular-card__footer">
-                    <div>
-                      <span className="popular-card__duration">{service.duration}</span>
-                      <span className="popular-card__price">{service.price} €</span>
-                    </div>
-                 <button
-                    className="popular-card__btn"
-                     onClick={(e) => {
-                     e.stopPropagation();
-                     goToBooking(service);
-                       }}
-                      >
-                     {t("servicesPage.book")} →
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div className="card-grid popular__grid">
+            {popularServices.map((service) => renderCard(service, { badge: t("servicesPage.popular") }))}
           </div>
         </div>
       </section>
@@ -408,95 +283,41 @@ export default function ServicesPage() {
       {/* {t("servicesPage.all")} */}
       <section id="services" className="services">
         <div className="container">
-          <div className="section-header">
-            <span className="section-badge">{t("servicesPage.our")}</span>
-            <h2 className="section-title">{t("servicesPage.choose")}</h2>
-          </div>
+          <SectionTitle eyebrow={t("servicesPage.our")} title={t("servicesPage.choose")} />
 
-          {/* Фільтри */}
-          <div className="services__filters">
-            <button 
-              className={`filter-btn ${activeFilter === 'all' ? 'active' : ''}`}
-              onClick={() => setActiveFilter('all')}
-            >
-              {t("servicesPage.all")}
-            </button>
-            <button 
-              className={`filter-btn ${activeFilter === 'bridal' ? 'active' : ''}`}
-              onClick={() => setActiveFilter('bridal')}
-            >
-              {t("servicesPage.bridal")}
-            </button>
-            <button 
-              className={`filter-btn ${activeFilter === 'evening' ? 'active' : ''}`}
-              onClick={() => setActiveFilter('evening')}
-            >
-              {t("servicesPage.evening")}
-            </button>
-            <button 
-              className={`filter-btn ${activeFilter === 'day' ? 'active' : ''}`}
-              onClick={() => setActiveFilter('day')}
-            >
-              {t("servicesPage.day")}
-            </button>
-            <button 
-              className={`filter-btn ${activeFilter === 'brows' ? 'active' : ''}`}
-              onClick={() => setActiveFilter('brows')}
-            >
-              {t("servicesPage.brows")}
-            </button>
-          </div>
-
-          {/* Сітка послуг */}
-          <div className="services__grid">
-            {filteredServices.map((service) => (
-              <div
-                                key={service.id}
-                                className="service-card"
-                                onClick={() => goToBooking(service)}
-                              >
-                            <div className="service-card__image">
-                              <img src={service.image} alt={service.name} />
-                            </div>
-                      <div className="service-card__content">
-              <h3>{service.name}</h3>
-
-              <p className="service-card__name-en">{service.nameEn}</p>
-
-              <div className="service-card__details">
-                <span className="service-card__duration">
-                  {service.duration}
-                </span>
-
-                <span className="service-card__price">
-                  {service.price} €
-                </span>
-              </div>
-
+          {/* Категорії (TZ step 6) */}
+          <div className="services__filters" role="group" aria-label={t("salon.filtersLabel")}>
+            {[{ id: "all", filter: t("servicesPage.all") }, ...groups].map((g) => (
               <button
+                key={g.id}
                 type="button"
-                className="popular-card__btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  goToBooking(service);
-                }}
+                className={`filter-btn ${activeFilter === g.id ? "active" : ""}`}
+                aria-pressed={activeFilter === g.id}
+                onClick={() => setActiveFilter(g.id)}
               >
-                {t("servicesPage.book")} →
+                {g.filter}
               </button>
-            </div>
-              </div>
             ))}
           </div>
+
+          {visibleGroups.map((group) => (
+            <div key={group.id} id={`services-${group.id}`} className="services__group">
+              <SectionTitle as="h3" title={group.title} subtitle={group.subtitle} />
+              <div className="card-grid card-grid--4 services__grid">
+                {group.items.map((service) => renderCard(service))}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
+
+      {/* Години роботи та доплати (TZ step 7) */}
+      <HoursNotice />
 
       {/* Як ми працюємо */}
       <section className="process">
         <div className="container">
-          <div className="section-header">
-            <span className="section-badge">{t("servicesPage.process")}</span>
-            <h2 className="section-title">{t("servicesPage.processTitle")}</h2>
-          </div>
+          <SectionTitle eyebrow={t("servicesPage.process")} title={t("servicesPage.processTitle")} />
 
           <div className="process__steps">
             <div className="process-step">

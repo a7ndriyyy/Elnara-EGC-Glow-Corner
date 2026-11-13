@@ -1,7 +1,7 @@
 /* Study Page Styles */
 .study-page {
   overflow-x: hidden;
-  background: #0a0a0a;
+  background: var(--bg);
   color: #ffffff;
 }
 
@@ -21,10 +21,10 @@
 .section-badge {
   display: inline-block;
   padding: 0.5rem 1.5rem;
-  background: linear-gradient(135deg, rgba(201, 162, 126, 0.1) 0%, rgba(201, 162, 126, 0.2) 100%);
-  border: 1px solid rgba(201, 162, 126, 0.3);
+  background: linear-gradient(135deg, rgba(var(--gold-rgb), 0.1) 0%, rgba(var(--gold-rgb), 0.2) 100%);
+  border: 1px solid rgba(var(--gold-rgb), 0.3);
   border-radius: 50px;
-  color: #c9a27e;
+  color: var(--gold);
   font-size: 0.9rem;
   font-weight: 500;
   letter-spacing: 1px;
@@ -36,11 +36,11 @@
   font-size: 3rem;
   font-weight: 300;
   margin-bottom: 1.5rem;
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-title);
 }
 
 .section-title span {
-  color: #c9a27e;
+  color: var(--gold);
   font-weight: 600;
 }
 
@@ -96,7 +96,7 @@
 .study-hero__badge {
   display: inline-block;
   padding: 0.5rem 1.5rem;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(29, 25, 20, 0.60);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50px;
@@ -111,12 +111,12 @@
   font-weight: 300;
   line-height: 1.2;
   margin-bottom: 1.5rem;
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-title);
 }
 
 .study-hero__title span {
   display: block;
-  color: #c9a27e;
+  color: var(--gold);
   font-weight: 600;
 }
 
@@ -139,7 +139,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 1rem 2rem;
-  border-radius: 50px;
+  border-radius: var(--radius-btn);
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
@@ -154,25 +154,25 @@
 }
 
 .study-btn--primary {
-  background: #c9a27e;
-  color: #0a0a0a;
+  background: var(--gold-grad);
+  color: var(--bg);
 }
 
 .study-btn--primary:hover {
-  background: #d8b594;
+  filter: brightness(1.08);
   transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(201, 162, 126, 0.3);
+  box-shadow: 0 10px 30px rgba(var(--gold-rgb), 0.3);
 }
 
 .study-btn--outline {
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: #ffffff;
+  border: 1px solid var(--gold);
+  color: var(--gold-light);
 }
 
 .study-btn--outline:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: #ffffff;
+  background: rgba(201, 168, 106, .12);
+  border-color: var(--gold-light);
   transform: translateY(-2px);
 }
 
@@ -201,7 +201,7 @@
   display: block;
   font-size: 2.5rem;
   font-weight: 600;
-  color: #c9a27e;
+  color: var(--gold);
   margin-bottom: 0.5rem;
 }
 
@@ -214,7 +214,7 @@
 /* About Section */
 .study-about {
   padding: 6rem 2rem;
-  background: #0f0f0f;
+  background: var(--bg);
 }
 
 .study-about__container {
@@ -234,30 +234,30 @@
   width: 100%;
   height: auto;
   border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 40px rgba(var(--gold-rgb), 0.35);
 }
 
 .study-about__experience {
   position: absolute;
   bottom: -20px;
   right: -20px;
-  background: #c9a27e;
+  background: var(--gold);
   padding: 2rem;
   border-radius: 10px;
   text-align: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 30px rgba(var(--gold-rgb), 0.35);
 }
 
 .study-about__experience span {
   display: block;
   font-size: 3rem;
   font-weight: 700;
-  color: #0a0a0a;
+  color: var(--bg);
   line-height: 1;
 }
 
 .study-about__experience p {
-  color: #0a0a0a;
+  color: var(--bg);
   margin: 0;
   font-size: 0.9rem;
 }
@@ -279,13 +279,13 @@
 .feature-icon {
   width: 50px;
   height: 50px;
-  background: rgba(201, 162, 126, 0.1);
+  background: rgba(var(--gold-rgb), 0.1);
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  color: #c9a27e;
+  color: var(--gold);
 }
 
 .feature h4 {
@@ -308,7 +308,7 @@
 
 .social-link {
   padding: 0.5rem 1rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(29, 25, 20, 0.60);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 5px;
   color: #ffffff;
@@ -318,15 +318,15 @@
 }
 
 .social-link:hover {
-  background: #c9a27e;
-  color: #0a0a0a;
+  background: var(--gold);
+  color: var(--bg);
   transform: translateY(-2px);
 }
 
 /* Courses Section */
 .study-courses {
   padding: 6rem 2rem;
-  background: #0a0a0a;
+  background: var(--bg);
 }
 
 .courses-grid {
@@ -337,7 +337,7 @@
 }
 
 .course-card {
-  background: #151515;
+  background: var(--bg-2);
   border-radius: 20px;
   overflow: hidden;
   transition: all 0.3s ease;
@@ -347,7 +347,7 @@
 .course-card:hover {
   transform: translateY(-10px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-  border-color: rgba(201, 162, 126, 0.3);
+  border-color: rgba(var(--gold-rgb), 0.3);
 }
 
 .course-card__image {
@@ -372,9 +372,9 @@
   top: 1rem;
   right: 1rem;
   padding: 0.3rem 1rem;
-  background: rgba(201, 162, 126, 0.9);
+  background: rgba(var(--gold-rgb), 0.9);
   border-radius: 20px;
-  color: #0a0a0a;
+  color: var(--bg);
   font-size: 0.8rem;
   font-weight: 500;
 }
@@ -387,7 +387,7 @@
   font-size: 1.3rem;
   margin-bottom: 1rem;
   color: #ffffff;
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-title);
 }
 
 .course-card__description {
@@ -423,7 +423,7 @@
 
 .feature-tag {
   padding: 0.3rem 1rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(29, 25, 20, 0.60);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
   font-size: 0.8rem;
@@ -441,7 +441,7 @@
 .course-card__price {
   font-size: 1.8rem;
   font-weight: 600;
-  color: #c9a27e;
+  color: var(--gold);
 }
 
 .course-card__btn {
@@ -450,9 +450,9 @@
   gap: 0.5rem;
   padding: 0.8rem 1.5rem;
   background: transparent;
-  border: 1px solid #c9a27e;
-  border-radius: 30px;
-  color: #c9a27e;
+  border: 1px solid var(--gold);
+  border-radius: var(--radius-btn);
+  color: var(--gold);
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -464,8 +464,8 @@
 }
 
 .course-card__btn:hover {
-  background: #c9a27e;
-  color: #0a0a0a;
+  background: var(--gold);
+  color: var(--bg);
 }
 
 .course-card__btn:hover svg {
@@ -475,7 +475,7 @@
 /* Videos Section */
 .study-videos {
   padding: 6rem 2rem;
-  background: #0f0f0f;
+  background: var(--bg);
 }
 
 .videos-grid {
@@ -515,7 +515,7 @@
   transform: translate(-50%, -50%);
   width: 60px;
   height: 60px;
-  background: rgba(201, 162, 126, 0.9);
+  background: rgba(var(--gold-rgb), 0.9);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -527,7 +527,7 @@
 .video-card__play svg {
   width: 30px;
   height: 30px;
-  color: #0a0a0a;
+  color: var(--bg);
 }
 
 .video-card:hover .video-card__play {
@@ -554,13 +554,13 @@
 }
 
 .video-card:hover .video-card__title {
-  color: #c9a27e;
+  color: var(--gold);
 }
 
 /* Format Section */
 .study-format {
   padding: 6rem 2rem;
-  background: #0a0a0a;
+  background: var(--bg);
 }
 
 .format-grid {
@@ -572,7 +572,7 @@
 .format-item {
   text-align: center;
   padding: 2rem;
-  background: #151515;
+  background: var(--bg-2);
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.05);
   transition: all 0.3s ease;
@@ -580,8 +580,8 @@
 
 .format-item:hover {
   transform: translateY(-5px);
-  border-color: #c9a27e;
-  box-shadow: 0 10px 30px rgba(201, 162, 126, 0.1);
+  border-color: var(--gold);
+  box-shadow: 0 10px 30px rgba(var(--gold-rgb), 0.1);
 }
 
 .format-icon {
@@ -592,7 +592,7 @@
 .format-item h3 {
   font-size: 1.3rem;
   margin-bottom: 1rem;
-  color: #c9a27e;
+  color: var(--gold);
 }
 
 .format-item p {
@@ -604,7 +604,7 @@
 /* CTA Section */
 .study-cta {
   padding: 6rem 2rem;
-  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+  background: linear-gradient(135deg, var(--bg) 0%, var(--bg-2) 100%);
   position: relative;
   overflow: hidden;
 }
@@ -616,7 +616,7 @@
   right: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(201, 162, 126, 0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(var(--gold-rgb), 0.1) 0%, transparent 70%);
   animation: rotate 30s linear infinite;
 }
 
@@ -636,7 +636,7 @@
 .cta-content h2 {
   font-size: 3rem;
   margin-bottom: 1.5rem;
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-title);
 }
 
 .cta-content p {
@@ -658,7 +658,7 @@
   left: 0;
   width: 100%;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.95);
+  background: var(--bg-2);
   backdrop-filter: blur(10px);
   z-index: 9999;
   display: flex;
@@ -678,7 +678,7 @@
   position: relative;
   width: 90%;
   max-width: 1000px;
-  background: #0a0a0a;
+  background: var(--bg);
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
@@ -711,8 +711,8 @@
 }
 
 .video-modal__close:hover {
-  background: #c9a27e;
-  color: #0a0a0a;
+  background: var(--gold);
+  color: var(--bg);
   transform: rotate(90deg);
 }
 
@@ -720,7 +720,7 @@
   position: relative;
   width: 100%;
   padding-bottom: 56.25%;
-  background: #000;
+  background: var(--bg-2);
 }
 
 .video-modal__iframe iframe {
@@ -739,7 +739,7 @@
   font-size: 1.2rem;
   font-weight: 400;
   text-align: center;
-  background: #0f0f0f;
+  background: var(--bg);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -765,7 +765,7 @@
 }
 
 .study__modal {
-  background: #fff;
+  background: var(--bg-2);
   border-radius: 30px;
   padding: 2.5rem;
   max-width: 500px;
@@ -773,7 +773,7 @@
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 30px 60px rgba(var(--gold-rgb), 0.35);
   animation: studyModalSlideUp 0.4s ease;
 }
 
@@ -795,7 +795,7 @@
   background: none;
   border: none;
   font-size: 2rem;
-  color: #666;
+  color: var(--text-2);
   cursor: pointer;
   width: 40px;
   height: 40px;
@@ -809,7 +809,7 @@
 
 .study__modal-close:hover {
   background: rgba(0, 0, 0, 0.05);
-  color: #c9a27e;
+  color: var(--gold);
   transform: rotate(90deg);
 }
 
@@ -821,14 +821,14 @@
 .study__modal-title {
   font-size: 1.8rem;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--text);
   margin: 0 0 0.5rem 0;
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-title);
 }
 
 .study__modal-subtitle {
   font-size: 0.95rem;
-  color: #666;
+  color: var(--text-2);
   margin: 0;
 }
 
@@ -852,7 +852,7 @@
   left: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #c9a27e;
+  color: var(--gold);
   font-size: 1rem;
   z-index: 2;
 }
@@ -860,20 +860,20 @@
 .study__modal-input {
   width: 100%;
   padding: 1rem 1rem 1rem 3rem;
-  background: #f8f4f0;
-  border: 1px solid rgba(201, 162, 126, 0.3);
+  background: var(--bg-3);
+  border: 1px solid rgba(var(--gold-rgb), 0.3);
   border-radius: 15px;
   font-size: 1rem;
-  color: #1a1a1a;
+  color: var(--text);
   transition: all 0.3s ease;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
 }
 
 .study__modal-input:focus {
   outline: none;
-  border-color: #c9a27e;
-  box-shadow: 0 0 0 3px rgba(201, 162, 126, 0.1);
-  background: white;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(var(--gold-rgb), 0.1);
+  background: var(--bg-2);
 }
 
 .study__modal-label {
@@ -881,7 +881,7 @@
   left: 3rem;
   top: 1rem;
   padding: 0 0.25rem;
-  background: #f8f4f0;
+  background: var(--bg-3);
   color: #999;
   font-size: 1rem;
   transition: all 0.2s ease;
@@ -894,8 +894,8 @@
   top: -0.5rem;
   left: 2.5rem;
   font-size: 0.8rem;
-  color: #c9a27e;
-  background: white;
+  color: var(--gold);
+  background: var(--bg-2);
   padding: 0 0.3rem;
 }
 
@@ -914,9 +914,9 @@
   justify-content: center;
   gap: 0.8rem;
   padding: 1.2rem 2rem;
-  background: #c9a27e;
+  background: var(--gold-grad);
   border: none;
-  border-radius: 50px;
+  border-radius: var(--radius-btn);
   color: white;
   font-size: 1rem;
   font-weight: 600;
@@ -924,13 +924,13 @@
   overflow: hidden;
   transition: all 0.3s ease;
   margin-top: 1rem;
-  border: 1px solid #c9a27e;
+  border: 1px solid var(--gold);
 }
 
 .study__modal-submit:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(201, 162, 126, 0.4);
-  background: #b8926a;
+  box-shadow: 0 10px 30px rgba(var(--gold-rgb), 0.4);
+  background: var(--gold-dark);
 }
 
 .study__modal-submit:disabled {
@@ -953,7 +953,7 @@
   left: 50%;
   width: 150%;
   height: 150%;
-  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(29, 25, 20, 0.60) 0%, transparent 70%);
   transform: translate(-50%, -50%) scale(0);
   transition: transform 0.5s ease;
   pointer-events: none;
@@ -967,7 +967,7 @@
   width: 20px;
   height: 20px;
   border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
+  border-top-color: var(--line-soft);
   border-radius: 50%;
   animation: studyModalSpin 0.8s linear infinite;
 }

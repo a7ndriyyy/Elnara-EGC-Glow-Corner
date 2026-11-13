@@ -3,9 +3,11 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import './AdminPage.css';
+import { useLanguage } from '../i18n/LanguageContext';
 
 export default function AdminLogin() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -35,12 +37,12 @@ export default function AdminLogin() {
 
       if (!admin) {
         await supabase.auth.signOut();
-        throw new Error('This account is not authorized as an administrator.');
+        throw new Error(t('admin.login.notAdmin'));
       }
 
       navigate('/admin');
     } catch (err) {
-      setError(err.message || 'Unable to sign in.');
+      setError(err.message || t('admin.login.failed'));
     } finally {
       setLoading(false);
     }
@@ -49,10 +51,10 @@ export default function AdminLogin() {
   return (
     <main className="admin-login">
       <form onSubmit={handleSubmit} className="admin-login__form">
-        <h1>ELNARA Admin</h1>
-        <p>Sign in to manage appointments.</p>
+        <h1>{t('admin.login.title')}</h1>
+        <p>{t('admin.login.intro')}</p>
 
-        <label htmlFor="admin-email">Email</label>
+        <label htmlFor="admin-email">{t('admin.login.email')}</label>
         <input
           id="admin-email"
           type="email"
@@ -62,7 +64,7 @@ export default function AdminLogin() {
           required
         />
 
-        <label htmlFor="admin-password">Password</label>
+        <label htmlFor="admin-password">{t('admin.login.password')}</label>
         <input
           id="admin-password"
           type="password"
@@ -75,7 +77,7 @@ export default function AdminLogin() {
         {error && <p role="alert">{error}</p>}
 
         <button type="submit" disabled={loading}>
-          {loading ? 'Signing in…' : 'Sign in'}
+          {loading ? t('admin.login.submitting') : t('admin.login.submit')}
         </button>
       </form>
     </main>
