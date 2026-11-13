@@ -107,7 +107,7 @@ export default function Gallery() {
               ) : (
                 <img src={item.after || item.src} alt="" loading="lazy" decoding="async" />
               )}
-              {item.before && (
+              {(item.before || item.beforeAfter) && (
                 <span className="gallery__tag">{t("showcase.before")} / {t("showcase.after")}</span>
               )}
             </button>

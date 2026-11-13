@@ -1,5 +1,6 @@
-// Texts for the homepage structure (TZ step 3): quick-link tiles and the
-// extra navigation items.
+// Texts for the homepage structure (TZ step 3): quick-link tiles, the
+// "Майстер" block and the extra navigation items.
+// TODO: уточнити в Ельнари — її розповідь про себе для блоку «Майстер».
 // `nav` keys are merged into the existing `nav.*` namespace.
 export const sectionMessages = {
   uk: {
@@ -13,6 +14,14 @@ export const sectionMessages = {
       promotionsTitle: "Акції",
       promotionsText: "Знижки та новинки салону",
     },
+    master: {
+      eyebrow: "Майстер",
+      title: "Ельнара",
+      intro: "Майстер перманентного макіяжу, візажист і бровист. Приймає клієнтів у Парижі та Іль-де-Франс за попереднім записом.",
+      skills: ["Перманентний макіяж", "Макіяж", "Брови та вії", "Видалення тату"],
+      book: "Записатися",
+      works: "Дивитися роботи",
+    },
   },
   ru: {
     nav: { booking: "Запись" },
@@ -24,6 +33,14 @@ export const sectionMessages = {
       pricesText: "Актуальный прайс на все услуги",
       promotionsTitle: "Акции",
       promotionsText: "Скидки и новинки салона",
+    },
+    master: {
+      eyebrow: "Мастер",
+      title: "Эльнара",
+      intro: "Мастер перманентного макияжа, визажист и бровист. Принимает клиентов в Париже и Иль-де-Франс по предварительной записи.",
+      skills: ["Перманентный макияж", "Макияж", "Брови и ресницы", "Удаление тату"],
+      book: "Записаться",
+      works: "Смотреть работы",
     },
   },
   en: {
@@ -37,6 +54,14 @@ export const sectionMessages = {
       promotionsTitle: "Offers",
       promotionsText: "Discounts and what’s new at the salon",
     },
+    master: {
+      eyebrow: "The artist",
+      title: "Elnara",
+      intro: "Permanent makeup artist, makeup artist and brow specialist. Seeing clients in Paris and Île-de-France by appointment.",
+      skills: ["Permanent makeup", "Makeup", "Brows & lashes", "Tattoo removal"],
+      book: "Book now",
+      works: "See her work",
+    },
   },
   fr: {
     nav: { booking: "Réserver" },
@@ -48,6 +73,14 @@ export const sectionMessages = {
       pricesText: "Les tarifs à jour de toutes les prestations",
       promotionsTitle: "Offres",
       promotionsText: "Remises et nouveautés de l’institut",
+    },
+    master: {
+      eyebrow: "L’artiste",
+      title: "Elnara",
+      intro: "Experte en maquillage permanent, maquilleuse et spécialiste des sourcils. Reçoit à Paris et en Île-de-France sur rendez-vous.",
+      skills: ["Maquillage permanent", "Maquillage", "Sourcils & cils", "Détatouage"],
+      book: "Réserver",
+      works: "Voir ses réalisations",
     },
   },
 };

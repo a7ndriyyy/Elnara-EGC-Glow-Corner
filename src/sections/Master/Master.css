@@ -1,0 +1,110 @@
+/* Home "Майстер" block */
+.master {
+  background: var(--bg);
+  padding: clamp(56px, 8vw, 110px) 0;
+}
+
+.master__inner {
+  width: min(1200px, calc(100% - 32px));
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(28px, 5vw, 72px);
+  align-items: center;
+}
+
+.master__main {
+  margin: 0;
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid var(--line-soft);
+  background: var(--bg-3);
+  aspect-ratio: 2 / 3;
+}
+
+.master__main img,
+.master__more img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.master__intro {
+  margin: 0 0 18px;
+  color: var(--text-2);
+  font-size: clamp(15px, 1.4vw, 17px);
+  line-height: 1.75;
+}
+
+.master__skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 26px;
+  padding: 0;
+  list-style: none;
+}
+
+.master__skills li {
+  padding: 6px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--gold-light);
+  font-size: 13px;
+  letter-spacing: .5px;
+}
+
+.master__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.master__more {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.master__more figure {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 3 / 4;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--line-soft);
+  background: var(--bg-3);
+}
+
+.master__more figcaption {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: 6px;
+  padding: 3px 6px;
+  border-radius: 999px;
+  background: rgba(15, 13, 11, .78);
+  color: var(--gold-light);
+  font-size: 10px;
+  letter-spacing: .5px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 900px) {
+  .master__inner { grid-template-columns: 1fr; }
+  .master__main { max-width: 440px; width: 100%; margin: 0 auto; }
+}
+
+@media (max-width: 480px) {
+  .master__more { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .master__actions .btn { flex: 1 1 auto; text-align: center; }
+}

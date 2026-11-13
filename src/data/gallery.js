@@ -3,6 +3,7 @@
 // Item shapes:
 //   { id, category, src, alt }               — photo
 //   { id, category, before, after, alt }     — before / after photo pair
+//   { id, category, src, beforeAfter: true, alt } — one photo that already shows before / after
 //   { id, category, video, alt }             — short video (mp4 in public/Videos)
 // `category` is one of galleryCategories (filter chips appear only for
 // categories that have items). `alt` is { uk, en, fr, ru }.
@@ -10,9 +11,72 @@
 const img = (path) => `${import.meta.env.BASE_URL}Images/${path}`;
 const video = (path) => `${import.meta.env.BASE_URL}Videos/${path}`;
 
-export const galleryCategories = ["brows", "lips", "eyeliner", "lashes", "makeup", "permanent"];
+export const galleryCategories = ["brows", "lips", "eyeliner", "lashes", "makeup", "permanent", "face"];
 
 export const galleryItems = [
+  {
+    id: "brows-lips-before-after",
+    category: "permanent",
+    src: img("Works/brows-lips-before-after.jpg"),
+    beforeAfter: true,
+    alt: { uk: "Брови і губи: до і після", en: "Brows and lips: before and after", fr: "Sourcils et lèvres : avant / après", ru: "Брови и губы: до и после" },
+  },
+  {
+    id: "brows-powder-3",
+    category: "brows",
+    src: img("Works/brows-powder-3.jpg"),
+    alt: { uk: "Пудрові брови", en: "Powder brows", fr: "Sourcils poudrés", ru: "Пудровые брови" },
+  },
+  {
+    id: "lips-lipstick",
+    category: "lips",
+    src: img("Works/lips-lipstick.jpg"),
+    alt: { uk: "Губи з помадним ефектом", en: "Lipstick-effect lips", fr: "Lèvres effet rouge à lèvres", ru: "Губы с помадным эффектом" },
+  },
+  {
+    id: "eyeliner-arrow",
+    category: "eyeliner",
+    src: img("Works/eyeliner-arrow.jpg"),
+    alt: { uk: "Міжвійка зі стрілкою", en: "Eyeliner with a wing", fr: "Eye-liner avec virgule", ru: "Межресничка со стрелкой" },
+  },
+  {
+    id: "brows-lamination-before-after",
+    category: "brows",
+    src: img("Works/brows-lamination-before-after.jpg"),
+    beforeAfter: true,
+    alt: { uk: "Ламінування брів: до і після", en: "Brow lamination: before and after", fr: "Restructuration des sourcils : avant / après", ru: "Ламинирование бровей: до и после" },
+  },
+  {
+    id: "brows-powder-closeup",
+    category: "brows",
+    src: img("Works/brows-powder-closeup.jpg"),
+    alt: { uk: "Пудрові брови зблизька", en: "Powder brows close-up", fr: "Sourcils poudrés en gros plan", ru: "Пудровые брови крупным планом" },
+  },
+  {
+    id: "lips-red",
+    category: "lips",
+    src: img("Works/lips-red.jpg"),
+    alt: { uk: "Червоні губи", en: "Red lips", fr: "Lèvres rouges", ru: "Красные губы" },
+  },
+  {
+    id: "brows-powder-before-after",
+    category: "brows",
+    src: img("Works/brows-powder-before-after.jpg"),
+    beforeAfter: true,
+    alt: { uk: "Пудрові брови: до і після", en: "Powder brows: before and after", fr: "Sourcils poudrés : avant / après", ru: "Пудровые брови: до и после" },
+  },
+  {
+    id: "brows-lamination",
+    category: "brows",
+    src: img("Works/brows-lamination.jpg"),
+    alt: { uk: "Ламінування брів", en: "Brow lamination", fr: "Restructuration des sourcils", ru: "Ламинирование бровей" },
+  },
+  {
+    id: "carbon-peel",
+    category: "face",
+    src: img("Works/carbon-peel.jpg"),
+    alt: { uk: "Карбоновий пілінг", en: "Carbon peel", fr: "Peeling carbone", ru: "Карбоновый пилинг" },
+  },
   {
     id: "brows-powder-1",
     category: "brows",

@@ -80,8 +80,8 @@ export default function App() {
           {/* Device treatments now live on the salon services page; keep old links working */}
           <Route path="equipment" element={<Navigate to="/services" state={{ scrollTo: "services-apparatus" }} replace />} />
           <Route path="prices" element={<PricesPage />} />
-          {/* "About the master" page was removed at the owner's request */}
-          <Route path="master" element={<Navigate to="/" replace />} />
+          {/* "About the master" page was removed at the owner's request; old links land on the home "Майстер" block */}
+          <Route path="master" element={<Navigate to="/" state={{ scrollTo: "master" }} replace />} />
           <Route path="directions/:slug" element={<DirectionPage />} />
           <Route path="promotions" element={<PromotionsPage />} />
           <Route path="booking" element={<BookingPage />} />

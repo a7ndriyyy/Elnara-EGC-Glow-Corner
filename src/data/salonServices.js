@@ -60,8 +60,13 @@ export const makeupTypes = priceItems("makeup").map((item) =>
 );
 
 /** Brows & lashes (price-list categories "brows" + "lashes"). */
+const browLashImages = {
+  "brow-lift": img("ImagesServices/lamination.webp"),
+  "brow-architecture": img("Works/brows-lamination.jpg"),
+  "brow-shaping-coloring": img("Works/brows-lamination-before-after.jpg"),
+};
 export const browAndLashServices = priceItems("brows", "lashes").map((item) =>
-  withExtras(item.id, item.id === "brow-lift" ? { image: img("ImagesServices/lamination.webp") } : {}),
+  withExtras(item.id, browLashImages[item.id] ? { image: browLashImages[item.id] } : {}),
 );
 
 /** Beauty packages (price-list category "packages"). */
@@ -74,7 +79,9 @@ export const tattooRemovalServices = priceItems("tattoo-laser").map((item) => wi
 export const pmuRemoverServices = priceItems("pmu-remover").map((item) => withExtras(item.id));
 
 /** Laser carbon peel (price-list category "carbon-peel"). */
-export const carbonPeelServices = priceItems("carbon-peel").map((item) => withExtras(item.id));
+export const carbonPeelServices = priceItems("carbon-peel").map((item) =>
+  withExtras(item.id, { image: img("Works/carbon-peel.jpg") }),
+);
 
 /** Permanent makeup + touch-ups (price-list categories "permanent" + "retouch"). */
 // Elnara's own work photos (13.11.2026) on the matching permanent-makeup cards.
@@ -83,6 +90,7 @@ const permanentImages = {
   "lip-blush": img("Works/lips-watercolor.webp"),
   "lipstick-lips": img("Works/lips-lipstick-brows.webp"),
   "eyeliner-ombre": img("Works/eyeliner-shaded.webp"),
+  "eyeliner-classic": img("Works/eyeliner-arrow.jpg"),
 };
 export const permanentServices = priceItems("permanent", "retouch").map((item) =>
   withExtras(item.id, permanentImages[item.id] ? { image: permanentImages[item.id] } : {}),
