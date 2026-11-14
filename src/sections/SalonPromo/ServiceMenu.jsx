@@ -37,15 +37,13 @@ export function ServiceGroup({ group, index, onBook }) {
                 </span>
                 <span className="scard__body">
                   <span className="scard__name">{card.title}</span>
-                  {card.description && <span className="scard__desc">{card.description}</span>}
-                  <span className="scard__foot">
-                    <span className="scard__meta">
-                      {card.duration && <span><FiClock aria-hidden="true" /> {card.duration}</span>}
-                      {card.price && <strong>{card.price}</strong>}
-                    </span>
-                    <span className="scard__go" aria-hidden="true"><FiArrowUpRight /></span>
+                  <span className="scard__meta">
+                    {card.duration && <span><FiClock aria-hidden="true" /> {card.duration}</span>}
+                    {card.price && <strong>{card.price}</strong>}
                   </span>
+                  {card.description && <span className="scard__desc">{card.description}</span>}
                 </span>
+                <span className="scard__go" aria-hidden="true"><FiArrowUpRight /></span>
               </button>
             </li>
           );
