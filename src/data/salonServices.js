@@ -2,11 +2,13 @@
 // Names, prices and durations come from Elnara's price list (./priceList.js);
 // this file only adds photos and short descriptions.
 import { priceItem, priceItems } from "./priceList";
+import { tempImage } from "./tempImages";
 
 const img = (path) => `${import.meta.env.BASE_URL}Images/${path}`;
 
 /** Price-list item + extra card fields (image, description, popular…). */
-const withExtras = (id, extras = {}) => ({ ...priceItem(id), slug: id, bookingId: id, ...extras });
+// Own photo from extras first, otherwise a temporary one (src/data/tempImages.js).
+const withExtras = (id, extras = {}) => ({ ...priceItem(id), slug: id, bookingId: id, ...extras, image: extras.image ?? tempImage(id) });
 
 // Photos/descriptions for makeup items that have them; the rest show the gold initial.
 const makeupExtras = {
@@ -103,7 +105,7 @@ export const massageProcedures = [
   {
     slug: "classic-back",
     title: { uk: "Класичний масаж спини", en: "Classic back massage", fr: "Massage classique du dos", ru: "Классический массаж спины" },
-    image: null,
+    image: tempImage("classic-back"), // TODO: уточнити в Ельнари — власне фото
     description: {
       uk: "Знімає напругу та втому м'язів спини.",
       en: "Relieves tension and fatigue in the back muscles.",
@@ -116,7 +118,7 @@ export const massageProcedures = [
   {
     slug: "full-body",
     title: { uk: "Загальний масаж тіла", en: "Full-body massage", fr: "Massage corps entier", ru: "Общий массаж тела" },
-    image: null,
+    image: tempImage("full-body"), // TODO: уточнити в Ельнари — власне фото
     description: {
       uk: "Глибоке розслаблення та відновлення всього тіла.",
       en: "Deep relaxation and recovery for the whole body.",
@@ -129,7 +131,7 @@ export const massageProcedures = [
   {
     slug: "anti-cellulite",
     title: { uk: "Антицелюлітний масаж", en: "Anti-cellulite massage", fr: "Massage anticellulite", ru: "Антицеллюлитный массаж" },
-    image: null,
+    image: tempImage("anti-cellulite"), // TODO: уточнити в Ельнари — власне фото
     description: {
       uk: "Покращує тонус шкіри та зменшує прояви целюліту.",
       en: "Improves skin tone and reduces the look of cellulite.",
@@ -142,7 +144,7 @@ export const massageProcedures = [
   {
     slug: "lymphatic",
     title: { uk: "Лімфодренажний масаж", en: "Lymphatic drainage massage", fr: "Massage lymphatique", ru: "Лимфодренажный массаж" },
-    image: null,
+    image: tempImage("lymphatic"), // TODO: уточнити в Ельнари — власне фото
     description: {
       uk: "Зменшує набряки та дарує відчуття легкості.",
       en: "Reduces swelling and leaves a feeling of lightness.",
@@ -155,7 +157,7 @@ export const massageProcedures = [
   {
     slug: "face-neck",
     title: { uk: "Масаж обличчя та шиї", en: "Face and neck massage", fr: "Massage visage et cou", ru: "Массаж лица и шеи" },
-    image: null,
+    image: tempImage("face-neck"), // TODO: уточнити в Ельнари — власне фото
     description: {
       uk: "Розслабляє м'язи обличчя, покращує тонус і колір шкіри.",
       en: "Relaxes facial muscles and improves skin tone and radiance.",

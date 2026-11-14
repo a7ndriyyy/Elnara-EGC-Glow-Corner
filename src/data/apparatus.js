@@ -1,3 +1,4 @@
+import { tempImage } from "./tempImages";
 // Device treatments without an entry in Elnara's price list yet (vacuum
 // massage, pressotherapy). Carbon peel and the removal services moved to
 // src/data/priceList.js when she sent their prices (13.11.2026).
@@ -10,7 +11,7 @@ export const apparatus = [
     slug: "vacuum-massage",
     // Replaces the former LPG device.
     title: { uk: "Вакуумний масаж", en: "Vacuum massage", fr: "Massage par dépression", ru: "Вакуумный массаж" },
-    image: null,
+    image: tempImage("vacuum-massage"), // TODO: уточнити в Ельнари — власне фото
     description: {
       uk: "Апаратний вакуумний масаж для моделювання силуету, тонусу шкіри та зменшення проявів целюліту.",
       en: "Device vacuum massage to contour the silhouette, tone the skin and reduce the look of cellulite.",
@@ -23,7 +24,7 @@ export const apparatus = [
   {
     slug: "pressotherapy",
     title: { uk: "Пресотерапія", en: "Pressotherapy", fr: "Pressothérapie", ru: "Прессотерапия" },
-    image: null,
+    image: tempImage("pressotherapy"), // TODO: уточнити в Ельнари — власне фото
     description: {
       uk: "Апаратний лімфодренаж: легкість у ногах, менше набряків, кращий тонус.",
       en: "Device lymphatic drainage: lighter legs, less swelling and better tone.",
