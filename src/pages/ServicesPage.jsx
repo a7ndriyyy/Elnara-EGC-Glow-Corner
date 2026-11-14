@@ -13,7 +13,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import emailjs from "@emailjs/browser";
 import "./ServicesPage.css";
-import ServiceCard from "../components/ServiceCard/ServiceCard";
+import { PopularTiles, ServiceGroup } from "../sections/SalonPromo/ServiceMenu";
 import SectionTitle from "../components/SectionTitle/SectionTitle";
 import HoursNotice from "../components/HoursNotice/HoursNotice";
 import SalonHighlights from "../sections/SalonPromo/SalonHighlights";
@@ -23,7 +23,6 @@ import { priceCategories } from "../data/priceList";
 import { apparatus } from "../data/apparatus";
 import { bookingLink } from "../data/directions";
 import { localize } from "../utils/format";
-import { toCardProps } from "../utils/pricing";
 import { useLanguage } from "../i18n/LanguageContext";
 
 // Імпорт зображень (замініть на свої)
@@ -85,17 +84,6 @@ export default function ServicesPage() {
   ];
   const visibleGroups = activeFilter === "all" ? groups : groups.filter((g) => g.id === activeFilter);
   const popularServices = makeupTypes.filter((s) => s.popular);
-
-  const renderCard = (service, extra = {}) => (
-    <ServiceCard
-      key={service.slug}
-      {...toCardProps(service, language, t)}
-      image={service.image}
-      imageAlt=""
-      onAction={() => goToBooking(service)}
-      {...extra}
-    />
-  );
 
   // Валідація форми
   const validateForm = () => {
@@ -242,9 +230,7 @@ export default function ServicesPage() {
         <div className="container">
           <SectionTitle eyebrow={t("servicesPage.popular")} title={t("servicesPage.popularTitle")} />
 
-          <div className="card-grid popular__grid">
-            {popularServices.map((service) => renderCard(service, { badge: t("servicesPage.popular") }))}
-          </div>
+          <PopularTiles services={popularServices} onBook={goToBooking} />
         </div>
       </section>
 
@@ -269,12 +255,7 @@ export default function ServicesPage() {
           </div>
 
           {visibleGroups.map((group) => (
-            <div key={group.id} id={`services-${group.id}`} className="services__group">
-              <SectionTitle as="h3" title={group.title} subtitle={group.subtitle} />
-              <div className="card-grid card-grid--4 services__grid">
-                {group.items.map((service) => renderCard(service))}
-              </div>
-            </div>
+            <ServiceGroup key={group.id} group={group} index={groups.indexOf(group)} onBook={goToBooking} />
           ))}
         </div>
       </section>
