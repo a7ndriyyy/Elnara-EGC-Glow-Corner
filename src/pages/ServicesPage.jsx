@@ -7,25 +7,21 @@ import {
   FaPhone,
   FaEnvelope,
   FaUser,
-  FaPaintBrush,
-  FaStar,
-  FaGraduationCap,
-  FaGem,
 } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import emailjs from "@emailjs/browser";
 import "./ServicesPage.css";
-import ServiceCard from "../components/ServiceCard/ServiceCard";
+import { PopularTiles, ServiceGroup } from "../sections/SalonPromo/ServiceMenu";
 import SectionTitle from "../components/SectionTitle/SectionTitle";
-import HoursNotice from "../components/HoursNotice/HoursNotice";
+import SalonHighlights from "../sections/SalonPromo/SalonHighlights";
+import SalonCta from "../sections/SalonPromo/SalonCta";
 import { beautyPackages, browAndLashServices, carbonPeelServices, makeupTypes, massageProcedures, permanentServices, pmuRemoverServices, tattooRemovalServices } from "../data/salonServices";
 import { priceCategories } from "../data/priceList";
 import { apparatus } from "../data/apparatus";
 import { bookingLink } from "../data/directions";
 import { localize } from "../utils/format";
-import { toCardProps } from "../utils/pricing";
 import { useLanguage } from "../i18n/LanguageContext";
 
 // Імпорт зображень (замініть на свої)
@@ -87,17 +83,6 @@ export default function ServicesPage() {
   ];
   const visibleGroups = activeFilter === "all" ? groups : groups.filter((g) => g.id === activeFilter);
   const popularServices = makeupTypes.filter((s) => s.popular);
-
-  const renderCard = (service, extra = {}) => (
-    <ServiceCard
-      key={service.slug}
-      {...toCardProps(service, language, t)}
-      image={service.image}
-      imageAlt=""
-      onAction={() => goToBooking(service)}
-      {...extra}
-    />
-  );
 
   // Валідація форми
   const validateForm = () => {
@@ -236,47 +221,15 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* Чому ми */}
-      <section className="features" aria-labelledby="services-features-title">
-        <div className="container">
-          {/* Hidden heading keeps the h1 → h2 → h3 outline valid for screen readers */}
-          <h2 id="services-features-title" className="sr-only">{t("home.whyChoose")}</h2>
-          <div className="features__grid">
-            <div className="feature-card" data-aos="fade-up">
-              <div className="feature-card__icon"><FaPaintBrush aria-hidden="true" /></div>
-              <h3>{t("servicesPage.cosmetics")}</h3>
-              <p>{t("servicesPage.cosmeticsText")}</p>
-            </div>
-            
-            <div className="feature-card" data-aos="fade-up" data-delay="100">
-              <div className="feature-card__icon"><FaStar aria-hidden="true" /></div>
-              <h3>{t("servicesPage.hygiene")}</h3>
-              <p>{t("servicesPage.hygieneText")}</p>
-            </div>
-            
-            <div className="feature-card" data-aos="fade-up" data-delay="200">
-              <div className="feature-card__icon"><FaGraduationCap aria-hidden="true" /></div>
-              <h3>{t("servicesPage.experience")}</h3>
-              <p>{t("servicesPage.experienceText")}</p>
-            </div>
-            
-            <div className="feature-card" data-aos="fade-up" data-delay="300">
-              <div className="feature-card__icon"><FaGem aria-hidden="true" /></div>
-              <h3>{t("servicesPage.personal")}</h3>
-              <p>{t("servicesPage.personalText")}</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Чому Ельнара — факти, бігучий рядок послуг */}
+      <SalonHighlights />
 
       {/* Популярні послуги */}
       <section className="popular">
         <div className="container">
           <SectionTitle eyebrow={t("servicesPage.popular")} title={t("servicesPage.popularTitle")} />
 
-          <div className="card-grid popular__grid">
-            {popularServices.map((service) => renderCard(service, { badge: t("servicesPage.popular") }))}
-          </div>
+          <PopularTiles services={popularServices} onBook={goToBooking} />
         </div>
       </section>
 
@@ -301,18 +254,10 @@ export default function ServicesPage() {
           </div>
 
           {visibleGroups.map((group) => (
-            <div key={group.id} id={`services-${group.id}`} className="services__group">
-              <SectionTitle as="h3" title={group.title} subtitle={group.subtitle} />
-              <div className="card-grid card-grid--4 services__grid">
-                {group.items.map((service) => renderCard(service))}
-              </div>
-            </div>
+            <ServiceGroup key={group.id} group={group} index={groups.indexOf(group)} onBook={goToBooking} />
           ))}
         </div>
       </section>
-
-      {/* Години роботи та доплати (TZ step 7) */}
-      <HoursNotice />
 
       {/* Як ми працюємо */}
       <section className="process">
@@ -356,32 +301,7 @@ export default function ServicesPage() {
       </section>
 
       {/* CTA */}
-      <section className="cta">
-        <div className="container">
-          <div className="cta__content">
-            <h2>{t("servicesPage.cta")}</h2>
-            <p>{t("servicesPage.ctaText")}</p>
-            <div className="cta__buttons">
-              <button 
-                className="btn btn--primary btn--large"
-                onClick={() => goToBooking()}
-              >
-                {t("servicesPage.online")}
-              </button>
-              <button
-  type="button"
-  className="btn btn--outline btn--large"
-  onClick={openModal}
->
-  {t("servicesPage.getConsultation")}
-</button>
-              <a href="tel:+33456756578" className="btn btn--outline btn--large">
-                +33 4 56 75 65 78
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
+      <SalonCta onBook={() => goToBooking()} onConsult={openModal} />
 
       {/* МОДАЛЬНЕ ВІКНО З ФОРМОЮ */}
       {isModalOpen && (

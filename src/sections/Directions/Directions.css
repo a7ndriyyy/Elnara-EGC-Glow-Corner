@@ -9,6 +9,21 @@
   margin: 0 auto;
 }
 
+/* six directions: 3 per row on desktop, links styled as the tall photo cards */
+.directions .directions__cards {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: clamp(28px, 4vw, 44px);
+}
+.directions__cards .scard { text-decoration: none; aspect-ratio: 4 / 5; }
+.directions__cards .scard__name { font-size: clamp(22px, 2.2vw, 30px); letter-spacing: 2px; }
+.directions__cards .scard__meta { max-width: 30ch; line-height: 1.5; }
+.directions .scard--locked .scard__media img { filter: grayscale(1) brightness(.6); }
+.scard__desc svg { vertical-align: -2px; }
+
+@media (max-width: 900px) {
+  .directions .directions__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 /* direction pages */
 .direction-page {
   background: var(--bg);

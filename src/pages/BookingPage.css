@@ -3,7 +3,22 @@
    ELNARA — Responsive Booking Page
    ================================ */
 
+/* Same light palette as the Prices page (owner's request): the design tokens
+   are redefined for this page only; golds are darkened for contrast on white. */
 .booking-page {
+  --bg: #faf7f2;
+  --bg-2: #ffffff;
+  --bg-3: #f3ece1;
+  --text: #1d1914;
+  --text-2: #5f5244;
+  --gold: #87663a;
+  --gold-light: #7a5c2e;
+  --gold-dark: #6b4f26;
+  --gold-rgb: 135, 102, 58;
+  --line: rgba(135, 102, 58, 0.35);
+  --line-soft: rgba(135, 102, 58, 0.18);
+  color-scheme: light;
+  font-family: var(--font-body);
   box-sizing: border-box;
   min-height: 70vh;
   padding: clamp(32px, 6vw, 80px) 20px;

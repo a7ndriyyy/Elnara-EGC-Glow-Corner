@@ -1,58 +1,195 @@
-/* Home "Майстер" block */
+/* Home "Майстер" block — editorial layout */
 .master {
-  background: var(--bg);
-  padding: clamp(56px, 8vw, 110px) 0;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(50% 60% at 15% 40%, rgba(var(--gold-rgb), .08), transparent 70%),
+    var(--bg);
+  padding: clamp(64px, 9vw, 130px) 0 clamp(56px, 7vw, 100px);
+}
+
+/* huge faint signature behind everything */
+.master__watermark {
+  position: absolute;
+  top: clamp(10px, 3vw, 40px);
+  right: -2vw;
+  font-family: var(--font-sign);
+  font-size: clamp(120px, 22vw, 330px);
+  line-height: 1;
+  color: rgba(var(--gold-rgb), .06);
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
 }
 
 .master__inner {
+  position: relative;
   width: min(1200px, calc(100% - 32px));
   margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  gap: clamp(28px, 5vw, 72px);
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: clamp(40px, 7vw, 110px);
   align-items: center;
 }
 
-.master__main {
-  margin: 0;
+/* ---- photo ---- */
+.master__visual {
   position: relative;
-  border-radius: 18px;
-  overflow: hidden;
-  border: 1px solid var(--line-soft);
-  background: var(--bg-3);
-  aspect-ratio: 2 / 3;
+  width: min(100%, 440px);
+  justify-self: center;
+  padding: 0 0 24px 24px;
 }
 
-.master__main img,
-.master__more img {
+/* gold arch outline, offset behind the photo */
+.master__outline {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: calc(100% - 24px);
+  height: calc(100% - 24px);
+  border: 1px solid var(--gold);
+  border-radius: 999px 999px 18px 18px;
+  opacity: .7;
+}
+
+.master__main {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 3 / 4;
+  border-radius: 999px 999px 18px 18px;
+  overflow: hidden;
+  background: var(--bg-3);
+  box-shadow: 0 40px 80px rgba(0, 0, 0, .55);
+}
+.master__main img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: 50% 20%;
+  transition: transform 1.2s var(--ease-soft);
+}
+.master__visual:hover .master__main img { transform: scale(1.04); }
+
+/* turning round stamp */
+.master__stamp {
+  position: absolute;
+  top: 8%;
+  right: -34px;
+  width: clamp(96px, 11vw, 128px);
+  aspect-ratio: 1;
+  padding: 4px;
+  border-radius: 50%;
+  background: rgba(15, 13, 11, .88);
+  border: 1px solid var(--line);
+  animation: master-spin 22s linear infinite;
+}
+.master__stamp text {
+  fill: var(--gold-light);
+  font-family: var(--font-body);
+  font-size: 9.4px;
+  font-weight: 600;
+  letter-spacing: 1.6px;
+}
+.master__stamp circle { fill: var(--gold); }
+@keyframes master-spin { to { transform: rotate(360deg); } }
+
+/* experience badge */
+.master__badge {
+  position: absolute;
+  left: -6px;
+  bottom: 56px;
+  display: grid;
+  gap: 2px;
+  padding: 14px 20px;
+  border-radius: 16px;
+  background: var(--gold-grad);
+  color: #1a140c;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .45);
+}
+.master__badge strong {
+  font-family: var(--font-title);
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1;
+}
+.master__badge span {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+/* ---- text ---- */
+.master__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 6px;
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+.master__eyebrow::before {
+  content: "";
+  width: 44px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.master__title {
+  margin: 0 0 18px;
+  font-family: var(--font-sign);
+  font-weight: 400;
+  font-size: clamp(72px, 9vw, 128px);
+  line-height: 1.05;
+  letter-spacing: 0;
+  text-transform: none;
+  background: var(--gold-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .master__intro {
-  margin: 0 0 18px;
+  margin: 0 0 28px;
+  max-width: 52ch;
   color: var(--text-2);
-  font-size: clamp(15px, 1.4vw, 17px);
-  line-height: 1.75;
+  font-size: clamp(15px, 1.35vw, 17px);
+  line-height: 1.8;
 }
 
+/* numbered skills, editorial list */
 .master__skills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 0 0 26px;
+  margin: 0 0 34px;
   padding: 0;
   list-style: none;
+  border-top: 1px solid var(--line-soft);
 }
-
 .master__skills li {
-  padding: 6px 14px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  color: var(--gold-light);
-  font-size: 13px;
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  padding: 14px 4px;
+  border-bottom: 1px solid var(--line-soft);
+  transition: padding .35s var(--ease-soft), background .35s var(--ease-soft);
+}
+.master__skills li:hover {
+  padding-left: 14px;
+  background: linear-gradient(90deg, rgba(var(--gold-rgb), .10), transparent 70%);
+}
+.master__num {
+  font-family: var(--font-title);
+  font-size: 15px;
+  color: var(--gold);
+  font-variant-numeric: lining-nums;
+}
+.master__skill {
+  font-family: var(--font-title);
+  font-size: clamp(20px, 2vw, 26px);
+  color: var(--text);
   letter-spacing: .5px;
 }
 
@@ -60,51 +197,94 @@
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-bottom: 32px;
 }
 
-.master__more {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-  margin: 0;
+/* ---- photo reel: hovered panel widens ---- */
+.master__reel {
+  position: relative;
+  display: flex;
+  gap: 10px;
+  width: min(1200px, calc(100% - 32px));
+  height: clamp(260px, 30vw, 380px);
+  margin: clamp(56px, 7vw, 96px) auto 0;
   padding: 0;
   list-style: none;
 }
 
-.master__more figure {
+.master__panel {
   position: relative;
-  margin: 0;
-  aspect-ratio: 3 / 4;
-  border-radius: 12px;
+  flex: 1 1 0;
+  min-width: 0;
+  border-radius: 16px;
   overflow: hidden;
-  border: 1px solid var(--line-soft);
   background: var(--bg-3);
+  border: 1px solid var(--line-soft);
+  transition: flex-grow .7s var(--ease-soft), border-color .4s ease;
+}
+.master__panel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 22%;
+  filter: grayscale(.55) brightness(.75);
+  transition: filter .6s var(--ease-soft), transform 1s var(--ease-soft);
+}
+.master__reel:hover .master__panel { flex-grow: .7; }
+.master__reel .master__panel:hover {
+  flex-grow: 4;
+  border-color: var(--gold);
+}
+.master__panel:hover img {
+  filter: none;
+  transform: scale(1.03);
 }
 
-.master__more figcaption {
+.master__caption {
   position: absolute;
-  left: 6px;
-  right: 6px;
-  bottom: 6px;
-  padding: 3px 6px;
+  left: 12px;
+  bottom: 12px;
+  padding: 5px 12px;
   border-radius: 999px;
-  background: rgba(15, 13, 11, .78);
+  background: rgba(15, 13, 11, .8);
+  border: .5px solid var(--gold);
   color: var(--gold-light);
-  font-size: 10px;
-  letter-spacing: .5px;
-  text-align: center;
+  font-size: 11px;
+  letter-spacing: 1px;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
+/* ---- tablet ---- */
 @media (max-width: 900px) {
   .master__inner { grid-template-columns: 1fr; }
-  .master__main { max-width: 440px; width: 100%; margin: 0 auto; }
+  .master__visual { width: min(84vw, 400px); }
+  .master__stamp { right: -14px; }
 }
 
-@media (max-width: 480px) {
-  .master__more { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* ---- phone: the reel becomes a swipeable strip ---- */
+@media (max-width: 640px) {
+  .master__reel {
+    width: 100%;
+    height: auto;
+    padding: 0 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .master__reel::-webkit-scrollbar { display: none; }
+  .master__panel,
+  .master__reel:hover .master__panel,
+  .master__reel .master__panel:hover {
+    flex: 0 0 62%;
+    aspect-ratio: 3 / 4;
+    scroll-snap-align: center;
+  }
+  .master__panel img { filter: none; }
   .master__actions .btn { flex: 1 1 auto; text-align: center; }
+  .master__badge strong { font-size: 32px; }
+  .master__badge { padding: 10px 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .master__stamp { animation: none; }
+  .master__panel, .master__panel img, .master__main img, .master__skills li { transition: none; }
 }

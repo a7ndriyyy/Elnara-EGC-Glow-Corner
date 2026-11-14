@@ -15,9 +15,11 @@ export default function Layout() {
   useRevealOnScroll(mainRef, location.pathname);
   usePageMeta();
   const hideBookingCta = ['/booking', '/reschedule', '/admin', '/admin-login'].includes(location.pathname);
+  // Admin pages are light from edge to edge (owner's request), not a light box on the dark site.
+  const isAdmin = ['/admin', '/admin-login'].includes(location.pathname);
 
   return (
-    <div className="site-layout">
+    <div className={`site-layout${isAdmin ? " site-layout--light" : ""}`}>
       <Navbar />
       <main className="site-layout__main" ref={mainRef}>
         <Suspense fallback={<div className="page-loading" aria-busy="true" />}>
