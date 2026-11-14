@@ -4,6 +4,32 @@
 // `nav` keys are merged into the existing `nav.*` namespace.
 export const sectionMessages = {
   uk: {
+    salonPromo: {
+      "ticker": [
+        "Перманентний макіяж",
+        "Пудрові брови",
+        "Акварельні губи",
+        "Міжвійка",
+        "Ламінування",
+        "Макіяж",
+        "Карбоновий пілінг",
+        "Видалення тату"
+      ],
+      "eyebrow": "Чому Ельнара",
+      "title": "Досвід, який видно в кожній роботі",
+      "yearsTitle": "років досвіду",
+      "yearsText": "Перманентний макіяж, макіяж і брови — техніка, відпрацьована роками, і погляд, що бачить вашу природну красу.",
+      "certTitle": "сертифікатів",
+      "certText": "Постійне навчання та сучасні техніки перманентного макіяжу.",
+      "wulopTitle": "WULOP France",
+      "wulopText": "Робота на міжнародному чемпіонаті з перманентного макіяжу в Парижі.",
+      "cleanWord": "Стерильно",
+      "cleanTitle": "Безпека понад усе",
+      "cleanText": "Одноразові голки й інструменти, дезінфекція робочого місця після кожної клієнтки.",
+      "ctaEyebrow": "Запис",
+      "ctaText": "Оберіть послугу й зручний час онлайн — або зателефонуйте, і ми допоможемо з вибором.",
+      "call": "Зателефонувати"
+    },
     nav: { booking: "Запис" },
     tiles: {
       label: "Швидкі посилання",
@@ -24,6 +50,32 @@ export const sectionMessages = {
     },
   },
   ru: {
+    salonPromo: {
+      "ticker": [
+        "Перманентный макияж",
+        "Пудровые брови",
+        "Акварельные губы",
+        "Межресничка",
+        "Ламинирование",
+        "Макияж",
+        "Карбоновый пилинг",
+        "Удаление тату"
+      ],
+      "eyebrow": "Почему Эльнара",
+      "title": "Опыт, который виден в каждой работе",
+      "yearsTitle": "лет опыта",
+      "yearsText": "Перманентный макияж, макияж и брови — техника, отточенная годами, и взгляд, который видит вашу естественную красоту.",
+      "certTitle": "сертификатов",
+      "certText": "Постоянное обучение и современные техники перманентного макияжа.",
+      "wulopTitle": "WULOP France",
+      "wulopText": "Работа на международном чемпионате по перманентному макияжу в Париже.",
+      "cleanWord": "Стерильно",
+      "cleanTitle": "Безопасность прежде всего",
+      "cleanText": "Одноразовые иглы и инструменты, дезинфекция рабочего места после каждой клиентки.",
+      "ctaEyebrow": "Запись",
+      "ctaText": "Выберите услугу и удобное время онлайн — или позвоните, и мы поможем с выбором.",
+      "call": "Позвонить"
+    },
     nav: { booking: "Запись" },
     tiles: {
       label: "Быстрые ссылки",
@@ -44,6 +96,32 @@ export const sectionMessages = {
     },
   },
   en: {
+    salonPromo: {
+      "ticker": [
+        "Permanent makeup",
+        "Powder brows",
+        "Watercolour lips",
+        "Lash line",
+        "Lash & brow lift",
+        "Makeup",
+        "Carbon peel",
+        "Tattoo removal"
+      ],
+      "eyebrow": "Why Elnara",
+      "title": "Experience you can see in every result",
+      "yearsTitle": "years of experience",
+      "yearsText": "Permanent makeup, makeup and brows — technique refined over years, and an eye for your natural beauty.",
+      "certTitle": "certificates",
+      "certText": "Ongoing training and up-to-date permanent makeup techniques.",
+      "wulopTitle": "WULOP France",
+      "wulopText": "Working at the international permanent makeup championship in Paris.",
+      "cleanWord": "Sterile",
+      "cleanTitle": "Safety first",
+      "cleanText": "Single-use needles and tools, the workstation disinfected after every client.",
+      "ctaEyebrow": "Booking",
+      "ctaText": "Choose a treatment and a time online — or call us and we’ll help you choose.",
+      "call": "Call us"
+    },
     nav: { booking: "Book" },
     tiles: {
       label: "Quick links",
@@ -64,6 +142,32 @@ export const sectionMessages = {
     },
   },
   fr: {
+    salonPromo: {
+      "ticker": [
+        "Maquillage permanent",
+        "Sourcils poudrés",
+        "Lèvres aquarelle",
+        "Ras de cils",
+        "Rehaussement",
+        "Maquillage",
+        "Peeling carbone",
+        "Détatouage"
+      ],
+      "eyebrow": "Pourquoi Elnara",
+      "title": "Une expérience visible dans chaque résultat",
+      "yearsTitle": "ans d’expérience",
+      "yearsText": "Maquillage permanent, maquillage et sourcils — une technique affinée au fil des années et un regard qui révèle votre beauté naturelle.",
+      "certTitle": "certificats",
+      "certText": "Formation continue et techniques modernes de maquillage permanent.",
+      "wulopTitle": "WULOP France",
+      "wulopText": "Au travail lors du championnat international de maquillage permanent à Paris.",
+      "cleanWord": "Stérile",
+      "cleanTitle": "La sécurité avant tout",
+      "cleanText": "Aiguilles et outils à usage unique, poste de travail désinfecté après chaque cliente.",
+      "ctaEyebrow": "Rendez-vous",
+      "ctaText": "Choisissez une prestation et un horaire en ligne — ou appelez-nous, nous vous aiderons à choisir.",
+      "call": "Appeler"
+    },
     nav: { booking: "Réserver" },
     tiles: {
       label: "Accès rapide",
