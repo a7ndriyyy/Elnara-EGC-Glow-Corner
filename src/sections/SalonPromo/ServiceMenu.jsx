@@ -5,45 +5,47 @@ import { toCardProps } from "../../utils/pricing";
 import "./ServiceMenu.css";
 
 /**
- * Minimal service menu for the salon page.
- * One group = sticky header on the left (number, title, note, count) and a
- * clean list of services on the right: name, note, duration, price and a
- * "book" arrow. Rows with a photo show a small thumbnail that grows on hover.
+ * Salon service group: a simple header (number, title, note, count) and a
+ * grid of clean, large cards — photo on top (or a quiet typographic panel
+ * when there is no photo yet), name, note, time and price. Hovering a card
+ * lifts it while the others step back, so the eye lands on one service.
  */
 export function ServiceGroup({ group, index, onBook }) {
   const { t, language } = useLanguage();
 
   return (
-    <section id={`services-${group.id}`} className="smenu" aria-labelledby={`smenu-${group.id}`}>
-      <header className="smenu__head">
-        <span className="smenu__index">{String(index + 1).padStart(2, "0")}</span>
-        <h3 id={`smenu-${group.id}`} className="smenu__title">{group.title}</h3>
-        {group.subtitle && <p className="smenu__note">{group.subtitle}</p>}
-        <span className="smenu__count">{group.items.length}</span>
+    <section id={`services-${group.id}`} className="sgroup" aria-labelledby={`sgroup-${group.id}`}>
+      <header className="sgroup__head">
+        <span className="sgroup__index">{String(index + 1).padStart(2, "0")}</span>
+        <h3 id={`sgroup-${group.id}`} className="sgroup__title">{group.title}</h3>
+        <span className="sgroup__count">{group.items.length}</span>
+        {group.subtitle && <p className="sgroup__note">{group.subtitle}</p>}
       </header>
 
-      <ul className="smenu__list">
+      <ul className="scards">
         {group.items.map((service) => {
           const card = toCardProps(service, language, t);
           return (
-            <li key={service.slug} className="smenu__item">
-              <button type="button" className="smenu__row" onClick={() => onBook(service)}>
-                {service.image ? (
-                  <img className="smenu__thumb" src={service.image} alt="" loading="lazy" decoding="async" />
-                ) : (
-                  <span className="smenu__thumb smenu__thumb--empty" aria-hidden="true" />
-                )}
-                <span className="smenu__main">
-                  <span className="smenu__name">{card.title}</span>
-                  {card.description && <span className="smenu__desc">{card.description}</span>}
-                </span>
-                <span className="smenu__meta">
-                  {card.duration && (
-                    <span className="smenu__duration"><FiClock aria-hidden="true" /> {card.duration}</span>
+            <li key={service.slug}>
+              <button type="button" className="scard" onClick={() => onBook(service)}>
+                <span className={`scard__media${service.image ? "" : " scard__media--empty"}`}>
+                  {service.image ? (
+                    <img src={service.image} alt="" loading="lazy" decoding="async" />
+                  ) : (
+                    <span className="scard__initial" aria-hidden="true">{card.title.charAt(0)}</span>
                   )}
-                  {card.price && <span className="smenu__price">{card.price}</span>}
                 </span>
-                <span className="smenu__go" aria-hidden="true"><FiArrowUpRight /></span>
+                <span className="scard__body">
+                  <span className="scard__name">{card.title}</span>
+                  {card.description && <span className="scard__desc">{card.description}</span>}
+                  <span className="scard__foot">
+                    <span className="scard__meta">
+                      {card.duration && <span><FiClock aria-hidden="true" /> {card.duration}</span>}
+                      {card.price && <strong>{card.price}</strong>}
+                    </span>
+                    <span className="scard__go" aria-hidden="true"><FiArrowUpRight /></span>
+                  </span>
+                </span>
               </button>
             </li>
           );
