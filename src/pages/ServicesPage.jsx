@@ -15,7 +15,6 @@ import emailjs from "@emailjs/browser";
 import "./ServicesPage.css";
 import { PopularTiles, ServiceGroup } from "../sections/SalonPromo/ServiceMenu";
 import SectionTitle from "../components/SectionTitle/SectionTitle";
-import HoursNotice from "../components/HoursNotice/HoursNotice";
 import SalonHighlights from "../sections/SalonPromo/SalonHighlights";
 import SalonCta from "../sections/SalonPromo/SalonCta";
 import { beautyPackages, browAndLashServices, carbonPeelServices, makeupTypes, massageProcedures, permanentServices, pmuRemoverServices, tattooRemovalServices } from "../data/salonServices";
@@ -259,9 +258,6 @@ export default function ServicesPage() {
           ))}
         </div>
       </section>
-
-      {/* Години роботи та доплати (TZ step 7) */}
-      <HoursNotice />
 
       {/* Як ми працюємо */}
       <section className="process">
