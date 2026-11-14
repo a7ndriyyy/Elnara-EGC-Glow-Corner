@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { supabase } from '../lib/supabase';
 import './AdminPage.css';
 import { useLanguage } from '../i18n/LanguageContext';
@@ -10,6 +11,7 @@ export default function AdminLogin() {
   const { t } = useLanguage();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -65,14 +67,27 @@ export default function AdminLogin() {
         />
 
         <label htmlFor="admin-password">{t('admin.login.password')}</label>
-        <input
-          id="admin-password"
-          type="password"
-          autoComplete="current-password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          required
-        />
+        {/* eye button shows / hides what was typed */}
+        <div className="admin-login__password">
+          <input
+            id="admin-password"
+            type={showPassword ? 'text' : 'password'}
+            autoComplete="current-password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            required
+          />
+          <button
+            type="button"
+            className="admin-login__eye"
+            onClick={() => setShowPassword((shown) => !shown)}
+            aria-label={showPassword ? t('admin.login.hidePassword') : t('admin.login.showPassword')}
+            aria-pressed={showPassword}
+            aria-controls="admin-password"
+          >
+            {showPassword ? <FiEyeOff aria-hidden="true" /> : <FiEye aria-hidden="true" />}
+          </button>
+        </div>
 
         {error && <p role="alert">{error}</p>}
 
