@@ -49,3 +49,29 @@
     font-size: 14px;
   }
 }
+
+/* Light shell for the admin pages: the same cream as the admin panel around
+   it, and the navbar / footer switch to light tokens too. */
+.site-layout--light {
+  --bg: #f4f1eb;
+  --bg-2: #ffffff;
+  --bg-3: #ece6dc;
+  --text: #1d1914;
+  --text-2: #5f5244;
+  --gold: #87663a;
+  --gold-light: #7a5c2e;
+  --gold-dark: #6b4f26;
+  --gold-rgb: 135, 102, 58;
+  --line: rgba(135, 102, 58, 0.35);
+  --line-soft: rgba(135, 102, 58, 0.18);
+  --navbar-bg: rgba(244, 241, 235, 0.88);
+  --navbar-bg-scrolled: rgba(244, 241, 235, 0.97);
+  --navbar-text: #1d1914;
+  --navbar-text-secondary: #5f5244;
+  --navbar-accent: #87663a;
+  --navbar-border: rgba(135, 102, 58, 0.18);
+  background: #f4f1eb;
+  color: var(--text);
+  color-scheme: light;
+}
+.site-layout--light .site-layout__main { background: #f4f1eb; }
